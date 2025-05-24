@@ -1,0 +1,185 @@
+import { Injectable } from '@nestjs/common'
+import * as crypto from 'crypto'
+import { scopes } from './scopes'
+import { Profile } from '@views/profile'
+import { ProfileMapper } from '@mappers/index'
+import { UserService } from '@data/user.service'
+import * as path from 'path'
+import * as fs from 'fs'
+import * as util from 'util'
+
+const execFile = util.promisify(require('node:child_process').execFile)
+
+@Injectable()
+export class AuthService {
+  constructor(private readonly userService: UserService) {}
+
+  private getRedirectUrl(url: string) {
+    if (url && url != '') {
+      return url
+    }
+    return `${process.env.PISTEREO_BASEURL}/api/auth/response`
+  }
+
+  public async getProfile(token: string, user: string = ''): Promise<Profile> {
+    let url: string = 'https://api.spotify.com/v1/me'
+
+    if (user) {
+      url = `https://api.spotify.com/v1/users/${user}`
+    }
+
+    const result = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: 'Bearer ' + token,
+      },
+    })
+
+    let json = await result.json()
+    return ProfileMapper(json)
+  }
+
+  public async getAuthorisationUrl(state: string, redirectUrl: string): Promise<string> {
+    const verifier = state == '' ? this.generateCodeVerifier(128) : state
+
+    const params = new URLSearchParams()
+    params.append('client_id', process.env.PISTEREO_CLIENTID as string)
+    params.append('response_type', 'code')
+    params.append('redirect_uri', this.getRedirectUrl(redirectUrl))
+
+    params.append('scope', scopes.join(' '))
+    params.append('state', verifier)
+
+    const result: any = {
+      url: `https://accounts.spotify.com/authorize?${params.toString()}`,
+      state: verifier,
+    }
+    return result
+  }
+
+  public async getAccessToken(
+    code: string,
+    verifier: string,
+    grantType = 'authorization_code',
+    redirectUrl: string,
+  ): Promise<any> {
+    const params = new URLSearchParams()
+    params.append('grant_type', grantType)
+    params.append('code', code)
+    params.append('redirect_uri', this.getRedirectUrl(redirectUrl))
+    params.append('code_verifier', verifier)
+
+    const result = await fetch('https://accounts.spotify.com/api/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization:
+          'Basic ' +
+          Buffer.from(
+            (process.env.PISTEREO_CLIENTID as string) +
+              ':' +
+              (process.env.PISTEREO_CLIENTSECRET as string),
+          ).toString('base64'),
+      },
+      body: params,
+    })
+
+    let body: any = await result.json()
+
+    if (body) {
+      let user = await this.getProfile(body.access_token)
+      await this.userService.addSession(body.access_token, body.refresh_token, user, body.expires)
+      await this.userService.addUser(user)
+      body.user = user ? user : {}
+      this.saveAccessToken(user.name, body.access_token)
+    }
+
+    return body
+  }
+
+  private async saveAccessToken(username: string, token: string) {
+    return new Promise((resolve, reject) => {
+      let filename = path.join(process.env.PISTEREO_CONFIG as string, '/librespot/accesstoken.env')
+      let librespotmode = (process.env.PISTEREO_LIBRESPOT_MODE ?? 'zeroconf') as string
+
+      if (fs.existsSync(filename)) {
+        fs.unlinkSync(filename)
+      }
+
+      if (librespotmode == 'token') {
+        fs.writeFileSync(
+          filename,
+          `PISTEREO_SPOTIFY_USERNAME=${username}\nPISTEREO_SPOTIFY_ACCESS_TOKEN=${token}`,
+        )
+
+        let in_docker = process.env.IN_DOCKER ?? 'no'
+        if (in_docker == 'yes') {
+          try {
+            execFile('pm2', ['restart', 'Librespot', '--update-env'])
+              .then((result) => {
+                resolve(result)
+              })
+              .catch((err) => {
+                reject(err)
+              })
+          } catch (err) {
+            resolve(err)
+          }
+        } else {
+          resolve(true)
+        }
+      } else {
+        resolve(true)
+      }
+    })
+  }
+
+  public async getRefreshToken(accessToken: string, refreshToken: string): Promise<any> {
+    const url = 'https://accounts.spotify.com/api/token'
+
+    const payload = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: 'Bearer ' + accessToken,
+      },
+      body: new URLSearchParams({
+        grant_type: 'refresh_token',
+        refresh_token: refreshToken,
+        client_id: process.env.PISTEREO_CLIENTID as string,
+      }),
+    }
+
+    const body = await fetch(url, payload)
+    const response = await body.json()
+    let user = await this.getProfile(response.access_token)
+    await this.userService.addSession(
+      response.access_token,
+      response.refresh_token,
+      user,
+      response.expires,
+    )
+    await this.userService.addUser(user)
+    return response
+  }
+
+  private generateCodeVerifier(length: number) {
+    let text = ''
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+
+    for (let i = 0; i < length; i++) {
+      text += possible.charAt(Math.floor(Math.random() * possible.length))
+    }
+    return text
+  }
+
+  private async generateCodeChallenge(codeVerifier: string) {
+    const data = new TextEncoder().encode(codeVerifier)
+    const digest = await crypto.subtle.digest('SHA-256', data)
+    return btoa(String.fromCharCode.apply(null, [...new Uint8Array(digest)]))
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '')
+  }
+}
