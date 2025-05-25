@@ -1,4 +1,5 @@
 import {
+  HttpStatus,
   HttpException,
   IntrinsicException,
   ArgumentsHost,
@@ -6,37 +7,31 @@ import {
   ExceptionFilter,
 } from '@nestjs/common'
 
-@Catch(HttpException)
-export class HttpExceptionFilter {
-  catch(exception, host) {
-    const ctx = host.switchToHttp()
-    const response = ctx.getResponse()
-    const request = ctx.getRequest()
-    const status = exception.getStatus()
-
-    response.status(status).json({
-      statusCode: status,
-      timestamp: new Date().toISOString(),
-      message: exception.message,
-      path: request.url,
-    })
-  }
-}
-
 @Catch()
-export class ExceptionFilter<T> implements ExceptionFilter {
-  catch(exception: T, host: ArgumentsHost) {
+export class ExceptionFilter implements ExceptionFilter {
+  catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp()
     const response = ctx.getResponse()
     const request = ctx.getRequest()
-    const status = 500
+    const status =
+      exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR
+    const message = exception instanceof HttpException ? exception.message : 'Internal Server Error'
 
-    response.status(status).json({
-      statusCode: status,
-      timestamp: new Date().toISOString(),
-      message: exception.message,
-      error: exception,
-      path: request.url,
-    })
+    if (exception instanceof HttpException) {
+      response.status(status).json({
+        statusCode: status,
+        timestamp: new Date().toISOString(),
+        message: message,
+        path: request.url,
+      })
+    } else {
+      response.status(status).json({
+        statusCode: status,
+        timestamp: new Date().toISOString(),
+        message: exception.message,
+        error: exception,
+        path: request.url,
+      })
+    }
   }
 }
