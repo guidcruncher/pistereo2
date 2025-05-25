@@ -23,6 +23,11 @@ import { LibrespotPlayerService } from './librespot-player.service'
     PlaylistImportService,
     LibrespotPlayerService,
   ],
-  exports: [SpotifyPlayerService, SpotifyListService, LibrespotClientService],
+  exports: [
+    SpotifyPlayerService,
+    SpotifyListService,
+    LibrespotClientService,
+    LibrespotPlayerService,
+  ],
 })
 export class SpotifyModule {}

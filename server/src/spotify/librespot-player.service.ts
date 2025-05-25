@@ -29,7 +29,7 @@ export class LibrespotPlayerService extends EventBaseService {
 
   async currentPlaying(token: string) {
     let trs = new HttpTransportService()
-    const result = await trs.request('GET', 'http://127.0.0.1:3678/player/currently-playing', {
+    const result = await trs.request('GET', 'http://127.0.0.1:3678/status', {
       Authorization: `Bearer ${token}`,
     })
 
@@ -39,7 +39,7 @@ export class LibrespotPlayerService extends EventBaseService {
       return track
     }
 
-    return PlayableItemMapper(result.value)
+    return PlayableItemMapper(LibrespotStatusMapper(result.value).track)
   }
 
   async getStatus(token: string): Promise<PlayerStatus> {
@@ -100,22 +100,11 @@ export class LibrespotPlayerService extends EventBaseService {
     }
 
     let request: any = {} as any
-    switch (uri.type) {
-      case 'album':
-      case 'playlist':
-      case 'artist':
-      case 'show':
-        request = { context_uri: uri.toString(), position_ms: 0 }
-        break
-      case 'track':
-      case 'episode':
-        request = { uris: [uri.toString()], position_ms: 0 }
-        break
-    }
+    request = { uri: uri.toString(), paused: false }
 
     let result = await this.transport.request(
-      'PUT',
-      'http://127.0.0.1:3678/player/play' + this.getQueryString(device_id),
+      'POST',
+      'http://127.0.0.1:3678/player/play',
       { Authorization: `Bearer ${token}` },
       request,
     )
@@ -133,8 +122,8 @@ export class LibrespotPlayerService extends EventBaseService {
   async stop(token: string, device_id: string) {
     try {
       return await this.transport.request(
-        'PUT',
-        'http://127.0.0.1:3678/player/pause' + this.getQueryString(device_id),
+        'POST',
+        'http://127.0.0.1:3678/player/pause',
         { Authorization: `Bearer ${token}` },
         {},
       )
@@ -150,8 +139,8 @@ export class LibrespotPlayerService extends EventBaseService {
       case 'play':
       case 'resume':
         result = await this.transport.request(
-          'PUT',
-          'http://127.0.0.1:3678/player/play' + this.getQueryString(device_id),
+          'POST',
+          'http://127.0.0.1:3678/player/resume',
           { Authorization: `Bearer ${token}` },
           {},
         )
@@ -159,7 +148,7 @@ export class LibrespotPlayerService extends EventBaseService {
       case 'previous':
         result = await this.transport.request(
           'POST',
-          'http://127.0.0.1:3678/player/previous' + this.getQueryString(device_id),
+          'http://127.0.0.1:3678/player/prev',
           { Authorization: `Bearer ${token}` },
           {},
         )
@@ -167,9 +156,9 @@ export class LibrespotPlayerService extends EventBaseService {
       case 'next':
         result = await this.transport.request(
           'POST',
-          'http://127.0.0.1:3678/player/next' + this.getQueryString(device_id),
+          'http://127.0.0.1:3678/player/next',
           { Authorization: `Bearer ${token}` },
-          {},
+          { uri: '' },
         )
         break
       case 'stop':
@@ -201,28 +190,35 @@ export class LibrespotPlayerService extends EventBaseService {
 
   async setVolume(token: string, device_id: string, value: number) {
     const result = await this.transport.request(
-      'PUT',
-      'http://127.0.0.1:3678/player/volume' +
-        this.getQueryString(device_id, { volume_percent: value }),
+      'POST',
+      'http://127.0.0.1:3678/player/volume',
       { Authorization: `Bearer ${token}` },
-      {},
+      { volume: value, relative: false },
     )
 
     return result
   }
 
   async getPlaybackQueue(token: string): Promise<PlaybackQueue> {
-    const result = await this.transport.request('GET', 'http://127.0.0.1:3678/player/queue', {
-      Authorization: `Bearer ${token}`,
-    })
+    const result = await this.transport.request(
+      'GET',
+      'https://api.spotify.com/v1/me/player/queue',
+      {
+        Authorization: `Bearer ${token}`,
+      },
+    )
 
     return PlaybackQueueMapper(result.value)
   }
 
   async getDevices(token: string): Promise<DeviceProp[]> {
-    const result = await this.transport.request('GET', 'http://127.0.0.1:3678/player/devices', {
-      Authorization: `Bearer ${token}`,
-    })
+    const result = await this.transport.request(
+      'GET',
+      'https://api.spotify.com/v1/me/player/devices',
+      {
+        Authorization: `Bearer ${token}`,
+      },
+    )
     return result.value.devices
       .map((a) => {
         return { id: a.id, name: a.name, active: a.is_active } as DeviceProp
@@ -259,7 +255,7 @@ export class LibrespotPlayerService extends EventBaseService {
 
     const result = await this.transport.request(
       'PUT',
-      'http://127.0.0.1:3678/player',
+      'https://api.spotify.com/v1/me/player',
       { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       { device_ids: [device.id], play: true },
     )
