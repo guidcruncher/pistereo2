@@ -189,19 +189,19 @@ export class LibrespotPlayerService extends EventBaseService {
     return 0
   }
 
-async setVolume(token: string, device_id: string, value: number) {
-const result = await this.transport.request(
-    'PUT',
-  'https://api.spotify.com/v1/me/player/volume' +
-    this.getQueryString(device_id, { volume_percent: value }),
-{ Authorization: `Bearer ${token}` },
-  {},
-)
+  async setVolume(token: string, device_id: string, value: number) {
+    const result = await this.transport.request(
+      'PUT',
+      'https://api.spotify.com/v1/me/player/volume' +
+        this.getQueryString(device_id, { volume_percent: value }),
+      { Authorization: `Bearer ${token}` },
+      {},
+    )
 
-return result
-}
+    return result
+  }
 
-  async  vsetVolume(token: string, device_id: string, value: number) {
+  async vsetVolume(token: string, device_id: string, value: number) {
     const result = await this.transport.request(
       'POST',
       'http://127.0.0.1:3678/player/volume',

@@ -20,7 +20,17 @@ import { LoggerModule, Logger } from 'nestjs-pino'
 
 @Module({
   imports: [
-    LoggerModule.forRoot(),
+    LoggerModule.forRoot({
+      pinoHttp: {
+        name: 'Server',
+        level: process.env.NODE_ENV !== 'production' ? 'debug' : 'info',
+        transport: process.env.NODE_ENV !== 'production' ? { target: 'pino-pretty' } : undefined,
+        stream: pino.destination({
+          minLength: 4096,
+          sync: false,
+        }),
+      },
+    }),
     EventEmitterModule.forRoot(),
     DataModule,
     AuthModule,

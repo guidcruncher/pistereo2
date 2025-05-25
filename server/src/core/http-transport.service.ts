@@ -7,9 +7,8 @@ import { Inject, HttpException, Injectable } from '@nestjs/common'
 
 @Injectable()
 export class HttpTransportService {
-
-@Inject(Logger)
-private readonly logger: Logger
+  @Inject(Logger)
+  private readonly logger: Logger
 
   public getQueryString(parameters: Record<string, any>): string {
     const params = new URLSearchParams()
