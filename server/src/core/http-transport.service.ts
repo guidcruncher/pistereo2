@@ -1,5 +1,5 @@
 import { Logger } from 'nestjs-pino'
-import { HttpException, Injectable } from '@nestjs/common'
+import { Inject, HttpException, Injectable } from '@nestjs/common'
 
 //export interface IHttpTransportService {
 //  request(method: string, url: string, headers: Record<string, string>, body?)
@@ -7,6 +7,10 @@ import { HttpException, Injectable } from '@nestjs/common'
 
 @Injectable()
 export class HttpTransportService {
+
+@Inject(Logger)
+private readonly logger: Logger
+
   public getQueryString(parameters: Record<string, any>): string {
     const params = new URLSearchParams()
 
