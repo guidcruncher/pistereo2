@@ -2,6 +2,7 @@ import { Uri } from '@views/index'
 import { HttpException, Injectable, Scope } from '@nestjs/common'
 import { MpvPlayerService } from '../mpv/mpv-player.service'
 import { SpotifyPlayerService } from '../spotify/spotify-player.service'
+import { LibrespotPlayerService } from '../spotify/librespot-player.service'
 import { TuneinPlayerService } from '../tunein/tunein-player.service'
 import { UserStreamPlayerService } from '../userstream/userstream-player.service'
 import { AuthService } from '../auth/auth.service'
@@ -20,7 +21,8 @@ export class AudioService {
   constructor(
     private readonly eventEmitter: EventEmitter2,
     private readonly mpvPlayer: MpvPlayerService,
-    private readonly spotifyPlayer: SpotifyPlayerService,
+    //    private readonly spotifyPlayer: SpotifyPlayerService,
+    private readonly spotifyPlayer: LibrespotPlayerService,
     private readonly tuneinPlayer: TuneinPlayerService,
     private readonly userStreamPlayer: UserStreamPlayerService,
     private readonly authService: AuthService,

@@ -13,6 +13,7 @@ import {
   Session,
 } from '@nestjs/common'
 import { SpotifyPlayerService } from './spotify-player.service'
+import { LibrespotPlayerService } from '../spotify/librespot-player.service'
 import { Public, Private, AuthToken } from '@auth/decorators'
 import { Uri } from '@views/uri'
 import { ApiOAuth2, ApiExcludeController, ApiExcludeEndpoint } from '@nestjs/swagger'
@@ -25,7 +26,10 @@ import { ApiOAuth2, ApiExcludeController, ApiExcludeEndpoint } from '@nestjs/swa
 @Private()
 @Controller('/api/spotify/player')
 export class PlayerController {
-  constructor(private readonly playerService: SpotifyPlayerService) {}
+  constructor(
+    //   private readonly playerService: SpotifyPlayerService
+    private readonly playerService: LibrespotPlayerService,
+  ) {}
 
   @Get('status')
   async getStatus(@User() user: any, @AuthToken() token: string) {

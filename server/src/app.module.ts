@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common'
+import { APP_FILTER } from '@nestjs/core'
 import { EventEmitterModule } from '@nestjs/event-emitter'
 import { AppService } from './app.service'
 import { AuthModule } from './auth/auth.module'
@@ -13,6 +14,7 @@ import { MpvModule } from './mpv/mpv.module'
 import { UserstreamModule } from './userstream/userstream.module'
 import { AudioModule } from './audio/audio.module'
 import { MetadataModule } from './metadata/metadata.module'
+import { HttpExceptionFilter, ExceptionFilter } from '/exception.filter'
 
 @Module({
   imports: [
@@ -29,6 +31,16 @@ import { MetadataModule } from './metadata/metadata.module'
     MetadataModule,
   ],
   controllers: [],
-  providers: [AppService],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: ExceptionFilter,
+    },
+    AppService,
+  ],
 })
 export class AppModule {}
