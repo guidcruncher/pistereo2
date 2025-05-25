@@ -53,17 +53,19 @@ export class HttpTransportService {
 
     if (!response.ok) {
       let txt: string = ''
+      let resp: string = await response.text()
       try {
-        let obj: any = await response.json()
+        let obj: any = JSON.parse(resp)
         txt = obj.error.message
       } catch (err) {
-        this.logger.error('Error parsing API Error Response', err)
+        txt = resp
+        this.logger.error('Error parsing API Error Response -> ' + resp, err)
       }
-      this.logger.error(
-        `HTTP Error from API : ${response.status} ${txt == '' ? response.statusText : txt}`,
-      )
-      throw new HttpException(txt == '' ? response.statusText : txt, response.status)
+      this.logger.error('Error from API ' + method + ' ' + url + ' => ' + txt)
+
+      throw new HttpException(txt, response.status)
     }
+
     if (response.status == 204) {
       return this.wrapResponse(response.statusText, response.status, {})
     }
