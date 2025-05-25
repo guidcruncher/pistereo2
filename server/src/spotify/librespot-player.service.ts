@@ -189,7 +189,7 @@ export class LibrespotPlayerService extends EventBaseService {
     return 0
   }
 
-  async setVolume(token: string, device_id: string, value: number) {
+  async xsetVolume(token: string, device_id: string, value: number) {
     const result = await this.transport.request(
       'PUT',
       'https://api.spotify.com/v1/me/player/volume' +
@@ -201,11 +201,11 @@ export class LibrespotPlayerService extends EventBaseService {
     return result
   }
 
-  async vsetVolume(token: string, device_id: string, value: number) {
+  async setVolume(token: string, device_id: string, value: number) {
     const result = await this.transport.request(
       'POST',
       'http://127.0.0.1:3678/player/volume',
-      { Authorization: `Bearer ${token}` },
+      { 'Content-Type': 'application/json' },
       { volume: value, relative: false },
     )
     return result
@@ -221,6 +221,16 @@ export class LibrespotPlayerService extends EventBaseService {
     )
 
     return PlaybackQueueMapper(result.value)
+  }
+
+  async addToQueue(token: string, uri: Uri) {
+    const result = await this.transport.request(
+      'POST',
+      'http://127.0.0.1:3678/player/add_to_queue',
+      { 'Content-Type': 'application/json' },
+      { uri: uri.toString() },
+    )
+    return result
   }
 
   async getDevices(token: string): Promise<DeviceProp[]> {

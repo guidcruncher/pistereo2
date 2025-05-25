@@ -226,6 +226,16 @@ export class SpotifyPlayerService extends EventBaseService {
     return PlaybackQueueMapper(result.value)
   }
 
+  async addToQueue(token: string, uri: Uri) {
+    const result = await this.transport.request(
+      'POST',
+      'http://127.0.0.1:3678/player/add_to_queue',
+      { 'Content-Type': 'application/json' },
+      { uri: uri.toString() },
+    )
+    return result
+  }
+
   async getDevices(token: string): Promise<DeviceProp[]> {
     const result = await this.transport.request(
       'GET',
