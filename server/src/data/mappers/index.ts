@@ -1,6 +1,7 @@
 export * from './album-mapper'
 export * from './episode-mapper'
 export * from './librespotmetadata-mapper'
+export * from './librespotstatus-mapper'
 export * from './mapper'
 export * from './mpvstatus-mapper'
 export * from './playableitem-mapper'

@@ -67,17 +67,19 @@ export default {
     <v-card-text>
       <v-infinite-scroll :height="windowSize.y" v-resize="onResize" :items="items" @load="loadData">
         <template v-for="item in items" :key="item" :value="item">
-          <v-row no-gutters class="pa-1" @click="loadPlaylist(item)" v-ripple>
-            <v-col>
-              <ScaledImage :src="item.imageUrl" size="xs" style="margin-right: 16px" />
-            </v-col>
-            <v-col cols="11">
-              <v-sheet class="pa-2">
-                <div class="text-subtitle-1">{{ item.name }}</div>
-                <div class="text-body-2">{{ item.owner.name }}</div>
-              </v-sheet>
-            </v-col>
-          </v-row>
+          <div class="pa-1" v-ripple @click="loadPlaylist(item)">
+            <table border="0" cellpadding="0" cellspacing="0">
+              <tbody>
+                <tr>
+                  <td><ScaledImage :src="item.imageUrl" size="xs" style="margin-right: 16px" /></td>
+                  <td>
+                    <div class="text-subtitle-1">{{ item.name }}</div>
+                    <div class="text-body-2">{{ item.artists.join(', ') }}</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </template>
       </v-infinite-scroll>
     </v-card-text>

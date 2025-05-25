@@ -11,6 +11,7 @@ import { PlaylistImportService } from './playlist-import.service'
 import { MetadataModule } from '../metadata/metadata.module'
 import { WebsocketsController } from './websockets.controller'
 import { MpvModule } from '../mpv/mpv.module'
+import { LibrespotPlayerService } from './librespot-player.service'
 
 @Module({
   imports: [DataModule, AuthModule, CoreModule, MetadataModule, MpvModule],
@@ -20,6 +21,7 @@ import { MpvModule } from '../mpv/mpv.module'
     SpotifyListService,
     LibrespotClientService,
     PlaylistImportService,
+    LibrespotPlayerService,
   ],
   exports: [SpotifyPlayerService, SpotifyListService, LibrespotClientService],
 })
