@@ -1,3 +1,4 @@
+import { Logger } from 'nestjs-pino'
 import { Injectable } from '@nestjs/common'
 import { PresetsService } from '@data/presets.service'
 import { AuthService } from '../auth/auth.service'

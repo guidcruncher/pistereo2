@@ -1,3 +1,4 @@
+import { Logger } from 'nestjs-pino'
 import { Injectable, Scope } from '@nestjs/common'
 
 @Injectable({ scope: Scope.DEFAULT })

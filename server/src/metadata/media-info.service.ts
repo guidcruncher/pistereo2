@@ -1,3 +1,4 @@
+import { Logger } from 'nestjs-pino'
 import { default as stream } from 'node:stream'
 import type { ReadableStream } from 'node:stream/web'
 

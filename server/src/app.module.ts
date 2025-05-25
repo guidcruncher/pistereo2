@@ -15,9 +15,22 @@ import { UserstreamModule } from './userstream/userstream.module'
 import { AudioModule } from './audio/audio.module'
 import { MetadataModule } from './metadata/metadata.module'
 import { AllExceptionFilter } from './exception.filter'
+import pino from 'pino'
+import { LoggerModule, Logger } from 'nestjs-pino'
 
 @Module({
   imports: [
+    LoggerModule.forRoot({
+      pinoHttp: {
+        name: 'PiStereo2',
+        level: process.env.NODE_ENV !== 'production' ? 'debug' : 'info',
+        transport: process.env.NODE_ENV !== 'production' ? { target: 'pino-pretty' } : undefined,
+        stream: pino.destination({
+          minLength: 4096,
+          sync: false,
+        }),
+      },
+    }),
     EventEmitterModule.forRoot(),
     DataModule,
     AuthModule,
@@ -34,7 +47,10 @@ import { AllExceptionFilter } from './exception.filter'
   providers: [
     {
       provide: APP_FILTER,
-      useClass: AllExceptionFilter,
+      useFactory: (logger: Logger) => {
+        return new AllExceptionFilter(logger)
+      },
+      inject: [Logger],
     },
     AppService,
   ],

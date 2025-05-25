@@ -1,3 +1,4 @@
+import { Logger } from 'nestjs-pino'
 import { Injectable, Inject } from '@nestjs/common'
 import { EventEmitterReadinessWatcher, EventEmitter2 } from '@nestjs/event-emitter'
 import { BaseService } from './base.service'

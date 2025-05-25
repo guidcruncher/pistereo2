@@ -1,3 +1,4 @@
+import { Logger } from 'nestjs-pino'
 import { Injectable } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
 import * as cp from 'child_process'

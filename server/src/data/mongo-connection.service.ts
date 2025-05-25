@@ -1,3 +1,4 @@
+import { Logger } from 'nestjs-pino'
 import { Inject, Injectable } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 import { InjectConnection } from '@nestjs/mongoose'

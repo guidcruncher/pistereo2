@@ -1,3 +1,4 @@
+import { Logger } from 'nestjs-pino'
 import { Scope, OnModuleDestroy, Injectable } from '@nestjs/common'
 import { EventEmitter2, EventEmitterModule } from '@nestjs/event-emitter'
 import { WebSocket } from 'ws'
@@ -13,8 +14,9 @@ export class LibrespotClientService implements OnModuleDestroy {
     private readonly eventEmitter: EventEmitter2,
     private readonly mpvPlayer: MpvPlayerService,
     private readonly historyService: HistoryService,
+    private readonly logger: Logger,
   ) {
-    this.open('ws://localhost:3678/events')
+    this.open('ws://127.0.0.1:3678/events')
   }
 
   public open(path: string) {
@@ -29,7 +31,7 @@ export class LibrespotClientService implements OnModuleDestroy {
         const json: any = JSON.parse(data.toString())
         await this.onMessage('spotify', json)
       } catch (err) {
-        console.log('Error processing message ' + (data ?? ''), err)
+        this.logger.error('Error processing message ' + (data ?? ''), err)
       }
     })
   }
@@ -39,7 +41,8 @@ export class LibrespotClientService implements OnModuleDestroy {
   }
 
   private async onMessage(namespace: string, payload: any) {
-    console.log('Librespot event fired', payload.type)
+    this.logger.log('Librespot event fired', payload.type)
+
     switch (payload.type) {
       case 'paused':
         this.eventEmitter.emit('player', { type: 'stateChanged', paused: true })

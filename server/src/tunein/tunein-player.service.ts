@@ -1,3 +1,4 @@
+import { Logger } from 'nestjs-pino'
 import { Injectable, HttpException } from '@nestjs/common'
 import { Uri } from '@views/uri'
 import { TuneinMapper, PlayableItemMapper } from '@mappers/index'

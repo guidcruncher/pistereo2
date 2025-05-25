@@ -1,3 +1,4 @@
+import { Logger } from 'nestjs-pino'
 import { Uri } from '@views/index'
 import { HttpException, Injectable, Scope } from '@nestjs/common'
 import { MpvPlayerService } from '../mpv/mpv-player.service'

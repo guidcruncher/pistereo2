@@ -1,3 +1,4 @@
+import { Logger } from 'nestjs-pino'
 import {
   HttpStatus,
   HttpException,
@@ -9,6 +10,8 @@ import {
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
+  constructor(private logger: Logger) {}
+
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp()
     const response = ctx.getResponse()
@@ -16,6 +19,8 @@ export class AllExceptionFilter implements ExceptionFilter {
     const status =
       exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR
     const message = exception instanceof HttpException ? exception.message : 'Internal Server Error'
+
+    this.logger.error('Error occured', exception)
 
     if (exception instanceof HttpException) {
       response.status(status).json({

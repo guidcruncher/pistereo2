@@ -1,3 +1,4 @@
+import { Logger } from 'nestjs-pino'
 import { Injectable } from '@nestjs/common'
 import * as crypto from 'crypto'
 import { scopes } from './scopes'

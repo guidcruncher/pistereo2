@@ -1,3 +1,4 @@
+import { Logger } from 'nestjs-pino'
 import { HttpException, Injectable } from '@nestjs/common'
 import { HttpTransportService } from '@core/http-transport.service'
 import { PlayableItem, PlaybackQueue, PlayerStatus, Track, DeviceProp } from '@views/index'

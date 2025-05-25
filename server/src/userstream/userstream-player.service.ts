@@ -1,3 +1,4 @@
+import { Logger } from 'nestjs-pino'
 import { HttpException, Injectable } from '@nestjs/common'
 import { UserStreamService } from '@data/userstream.service'
 import { UserStream } from '@schemas/index'
