@@ -14,7 +14,7 @@ import { MpvModule } from './mpv/mpv.module'
 import { UserstreamModule } from './userstream/userstream.module'
 import { AudioModule } from './audio/audio.module'
 import { MetadataModule } from './metadata/metadata.module'
-import { ExceptionFilter } from '/exception.filter'
+import { AllExceptionFilter } from './exception.filter'
 
 @Module({
   imports: [
@@ -34,7 +34,7 @@ import { ExceptionFilter } from '/exception.filter'
   providers: [
     {
       provide: APP_FILTER,
-      useClass: ExceptionFilter,
+      useClass: AllExceptionFilter,
     },
     AppService,
   ],

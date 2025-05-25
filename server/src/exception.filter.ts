@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common'
 
 @Catch()
-export class ExceptionFilter implements ExceptionFilter {
+export class AllExceptionFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp()
     const response = ctx.getResponse()
@@ -28,7 +28,7 @@ export class ExceptionFilter implements ExceptionFilter {
       response.status(status).json({
         statusCode: status,
         timestamp: new Date().toISOString(),
-        message: exception.message,
+        message: message,
         error: exception,
         path: request.url,
       })
