@@ -66,20 +66,48 @@ export class MixerService {
   }
 
   private async parseContents(data: string): Promise<Mixer> {
-    let m: Mixer = new Mixer
-    let f: Frequency= undefined
-let lines: string[]=data.split("\n").filter(n=>(n && n != ''))
-let i: number=0
+    let m: Mixer = new Mixer()
+    let lines: string[] = data
+      .split('\n')
+      .filter((n) => n && n.trim() != '')
+      .map((n) => {
+        let v: string = n.trim()
+        if (v.startsWith('; ') || v.startsWith(': ')) {
+          v = v.slice(2)
+        }
+        return v
+      })
+    let i: number = 0
 
-while (i  < lines.length) {
-if (lines[i].startsWith("num") {
-lines+=2
-}
-lines+=1
-}
+    while (i < lines.length) {
+      if (lines[i].startsWith('num')) {
+        let obj = {} as any
+        let fields: string[] =
+          `${lines[i]},${lines[i + 1].replaceAll('values', 'channels')},${lines[i + 2]}`
+            .replaceAll("'", '')
+            .split(',')
+        fields.map((a) => {
+          let b = a.split('=')
+          obj[b[0]] = b[1]
+          return b
+        })
 
-
+        let f = new Frequency()
+        f.numid = parseInt(obj['numid'])
+        f.min = parseInt(obj['min'])
+        f.max = parseInt(obj['max'])
+        f.steps = parseInt(obj['step'])
+        f.name = obj['name'] ?? ''
+        f.channels = obj['values'].map((v) => {
+          return { name: '', value: v }
+        })
+        m.frequencies.push(f)
+        i = i + 2
+      }
+      i = i + 1
+    }
 
     return m
   }
 }
+3

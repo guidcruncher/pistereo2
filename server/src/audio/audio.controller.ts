@@ -22,6 +22,7 @@ import { PresetService } from './preset.service'
 import { PlayableItem, Uri } from '@views/index'
 import { AudioService } from './audio.service'
 import { OnEvent, EventEmitter2, EventEmitterModule } from '@nestjs/event-emitter'
+import { MixerService } from './mixer.service'
 
 @ApiOAuth2(
   ['user-read-playback-state', 'user-modify-playback-state', 'user-read-recently-played'],
@@ -34,6 +35,7 @@ export class AudioController {
     private readonly audioService: AudioService,
     private readonly presetService: PresetService,
     private readonly spotifyPlayerService: SpotifyPlayerService,
+    private readonly mixerService: MixerService,
   ) {}
 
   @ApiExcludeEndpoint()
@@ -102,5 +104,10 @@ export class AudioController {
   @Get('/metadata/track')
   async getTrackDetail(@AuthToken() token: string, @Query('uri') uri: string) {
     return await this.audioService.getTrackDetail(token, uri)
+  }
+
+  @Get('/mixer/:device')
+  async getMixer(@AuthToken() token, @Param('device') device: string) {
+    return await this.mixerService.getMixer(device)
   }
 }
