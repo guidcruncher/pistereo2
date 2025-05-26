@@ -83,15 +83,17 @@ export class MixerService {
       if (lines[i].startsWith('num')) {
         let obj = {} as any
         let fields: string[] =
-          `${lines[i]},${lines[i + 1].replaceAll('values', 'channels')},${lines[i + 2]}`
+          `${lines[i]},${lines[i + 1].replaceAll('values', 'channels')},${lines[i + 2].replaceAll(",","_")}`
             .replaceAll("'", '')
             .split(',')
         fields.map((a) => {
           let b = a.split('=')
+if (b[0] == "values") {b[1]= b[1].replace("_",",")}
+
           obj[b[0]] = b[1]
           return b
         })
-
+console.log(obj)
         let f = new Frequency()
         f.numid = parseInt(obj['numid'])
         f.min = parseInt(obj['min'])
@@ -101,7 +103,8 @@ export class MixerService {
         f.channels = obj['values'].map((v) => {
           return { name: '', value: v }
         })
-        m.frequencies.push(f)
+console.log(f) 
+       m.frequencies.push(f)
         i = i + 2
       }
       i = i + 1
@@ -110,4 +113,5 @@ export class MixerService {
     return m
   }
 }
-3
+
+ 

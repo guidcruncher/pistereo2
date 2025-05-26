@@ -35,13 +35,13 @@ import { LoggerModule, Logger } from 'nestjs-pino'
   ],
   controllers: [],
   providers: [
-    {
-      provide: APP_FILTER,
-      useFactory: (logger: Logger) => {
-        return new AllExceptionFilter(logger)
-      },
-      inject: [Logger],
-    },
+  //  {
+  //    provide: APP_FILTER,
+ //     useFactory: (logger: Logger) => {
+ //       return new AllExceptionFilter(logger)
+ //    },
+//      inject: [Logger],
+//    },
     AppService,
   ],
 })
