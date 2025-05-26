@@ -1,7 +1,7 @@
-import { Logger } from 'nestjs-pino'
 import {
   HttpStatus,
   HttpException,
+  Logger,
   IntrinsicException,
   ArgumentsHost,
   Catch,
@@ -10,9 +10,12 @@ import {
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
-  constructor(private logger: Logger) {}
 
-  catch(exception: unknown, host: ArgumentsHost) {
+private readonly logger = new Logger(AllExcepionFilter.name, { timestamp: true });
+
+  constructor() {}
+
+  catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp()
     const response = ctx.getResponse()
     const request = ctx.getRequest()

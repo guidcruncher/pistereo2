@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common'
+import { Module, Logger } from '@nestjs/common'
 import { APP_FILTER } from '@nestjs/core'
 import { EventEmitterModule } from '@nestjs/event-emitter'
 import { AppService } from './app.service'
@@ -15,12 +15,10 @@ import { UserstreamModule } from './userstream/userstream.module'
 import { AudioModule } from './audio/audio.module'
 import { MetadataModule } from './metadata/metadata.module'
 import { AllExceptionFilter } from './exception.filter'
-import pino from 'pino'
-import { LoggerModule, Logger } from 'nestjs-pino'
 
 @Module({
   imports: [
-    LoggerModule.forRoot(),
+//    LoggerModule.forRoot(),
     EventEmitterModule.forRoot(),
     DataModule,
     AuthModule,
@@ -35,13 +33,13 @@ import { LoggerModule, Logger } from 'nestjs-pino'
   ],
   controllers: [],
   providers: [
-  //  {
-  //    provide: APP_FILTER,
- //     useFactory: (logger: Logger) => {
- //       return new AllExceptionFilter(logger)
- //    },
-//      inject: [Logger],
-//    },
+    {
+      provide: APP_FILTER,
+      useFactory: (logger: Logger) => {
+        return new AllExceptionFilter(logger)
+      },
+     inject: [Logger],
+    },
     AppService,
   ],
 })

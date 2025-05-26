@@ -1,10 +1,10 @@
 import { NestFactory } from '@nestjs/core'
+import { Logger } from '@nestjs/common'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 import { AppModule } from './app.module'
 import { config } from '@dotenvx/dotenvx'
 import { getScopes } from '@auth/scopes'
 import compression = require('compression')
-import { Logger } from 'nestjs-pino'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)

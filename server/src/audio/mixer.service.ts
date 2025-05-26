@@ -7,6 +7,9 @@ import * as path from 'path'
 
 @Injectable()
 export class MixerService {
+
+private readonly logger = new Logger(MixerService.name, { timestamp: true });
+
   async getMixer(device: string): Promise<Mixer> {
     const equal: Mixer = await this.contents(device)
     return equal
@@ -93,7 +96,7 @@ if (b[0] == "values") {b[1]= b[1].replace("_",",")}
           obj[b[0]] = b[1]
           return b
         })
-console.log(obj)
+this.logger.log(obj)
         let f = new Frequency()
         f.numid = parseInt(obj['numid'])
         f.min = parseInt(obj['min'])
@@ -103,7 +106,7 @@ console.log(obj)
         f.channels = obj['values'].map((v) => {
           return { name: '', value: v }
         })
-console.log(f) 
+this.logger.log(f) 
        m.frequencies.push(f)
         i = i + 2
       }
