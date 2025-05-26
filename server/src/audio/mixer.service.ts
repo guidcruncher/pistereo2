@@ -96,7 +96,6 @@ if (b[0] == "values") {b[1]= b[1].replace("_",",")}
           obj[b[0]] = b[1]
           return b
         })
-this.logger.log(obj)
         let f = new Frequency()
         f.numid = parseInt(obj['numid'])
         f.min = parseInt(obj['min'])
@@ -106,7 +105,6 @@ this.logger.log(obj)
         f.channels = obj['values'].split(",").map((v) => {
           return { name: '', value: parseInt(v) }
         })
-this.logger.log(f) 
        m.frequencies.push(f)
         i = i + 2
       }
