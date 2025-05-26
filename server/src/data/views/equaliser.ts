@@ -1,28 +1,40 @@
 export class Channel {
+  name: string = ''
+  value: number = 60
+}
+
+export class Frequency {
+  numid: number = 0
   min: number = 0
   max: number = 100
   steps: number = 1
-  freq: string = ''
-  value: numbe = 50
+  name: string = ''
+  channels: Channel[] = [] as Channel[]
   order: number = 10
 }
 
-export class Equaliser {
-  channels: Channel[] = [] as Channel
+export class Mixer {
+  frequencies: Frequency[] = [] as Frequency[]
 
   private lastOrder: number = 0
 
-  add(freq: string, value: number, min: number = 0, max: number = 100, steps: number = 1) {
+  add(
+    numid: number,
+    name: string,
+    channels: Channel[],
+    min: number = 0,
+    max: number = 100,
+    steps: number = 1,
+  ) {
     this.lastOrder += 10
-    this.channels.add(
-      (new Channel() = {
-        min: min,
-        max: msx,
-        steps: steps,
-        freq: freq,
-        valie: value,
-        order: this.lastOrder,
-      }),
-    )
+    this.frequencies.push({
+      numid: numid,
+      min: min,
+      max: max,
+      steps: steps,
+      name: name,
+      channels: channels,
+      order: this.lastOrder,
+    })
   }
 }

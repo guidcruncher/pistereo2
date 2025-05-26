@@ -11,12 +11,12 @@ import { TuneinModule } from '../tunein/tunein.module'
 import { MpvModule } from '../mpv/mpv.module'
 import { UserstreamModule } from '../userstream/userstream.module'
 
-import { EqualiserService } from './equaliser.service'
 import { AudioController } from './audio.controller'
 import { AudioService } from './audio.service'
 import { PresetService } from './preset.service'
 import { UserStreamService } from './user-stream.service'
 import { WebsocketsController } from './websockets.controller'
+import { MixerService } from './mixer.service'
 
 @Module({
   imports: [
@@ -28,7 +28,7 @@ import { WebsocketsController } from './websockets.controller'
     MpvModule,
     UserstreamModule,
   ],
-  providers: [EqualiserService, AudioService, PresetService, UserStreamService],
+  providers: [AudioService, PresetService, UserStreamService, MixerService],
   controllers: [AudioController, WebsocketsController],
 })
 export class AudioModule {}
