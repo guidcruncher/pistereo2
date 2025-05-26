@@ -103,8 +103,8 @@ this.logger.log(obj)
         f.max = parseInt(obj['max'])
         f.steps = parseInt(obj['step'])
         f.name = obj['name'] ?? ''
-        f.channels = obj['values'].map((v) => {
-          return { name: '', value: v }
+        f.channels = obj['values'].split(",").map((v) => {
+          return { name: '', value: parseInt(v) }
         })
 this.logger.log(f) 
        m.frequencies.push(f)
