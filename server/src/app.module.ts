@@ -35,10 +35,7 @@ import { AllExceptionFilter } from './exception.filter'
   providers: [
     {
       provide: APP_FILTER,
-      useFactory: (logger: Logger) => {
-        return new AllExceptionFilter(logger)
-      },
-     inject: [Logger],
+      useClass: AllExceptionFilter
     },
     AppService,
   ],

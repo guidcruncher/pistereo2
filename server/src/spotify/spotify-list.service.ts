@@ -1,4 +1,4 @@
-import { Logger } from 'nestjs-pino'
+import { Logger } from '@nestjs/common'
 import { HttpException, Injectable } from '@nestjs/common'
 import { HttpTransportService } from '@core/http-transport.service'
 import {

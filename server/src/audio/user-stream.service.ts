@@ -1,4 +1,4 @@
-import { Logger } from 'nestjs-pino'
+import { Logger } from '@nestjs/common'
 import { Injectable } from '@nestjs/common'
 import { UserStreamService as UserStreamDataService } from '@data/userstream.service'
 import { AuthService } from '../auth/auth.service'

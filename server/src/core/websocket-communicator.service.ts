@@ -1,4 +1,4 @@
-import { Logger } from 'nestjs-pino'
+import { Logger } from '@nestjs/common'
 import { Injectable, Scope, OnModuleDestroy } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import * as net from 'net'

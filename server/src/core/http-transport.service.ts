@@ -1,4 +1,4 @@
-import { Logger } from 'nestjs-pino'
+import { Logger } from '@nestjs/common'
 import { Inject, HttpException, Injectable } from '@nestjs/common'
 import { getUserAgent } from './user-agent'
 

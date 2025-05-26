@@ -1,4 +1,4 @@
-import { Logger } from 'nestjs-pino'
+import { Logger } from '@nestjs/common'
 import { Injectable } from '@nestjs/common'
 import { M3uPlaylist, parseM3U } from '@iptv/playlist'
 import { UserStream } from '@data/schemas/index'
