@@ -65,8 +65,20 @@ export class MixerService {
     })
   }
 
-  private async parseContents(data): Promise<Mixer> {
-    let m: Mixer = new Mixer()
+  private async parseContents(data: string): Promise<Mixer> {
+    let m: Mixer = new Mixer
+    let f: Frequency= undefined
+let lines: string[]=data.split("\n").filter(n=>(n && n != ''))
+let i: number=0
+
+while (i  < lines.length) {
+if (lines[i].startsWith("num") {
+lines+=2
+}
+lines+=1
+}
+
+
 
     return m
   }
