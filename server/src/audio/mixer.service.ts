@@ -17,16 +17,16 @@ export class MixerService {
   async updateMixer(device: string, mixer: Mixer) {
     for (var i = 0; i < mixer.frequencies.length; i++) {
       let f: Frequency = mixer.frequencies[i]
-      await this.sset(device, f.name, f.channels)
+      await this.cset(device, f.numid, f.channels)
     }
   }
 
-  private async sset(device: string, name: string, values: Channel[]) {
+  private async cset(device: string, numid: number, values: Channel[]) {
     return await this.amixer([
       '-D',
       device,
-      'sset',
-      `"${name}"`,
+      'cset',
+      `numid=${numid}`,
       `${values
         .map((a) => {
           return a.value

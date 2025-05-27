@@ -7,7 +7,7 @@ export default {
   name: 'Mixer',
   props: {},
   data() {
-    return { mixer: {} as any, hasData: false }
+    return { mixer: {} as any, hasData: false, mode: 'advanced' }
   },
   mounted() {
     const playerService = new PlayerService()
@@ -26,7 +26,22 @@ export default {
       const playerService = new PlayerService()
       playerService.updateMixer('equal', this.mixer)
     },
-    setEqualiser(item) {},
+    setEqualiser(item, index) {
+      if (this.mode == 'simple') {
+        for (let i = 0; i < item.channels.length; i++) {
+          item.channels[i].value = item.value
+        }
+      } else {
+        //
+      }
+
+      this.saveMixer()
+    },
+    updateColor(ctl, item) {
+      if (item.value < 50) {
+        ctl.color = 'green'
+      }
+    },
   },
 }
 </script>
@@ -38,22 +53,50 @@ export default {
       v-slot="{ isSelected, toggle }"
       :value="item"
     >
-      <v-slider
-        v-model="item.channels[0]"
-        direction="vertical"
-        min="1"
-        max="100"
-        step="1"
-        @end="setEqualiser(item)"
-      >
-        <template #label>
-          <div class="text-caption">
-            {{ item.title }}
-          </div>
-        </template>
-      </v-slider>
+      <div v-if="mode == 'simple'">
+        <v-slider
+          v-model="item.value"
+          direction="vertical"
+          :min="item.min"
+          :max="item.max"
+          :step="item.steps"
+          @end="setEqualiser(item, -1)"
+        >
+          <template #label>
+            <div class="text-caption">{{ item.title }} {{ item.value }}</div>
+          </template>
+        </v-slider>
+      </div>
+      <div v-else>
+        {{ item.channels[0].name }}
+        <v-slider
+          v-model="item.channels[0].value"
+          direction="vertical"
+          :min="item.min"
+          :max="item.max"
+          :step="item.steps"
+          @end="setEqualiser(item, 0)"
+        >
+          <template #label>
+            <div class="text-caption">{{ item.title }} {{ item.value }}</div>
+          </template>
+        </v-slider>
+
+        {{ item.channels[1].name }}
+        <v-slider
+          v-model="item.channels[1].value"
+          direction="vertical"
+          :min="item.min"
+          :max="item.max"
+          :step="item.steps"
+          @end="setEqualiser(item, 1)"
+        >
+          <template #label>
+            <div class="text-caption">{{ item.title }} {{ item.value }}</div>
+          </template>
+        </v-slider>
+      </div>
     </v-slide-group-item>
   </v-slide-group>
 </template>
 <style></style>
-1
