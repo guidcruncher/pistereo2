@@ -1,7 +1,7 @@
 #!/bin/bash
 basedir="./build/server"
 
-if [ "$IN_DOCKER" == "yes" ]; thrn
+if [ "$IN_DOCKER" == "yes" ]; then
   basedir="/app/server"
 fi
 

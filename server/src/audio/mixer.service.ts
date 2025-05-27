@@ -14,6 +14,12 @@ export class MixerService {
     return equal
   }
 
+  async updateMixer(device: string, mixer: Mixer) {
+    for (var f in mixer.frequencies) {
+      await this.sset(device, f.name, f.channels)
+    }
+  }
+
   private async sset(device: string, name: string, values: Channel[]) {
     return await this.amixer([
       '-D',
@@ -103,6 +109,7 @@ export class MixerService {
         f.max = parseInt(obj['max'])
         f.steps = parseInt(obj['step'])
         f.name = obj['name'] ?? ''
+        f.title = f.name.slice(f.name.indexOf(' ')).replaceAll(' Playback Volume', '').trim()
         f.channels = obj['values'].split(',').map((v) => {
           return { name: '', value: parseInt(v) }
         })

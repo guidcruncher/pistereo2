@@ -1,3 +1,4 @@
+import { Channel, Mixer, Frequency } from '@views/index'
 import { User } from '@auth/decorators'
 import {
   Param,
@@ -109,5 +110,10 @@ export class AudioController {
   @Get('/mixer/:device')
   async getMixer(@AuthToken() token, @Param('device') device: string) {
     return await this.mixerService.getMixer(device)
+  }
+
+  @Put('/mixer/:device')
+  async updateMixer(@AuthToken() token, @Param('device') device: string, @Body() mixer: Mixer) {
+    return await this.mixerService.updateMixer(device, mixer)
   }
 }

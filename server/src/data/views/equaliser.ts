@@ -9,6 +9,7 @@ export class Frequency {
   max: number = 100
   steps: number = 1
   name: string = ''
+  title: string = ''
   channels: Channel[] = [] as Channel[]
   order: number = 10
 }
@@ -33,6 +34,7 @@ export class Mixer {
       max: max,
       steps: steps,
       name: name,
+      title: name.slice(name.indexOf(' ')).replaceAll(' Playback Volume', '').trim(),
       channels: channels,
       order: this.lastOrder,
     })
