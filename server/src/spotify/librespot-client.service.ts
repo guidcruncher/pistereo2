@@ -10,11 +10,12 @@ import { MpvPlayerService } from '../mpv/mpv-player.service'
 export class LibrespotClientService implements OnModuleDestroy {
   private socket: WebSocket
 
+private readonly logger: Logger = new Logger(LibrespotClientService.name, {timestamp: true})
+
   constructor(
     private readonly eventEmitter: EventEmitter2,
     private readonly mpvPlayer: MpvPlayerService,
     private readonly historyService: HistoryService,
-    private readonly logger: Logger,
   ) {
     this.open('ws://127.0.0.1:3678/events')
   }
