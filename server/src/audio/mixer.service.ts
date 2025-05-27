@@ -36,23 +36,11 @@ export class MixerService {
   }
 
   private async contents(device: string): Promise<Mixer> {
-    let ch = await this.getchannels(device)
-
+    let ch = await this.amixer(['-D', device, 'scontents'])
     let res = await this.amixer(['-D', device, 'contents'])
     let contents = await this.parseContents(res, ch)
     contents.device = device
     return contents
-  }
-
-  private async getchannels(device: string) {
-    let res = await this.amixer(['-D', device, 'scontents'])
-    let i = res.indexOf('Playback channels:')
-    if (i >= 0) {
-      let content = res.substring(i, res.indexOf('\n', i) - i)
-      return content.slice(18).split(' - ')
-    } else {
-      return []
-    }
   }
 
   private async amixer(params): Promise<string> {
@@ -80,8 +68,17 @@ export class MixerService {
     })
   }
 
-  private async parseContents(data: string, names: string[]): Promise<Mixer> {
+  private async parseContents(data: string, controls: string): Promise<Mixer> {
     let m: Mixer = new Mixer()
+    let channels: string[] = controls
+      .split('\n')
+      .map((a) => {
+        return a.trim()
+      })
+      .filter((a) => {
+        return a.startsWith('Playback channels:')
+      })
+      .map((a) => a.slice(18).split('-'))[0]
     let lines: string[] = data
       .split('\n')
       .filter((n) => n && n.trim() != '')
@@ -118,7 +115,7 @@ export class MixerService {
         f.name = obj['name'] ?? ''
         f.title = f.name.slice(f.name.indexOf(' ')).replaceAll(' Playback Volume', '').trim()
         f.channels = obj['values'].split(',').map((v, index) => {
-          return { name: names[index], value: parseInt(v) }
+          return { name: channels[index].trim(), value: parseInt(v) }
         })
         m.frequencies.push(f)
         i = i + 2
