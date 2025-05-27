@@ -1,4 +1,4 @@
-s# Base container
+# Base container
 FROM node:22-alpine AS base
 ARG TARGETARCH
 ENV NODE_ENV=production
