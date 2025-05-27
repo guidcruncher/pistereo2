@@ -11,13 +11,11 @@ export class Frequency {
   name: string = ''
   title: string = ''
   channels: Channel[] = [] as Channel[]
-  order: number = 10
 }
 
 export class Mixer {
   frequencies: Frequency[] = [] as Frequency[]
-
-  private lastOrder: number = 0
+  device: string = ''
 
   add(
     numid: number,
@@ -27,7 +25,6 @@ export class Mixer {
     max: number = 100,
     steps: number = 1,
   ) {
-    this.lastOrder += 10
     this.frequencies.push({
       numid: numid,
       min: min,
@@ -36,7 +33,6 @@ export class Mixer {
       name: name,
       title: name.slice(name.indexOf(' ')).replaceAll(' Playback Volume', '').trim(),
       channels: channels,
-      order: this.lastOrder,
     })
   }
 }
