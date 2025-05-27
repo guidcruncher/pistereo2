@@ -25,6 +25,16 @@ export class PlayerService extends BaseService {
     return res
   }
 
+  async getMixer(device: string) {
+    const response: AxiosResponse<any> = await this.client().get(`/mixer/${device}`)
+    return response.data
+  }
+
+  async updateMixer(device: string, settings: any) {
+ const response: AxiosResponse<any> = await this.client().post(`/mixer/${device}`, settings)
+    return response.data
+  }
+
   async play(uri: any) {
     const params = new URLSearchParams()
     params.append('uri', this.uriString(uri))
