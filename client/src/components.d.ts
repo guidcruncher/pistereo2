@@ -11,6 +11,7 @@ declare module 'vue' {
     AlbumListsView: typeof import('./components/AlbumListsView.vue')['default']
     AppFooter: typeof import('./components/AppFooter.vue')['default']
     EpisodeListsView: typeof import('./components/EpisodeListsView.vue')['default']
+    Mixer: typeof import('./components/Mixer.vue')['default']
     Player: typeof import('./components/Player.vue')['default']
     PlaylistsView: typeof import('./components/PlaylistsView.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
