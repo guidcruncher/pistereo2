@@ -16,8 +16,8 @@
           <Player />
         </div>
       </div>
-      <Mixer /> 
-   </v-tabs-window-item>
+      <Mixer />
+    </v-tabs-window-item>
     <v-tabs-window-item value="myplaylists">
       <PlaylistsView />
     </v-tabs-window-item>

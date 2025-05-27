@@ -11,6 +11,7 @@ export class Frequency {
   name: string = ''
   title: string = ''
   channels: Channel[] = [] as Channel[]
+  value: mumber = 0
 }
 
 export class Mixer {

@@ -31,7 +31,7 @@ export class PlayerService extends BaseService {
   }
 
   async updateMixer(device: string, settings: any) {
- const response: AxiosResponse<any> = await this.client().post(`/mixer/${device}`, settings)
+    const response: AxiosResponse<any> = await this.client().post(`/mixer/${device}`, settings)
     return response.data
   }
 

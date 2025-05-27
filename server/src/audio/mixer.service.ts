@@ -117,6 +117,7 @@ export class MixerService {
         f.channels = obj['values'].split(',').map((v, index) => {
           return { name: channels[index].trim(), value: parseInt(v) }
         })
+        f.value = f.channels[0].value
         m.frequencies.push(f)
         i = i + 2
       }
