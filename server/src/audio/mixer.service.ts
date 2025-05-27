@@ -15,7 +15,8 @@ export class MixerService {
   }
 
   async updateMixer(device: string, mixer: Mixer) {
-    for (var f in mixer.frequencies) {
+    for (var i = 0; i < mixer.frequencies.length; i++) {
+      let f: Frequency = mixer.frequencies[i]
       await this.sset(device, f.name, f.channels)
     }
   }
