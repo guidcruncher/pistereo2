@@ -33,7 +33,7 @@ export class Mixer {
       steps: steps,
       name: name,
       title: name.slice(name.indexOf(' ')).replaceAll(' Playback Volume', '').trim(),
-      channels: channels,
+      channels: channels,value: channels[0].value
     })
   }
 }
