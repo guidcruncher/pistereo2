@@ -7,8 +7,7 @@ import * as path from 'path'
 
 @Injectable()
 export class MixerService {
-
-private readonly logger = new Logger(MixerService.name, { timestamp: true });
+  private readonly logger = new Logger(MixerService.name, { timestamp: true })
 
   async getMixer(device: string): Promise<Mixer> {
     const equal: Mixer = await this.contents(device)
@@ -86,12 +85,14 @@ private readonly logger = new Logger(MixerService.name, { timestamp: true });
       if (lines[i].startsWith('num')) {
         let obj = {} as any
         let fields: string[] =
-          `${lines[i]},${lines[i + 1].replaceAll('values', 'channels')},${lines[i + 2].replaceAll(",","_")}`
+          `${lines[i]},${lines[i + 1].replaceAll('values', 'channels')},${lines[i + 2].replaceAll(',', '_')}`
             .replaceAll("'", '')
             .split(',')
         fields.map((a) => {
           let b = a.split('=')
-if (b[0] == "values") {b[1]= b[1].replace("_",",")}
+          if (b[0] == 'values') {
+            b[1] = b[1].replace('_', ',')
+          }
 
           obj[b[0]] = b[1]
           return b
@@ -102,10 +103,10 @@ if (b[0] == "values") {b[1]= b[1].replace("_",",")}
         f.max = parseInt(obj['max'])
         f.steps = parseInt(obj['step'])
         f.name = obj['name'] ?? ''
-        f.channels = obj['values'].split(",").map((v) => {
+        f.channels = obj['values'].split(',').map((v) => {
           return { name: '', value: parseInt(v) }
         })
-       m.frequencies.push(f)
+        m.frequencies.push(f)
         i = i + 2
       }
       i = i + 1
@@ -114,5 +115,3 @@ if (b[0] == "values") {b[1]= b[1].replace("_",",")}
     return m
   }
 }
-
- 

@@ -8,8 +8,7 @@ import { getUserAgent } from './user-agent'
 
 @Injectable()
 export class HttpTransportService {
-
-  private readonly logger: Logger = new Logger(HttpTransportService.name, {timestamp: true})
+  private readonly logger: Logger = new Logger(HttpTransportService.name, { timestamp: true })
   private readonly userAgent: string = ''
 
   constructor() {

@@ -1,4 +1,4 @@
-# Base container
+s# Base container
 FROM node:22-alpine AS base
 ARG TARGETARCH
 ENV NODE_ENV=production
@@ -24,7 +24,7 @@ RUN npm i --no-audit --progress=false && cd server && NODE_ENV=development npm i
 ENV NODE_ENV=production
 RUN grunt build-all
 COPY ./buildscripts/startcontainer.sh ./build/startcontainer.sh
-COPY ./buildscripts/start.sh ./build/server/start.sh
+COPY ./buildscripts/start.sh ./build/start.sh
 RUN chmod +x ./build/*.sh ./build/server/*.sh
 
 # Runtime container

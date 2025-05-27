@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core'
-import { Logger } from '@nestjs/common'
+import { ConsoleLogger, Logger } from '@nestjs/common'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 import { AppModule } from './app.module'
 import { config } from '@dotenvx/dotenvx'
@@ -7,11 +7,15 @@ import { getScopes } from '@auth/scopes'
 import compression = require('compression')
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule)
+  const app = await NestFactory.create(AppModule, {
+    logger: new ConsoleLogger({
+      colors: true,
+    }),
+  })
+
   const baseUrl: string = process.env.PISTEREO_BASEURL as string
   const listenAddr = (process.env.PISTEREO_LISTEN_PORT ?? '3000') as string
 
-  app.useLogger(app.get(Logger))
   app.use(compression())
 
   const config = new DocumentBuilder()

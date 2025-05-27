@@ -18,7 +18,7 @@ import { AllExceptionFilter } from './exception.filter'
 
 @Module({
   imports: [
-//    LoggerModule.forRoot(),
+    //    LoggerModule.forRoot(),
     EventEmitterModule.forRoot(),
     DataModule,
     AuthModule,
@@ -35,7 +35,7 @@ import { AllExceptionFilter } from './exception.filter'
   providers: [
     {
       provide: APP_FILTER,
-      useClass: AllExceptionFilter
+      useClass: AllExceptionFilter,
     },
     AppService,
   ],

@@ -1,4 +1,10 @@
 #!/bin/bash
+basedir="./build/server"
+
+if [ "$IN_DOCKER" == "yes" ]; thrn
+  basedir="/app/server"
+fi
+
 
 if [ -z "$NODE_ENV" ]; then
   NODE_ENV=development
@@ -6,13 +12,13 @@ fi
 echo "Running for $NODE_ENV"
 
 if [ -f "./config/.env" ]; then
-  cp ./config/.env ./build/server/.env
+  cp ./config/.env "$basedir"/.env
 fi
 
 if [ -f "./media.env" ]; then
-  cat ./media.env | sed "s@PISTEREO_MPV_SOCKET=/config/mpv/socket@PISTEREO_MPV_SOCKET=$HOME/src/pistereo-config/mpv/socket@g" > ./build/server/.env
+  cat ./media.env | sed "s@PISTEREO_MPV_SOCKET=/config/mpv/socket@PISTEREO_MPV_SOCKET=$HOME/src/pistereo-config/mpv/socket@g" > "$basedir"/.env
 fi
 
-cd ./build/server
+cd "$basedir"
 node ./main.js
 

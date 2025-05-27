@@ -10,7 +10,7 @@ import { MpvPlayerService } from '../mpv/mpv-player.service'
 export class LibrespotClientService implements OnModuleDestroy {
   private socket: WebSocket
 
-private readonly logger: Logger = new Logger(LibrespotClientService.name, {timestamp: true})
+  private readonly logger: Logger = new Logger(LibrespotClientService.name, { timestamp: true })
 
   constructor(
     private readonly eventEmitter: EventEmitter2,

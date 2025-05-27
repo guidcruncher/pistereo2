@@ -10,8 +10,7 @@ import {
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
-
-private readonly logger = new Logger(AllExceptionFilter.name, { timestamp: true });
+  private readonly logger = new Logger(AllExceptionFilter.name, { timestamp: true })
 
   constructor() {}
 
