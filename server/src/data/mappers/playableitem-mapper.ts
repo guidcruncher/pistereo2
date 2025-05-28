@@ -1,0 +1,48 @@
+import { imageUrl, Mapper } from './mapper'
+import { Uri } from '../views/uri'
+import { Context } from '../views/context'
+import { PlayableItem } from '../views/playableitem'
+import {
+  AlbumMapper,
+  TrackMapper,
+  ShowMapper,
+  EpisodeMapper,
+  TuneinMapper,
+  UserStreamMapper,
+  PlaylistMapper,
+} from '@mappers/index'
+
+export const PlayableItemMapper: Mapper<PlayableItem> = (value: any): PlayableItem => {
+  let uri: Uri = {} as Uri
+  if (typeof value.uri === 'string') {
+    uri = Uri.fromUriString(value.uri)
+  } else {
+    if (value.uri instanceof Uri) {
+      uri = value.uri
+    } else {
+      throw new Error('Invalid uri type, expected string or Uri.')
+    }
+  }
+
+  switch (uri.source) {
+    case 'spotify':
+      switch (uri.type) {
+        case 'album':
+          return AlbumMapper(value)
+        case 'track':
+          return TrackMapper(value)
+        case 'show':
+          return ShowMapper(value)
+        case 'episode':
+          return EpisodeMapper(value)
+        case 'playlist':
+          return {} as PlayableItem
+      }
+      break
+    case 'tunein':
+      return TuneinMapper(value)
+    case 'user':
+      return UserStreamMapper(value)
+  }
+  throw new Error('Invalid input to mapper')
+}

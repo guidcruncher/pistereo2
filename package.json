@@ -1,0 +1,25 @@
+{
+  "name": "pistereo2",
+  "version": "0.0.1",
+  "description": "",
+  "homepage": "https://github.com/guidcruncher/pistereo2#readme",
+  "bugs": {
+    "url": "https://github.com/guidcruncher/pistereo2/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guidcruncher/pistereo2.git"
+  },
+  "license": "GPL-3.0-or-later",
+  "author": "guidcruncher",
+  "main": "grunt",
+  "scripts": {},
+  "dependencies": {
+    "grunt": "^1.6.1",
+    "grunt-concurrent": "^3.0.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-watch": "^1.1.0",
+    "grunt-nodemon": "^0.4.2",
+    "grunt-run": "^0.8.1"
+  }
+}
