@@ -31,7 +31,7 @@ export class MixerService {
         .map((a) => {
           return a.value
         })
-        .join(', ')}`,
+        .join(',')}`,
     ])
   }
 

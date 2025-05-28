@@ -10,7 +10,7 @@ export default {
     return { mixer: {} as any, hasData: false, mode: 'simple' }
   },
   mounted() {
-    const playerService = new PlayerService()ttt"sßssssssxx%-•%-%
+    const playerService = new PlayerService()
     this.loadMixer()
   },
   beforeUnmount() {},
@@ -28,35 +28,63 @@ export default {
     },
     setEqualiser(item, index) {
       if (this.mode == 'simple') {
-        for (let i = 0; i < item.channels.length; i++) {
-          item.channels[i].value = item.value
-        }
-      } else {
-        //
+        item.channels.forEach((c) => {
+          c.value = item.value
+        })
       }
 
       this.saveMixer()
     },
-    updateColor(ctl, item) {
-      if (item.value < 50) {
-        ctl.color = 'green'
-      }
+    setAll(level) {
+      this.mixer.frequencies.forEach((f) => {
+        f.channels.forEach((c) => {
+          c.value = level
+        })
+        f.value = level
+      })
+      this.saveMixer()
     },
   },
 }
 </script>
 <template>
   <v-card>
+<v-card-item>
+ <v-card-title>Mixer </v-card-title>
+ <v-card-subtitle></v-card-subtitle>
+    </v-card-item>
+    <v-card-text>
     <v-slide-group show-arrows v-if="hasData">
       <v-slide-group-item
+        v-if="mode == 'simple'"
         v-for="item in mixer.frequencies"
         :key="item"
         v-slot="{ isSelected, toggle }"
         :value="item"
       >
-        <div v-if="mode == 'simple'">
+        <v-slider
+          v-model="item.value"
+          direction="vertical"
+          :min="item.min"
+          :max="item.max"
+          :step="item.steps"
+          @end="setEqualiser(item, -1)"
+        >
+          <template #label>
+            <div class="text-caption">{{ item.title }}</div>
+          </template>
+        </v-slider>
+      </v-slide-group-item>
+      <v-slide-group-item
+        v-if="mode == 'advanced'"
+        v-for="item in mixer.frequencies"
+        :key="item"
+        v-slot="{ isSelected, toggle }"
+        :value="item"
+      >
+        <div v-for="ch in item.channels" class="pa-2">
           <v-slider
-            v-model="item.value"
+            v-model="ch.value"
             direction="vertical"
             :min="item.min"
             :max="item.max"
@@ -64,41 +92,23 @@ export default {
             @end="setEqualiser(item, -1)"
           >
             <template #label>
-              <div class="text-caption">{{ item.title }} {{ item.value }}</div>
-            </template>
-          </v-slider>
-        </div>
-        <div v-else>
-          {{ item.channels[0].name }}
-          <v-slider
-            v-model="item.channels[0].value"
-            direction="vertical"
-            :min="item.min"
-            :max="item.max"
-            :step="item.steps"
-            @end="setEqualiser(item, 0)"
-          >
-            <template #label>
-              <div class="text-caption">{{ item.title }} {{ item.value }}</div>
-            </template>
-          </v-slider>
-
-          {{ item.channels[1].name }}
-          <v-slider
-            v-model="item.channels[1].value"
-            direction="vertical"
-            :min="item.min"
-            :max="item.max"
-            :step="item.steps"
-            @end="setEqualiser(item, 1)"
-          >
-            <template #label>
-              <div class="text-caption">{{ item.title }} {{ item.value }}</div>
+              <div class="text-caption">{{ ch.name }} {{ item.title }}</div>
             </template>
           </v-slider>
         </div>
       </v-slide-group-item>
     </v-slide-group>
+</v-card-text>
+    <v-card-actions>
+      <v-btn @click="setAll(60)">Reset</v-btn>
+      <v-switch
+        v-model="mode"
+        label="Advanced mode"
+        false-value="simple"
+        true-value="advanced"
+        hide-details
+      ></v-switch>
+    </v-card-actions>
   </v-card>
 </template>
 <style></style>
