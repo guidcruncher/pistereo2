@@ -26,6 +26,7 @@ export class PresetService {
     if (item.presetid === '') {
       item.presetid = crypto.randomUUID()
     }
+
     item.id = item.uri.id
 
     return await this.presetsService.savePreset(item, user.id)

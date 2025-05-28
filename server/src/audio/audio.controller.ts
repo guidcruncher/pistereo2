@@ -56,6 +56,7 @@ export class AudioController {
   @Put('/presets')
   async addPresets(@User() user: any, @AuthToken() token: string, @Query('uri') uri: string) {
     let metadata = await this.audioService.getTrackDetail(token, uri)
+    metadata.uri = Uri.fromUriString(uri)
     return await this.presetService.addPreset(token, user, metadata)
   }
 

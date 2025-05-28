@@ -24,9 +24,6 @@ import { TuneinSearchService } from './tunein-search.service'
     UserstreamModule,
   ],
   controllers: [SearchController],
-  providers: [
-    SearchService,
-    TuneinSearchService,
-  ],
+  providers: [SearchService, TuneinSearchService],
 })
 export class SearchModule {}
