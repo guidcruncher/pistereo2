@@ -29,7 +29,7 @@ export class SearchController {
     @AuthToken() token: string,
     @User() user: any,
     @Query('query') query: string,
-    @Query('offset') offaet: number,
+    @Query('offset') offset: number,
     @Query('limit') limit: number,
   ) {
     return await this.searchService.query(token, user, query, offset, limit)

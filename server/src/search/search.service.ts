@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common'
+import { TuneinSearchService } from './tunein-search.service'
 
 @Injectable()
 export class SearchService {

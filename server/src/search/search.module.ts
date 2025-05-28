@@ -11,6 +11,7 @@ import { UserstreamModule } from '../userstream/userstream.module'
 
 import { SearchController } from './search.controller'
 import { SearchService } from './search.service'
+import { TuneinSearchService } from './tunein-search.service'
 
 @Module({
   imports: [
@@ -23,7 +24,9 @@ import { SearchService } from './search.service'
     UserstreamModule,
   ],
   controllers: [SearchController],
-  providers: [AudioService, PresetService, UserStreamService, MixerService, SearchService],
-  controllers: [AudioController, WebsocketsController],
+  providers: [
+    SearchService,
+    TuneinSearchService,
+  ],
 })
 export class SearchModule {}
