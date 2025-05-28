@@ -42,7 +42,7 @@ export default {
         :key="item"
         v-slot="{ isSelected, toggle }"
       >
-        <div class="spacer">
+        <div class="pa-1">
           <ScaledImage :src="item.imageUrl" size="sm" @click="play(item)" />
         </div>
       </v-slide-group-item>

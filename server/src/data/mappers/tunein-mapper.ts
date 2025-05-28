@@ -5,7 +5,7 @@ import { Tunein } from '../views/tunein'
 
 export const TuneinMapper: Mapper<Tunein> = (value: any) => {
   let result = new Tunein()
-  result.uri = value.uri
+  result.uri =Uri.fromUriString( "tunein:station:"+ value.GuideId )
   result.name = value.Title
   result.owner = value.Subtitle ?? ''
   result.subtitle = value.Subtitle ?? ''
