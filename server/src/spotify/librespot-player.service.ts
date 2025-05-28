@@ -133,6 +133,16 @@ export class LibrespotPlayerService extends EventBaseService {
     }
   }
 
+  private async getNextTrackUri(token: string) {
+    let currentQueue:PlaybackQueue = await this.getPlaybackQueue(token)
+      if (currentQueue && (currentQueue.queue.length > 0)) {
+         let uri: Uri = currentQueue.queue[0].uri
+         return uri.toString()
+      }
+
+    return ""
+  }
+
   async playerCommand(token: string, device_id: string, command: string): Promise<PlayableItem> {
     let result: any = undefined
 
@@ -159,7 +169,7 @@ export class LibrespotPlayerService extends EventBaseService {
           'POST',
           'http://127.0.0.1:3678/player/next',
           { Authorization: `Bearer ${token}` },
-          { uri: '' },
+          { uri: await this.getNextTrackUri(token) },
         )
         break
       case 'stop':

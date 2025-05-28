@@ -173,6 +173,7 @@ export default {
           <h4>-</h4>
           <h5>-</h5>
         </div>
+        <div><center>
         <table border="0" cellpadding="4" cellspacing="4">
           <tbody>
             <tr>
@@ -230,6 +231,8 @@ export default {
             </tr>
           </tbody>
         </table>
+</center>
+</div>
       </div>
     </div>
   </v-card>

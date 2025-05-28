@@ -93,49 +93,12 @@ export class AuthService {
       await this.userService.addSession(body.access_token, body.refresh_token, user, body.expires)
       await this.userService.addUser(user)
       body.user = user ? user : {}
-      this.saveAccessToken(user.name, body.access_token)
     }
 
     return body
   }
 
-  private async saveAccessToken(username: string, token: string) {
-    return new Promise((resolve, reject) => {
-      let filename = path.join(process.env.PISTEREO_CONFIG as string, '/librespot/accesstoken.env')
-      let librespotmode = (process.env.PISTEREO_LIBRESPOT_MODE ?? 'zeroconf') as string
-
-      if (fs.existsSync(filename)) {
-        fs.unlinkSync(filename)
-      }
-
-      if (librespotmode == 'token') {
-        fs.writeFileSync(
-          filename,
-          `PISTEREO_SPOTIFY_USERNAME=${username}\nPISTEREO_SPOTIFY_ACCESS_TOKEN=${token}`,
-        )
-
-        let in_docker = process.env.IN_DOCKER ?? 'no'
-        if (in_docker == 'yes') {
-          try {
-            execFile('pm2', ['restart', 'Librespot', '--update-env'])
-              .then((result) => {
-                resolve(result)
-              })
-              .catch((err) => {
-                reject(err)
-              })
-          } catch (err) {
-            resolve(err)
-          }
-        } else {
-          resolve(true)
-        }
-      } else {
-        resolve(true)
-      }
-    })
-  }
-
+  k
   public async getRefreshToken(accessToken: string, refreshToken: string): Promise<any> {
     const url = 'https://accounts.spotify.com/api/token'
 

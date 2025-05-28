@@ -15,7 +15,7 @@ import { UserstreamModule } from './userstream/userstream.module'
 import { AudioModule } from './audio/audio.module'
 import { MetadataModule } from './metadata/metadata.module'
 import { AllExceptionFilter } from './exception.filter'
-import { SearchModule } from './search/search.module';
+import { SearchModule } from './search/search.module'
 
 @Module({
   imports: [
