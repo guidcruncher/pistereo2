@@ -11,6 +11,9 @@ COPY ./mediaserver/lib/libasound* /usr/lib/alsa-lib/
 
 RUN npm i -g @nestjs/cli grunt-cli pm2 dotenv-cli --no-audit
 RUN npm cache clean --force
+RUN pm2 install pm2-logrotate
+RUN pm2 set pm2-logrotate:retain 2
+RUN pm2 set pm2-logrotate:max_size 5M
 
 # Build container
 FROM base AS build
