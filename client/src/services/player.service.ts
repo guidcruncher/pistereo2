@@ -15,6 +15,18 @@ export class PlayerService extends BaseService {
     return response.data
   }
 
+  async getPresets() {
+    const response: AxiosResponse<any> = await this.client().get('/presets')
+    return response.data
+  }
+
+  async addPreset(uri: Uri) {
+    const params = new URLSearchParams()
+    params.append('uri', this.uriString(uri))
+    const response: AxiosResponse<any> = await this.client().put(`/presets?${params.toString()}`)
+    return response.data
+  }
+
   async tryStartLastPlayed() {
     const response: AxiosResponse<any> = await this.client().put(`/lastplayed`)
     return response.data

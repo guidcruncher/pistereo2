@@ -49,42 +49,21 @@ export default {
 </script>
 <template>
   <v-card>
-<v-card-item>
- <v-card-title>Mixer </v-card-title>
- <v-card-subtitle></v-card-subtitle>
+    <v-card-item>
+      <v-card-title>Mixer </v-card-title>
+      <v-card-subtitle></v-card-subtitle>
     </v-card-item>
     <v-card-text>
-    <v-slide-group show-arrows v-if="hasData">
-      <v-slide-group-item
-        v-if="mode == 'simple'"
-        v-for="item in mixer.frequencies"
-        :key="item"
-        v-slot="{ isSelected, toggle }"
-        :value="item"
-      >
-        <v-slider
-          v-model="item.value"
-          direction="vertical"
-          :min="item.min"
-          :max="item.max"
-          :step="item.steps"
-          @end="setEqualiser(item, -1)"
+      <v-slide-group show-arrows v-if="hasData">
+        <v-slide-group-item
+          v-if="mode == 'simple'"
+          v-for="item in mixer.frequencies"
+          :key="item"
+          v-slot="{ isSelected, toggle }"
+          :value="item"
         >
-          <template #label>
-            <div class="text-caption">{{ item.title }}</div>
-          </template>
-        </v-slider>
-      </v-slide-group-item>
-      <v-slide-group-item
-        v-if="mode == 'advanced'"
-        v-for="item in mixer.frequencies"
-        :key="item"
-        v-slot="{ isSelected, toggle }"
-        :value="item"
-      >
-        <div v-for="ch in item.channels" class="pa-2">
           <v-slider
-            v-model="ch.value"
+            v-model="item.value"
             direction="vertical"
             :min="item.min"
             :max="item.max"
@@ -92,13 +71,34 @@ export default {
             @end="setEqualiser(item, -1)"
           >
             <template #label>
-              <div class="text-caption">{{ ch.name }} {{ item.title }}</div>
+              <div class="text-caption">{{ item.title }}</div>
             </template>
           </v-slider>
-        </div>
-      </v-slide-group-item>
-    </v-slide-group>
-</v-card-text>
+        </v-slide-group-item>
+        <v-slide-group-item
+          v-if="mode == 'advanced'"
+          v-for="item in mixer.frequencies"
+          :key="item"
+          v-slot="{ isSelected, toggle }"
+          :value="item"
+        >
+          <div v-for="ch in item.channels" class="pa-2">
+            <v-slider
+              v-model="ch.value"
+              direction="vertical"
+              :min="item.min"
+              :max="item.max"
+              :step="item.steps"
+              @end="setEqualiser(item, -1)"
+            >
+              <template #label>
+                <div class="text-caption">{{ ch.name }} {{ item.title }}</div>
+              </template>
+            </v-slider>
+          </div>
+        </v-slide-group-item>
+      </v-slide-group>
+    </v-card-text>
     <v-card-actions>
       <v-btn @click="setAll(60)">Reset</v-btn>
       <v-switch

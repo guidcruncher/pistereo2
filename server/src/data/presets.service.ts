@@ -6,6 +6,7 @@ import { Connection } from 'mongoose'
 import { Inject, Injectable, Dependencies } from '@nestjs/common'
 import { PlayableItem } from '@views/index'
 import { Preset } from '@schemas/index'
+import * as crypto from 'crypto'
 
 @Injectable()
 export class PresetsService {
@@ -14,6 +15,20 @@ export class PresetsService {
   async savePreset(item: Preset, user: string): Promise<any> {
     let preset: Preset = item as Preset
     preset.userId = user
+    return await this.presetModel.findOneAndUpdate(
+      { $and: [{ id: preset.id }, { userId: preset.userId }] },
+      preset,
+      {
+        upsert: true,
+      },
+    )
+  }
+
+  async addPreset(item: PlayableItem, user: string): Promise<any> {
+    let preset: Preset = item as Preset
+    preset.userId = user
+    preset.id = crypto.randomUUID()
+
     return await this.presetModel.findOneAndUpdate(
       { $and: [{ id: preset.id }, { userId: preset.userId }] },
       preset,

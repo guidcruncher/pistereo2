@@ -53,6 +53,12 @@ export class AudioController {
     return await this.presetService.getPresets(token, user)
   }
 
+  @Put('/presets')
+  async addPresets(@User() user: any, @AuthToken() token: string, @Query('uri') uri: string) {
+    let metadata = await this.audioService.getTrackDetail(token, uri)
+    return await this.presetService.addPreset(token, user, metadata)
+  }
+
   @Put('/lastplayed')
   async startLastPlayed(@User() user: any, @AuthToken() token: string) {
     return await this.audioService.startLastPlayed(token, user)

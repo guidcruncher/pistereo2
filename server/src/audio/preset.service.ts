@@ -5,6 +5,7 @@ import { AuthService } from '../auth/auth.service'
 import { Preset } from '@schemas/index'
 import * as crypto from 'crypto'
 import { Uri } from '@views/uri'
+import { PlayableItem, Uri } from '@views/index'
 
 @Injectable()
 export class PresetService {
@@ -29,5 +30,11 @@ export class PresetService {
     item.id = item.uri.id
 
     return await this.presetsService.savePreset(item, user.id)
+  }
+
+  async addPreset(token: string, user: any, data: PlayableItem) {
+    let item = new Preset()
+
+    return await this.savePreser(token, user, item) 
   }
 }
