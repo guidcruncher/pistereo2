@@ -173,66 +173,77 @@ export default {
           <h4>-</h4>
           <h5>-</h5>
         </div>
-        <div><center>
-        <table border="0" cellpadding="4" cellspacing="4">
-          <tbody>
-            <tr>
-              <td>
-                <v-btn
-                  color="primary"
-                  icon="mdi-skip-previous"
-                  variant="outlined"
-                  @click="previousTrack()"
-                />
-              </td>
-              <td>
-                <v-btn color="primary" variant="outlined" icon="mdi-stop" @click="stopPlayer()" />
-              </td>
-              <td>
-                <v-btn
-                  color="primary"
-                  size="x-large"
-                  icon="mdi-play"
-                  v-if="!playing"
-                  @click="togglePlayback()"
-                />
-                <v-btn
-                  color="primary"
-                  size="x-large"
-                  icon="mdi-pause"
-                  v-if="playing"
-                  @click="togglePlayback()"
-                />
-              </td>
-              <td>
-                <v-btn color="primary" variant="outlined" icon="mdi-skip-next" @click="nextTrack" />
-              </td>
-              <td>
-                <v-btn
-                  color="primary"
-                  icon="mdi-volume-medium"
-                  variant="outlined"
-                  v-if="volumeStore.muted"
-                  @click="unmuteVolume()"
-                />
-                <v-btn
-                  color="primary"
-                  icon="mdi-volume-mute"
-                  variant="outlined"
-                  v-if="!volumeStore.muted"
-                  @click="muteVolume()"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td colspan="5">
-                <VolumeControl />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-</center>
-</div>
+        <div>
+          <center>
+            <table border="0" cellpadding="4" cellspacing="4">
+              <tbody>
+                <tr>
+                  <td>
+                    <v-btn
+                      color="primary"
+                      icon="mdi-skip-previous"
+                      variant="outlined"
+                      @click="previousTrack()"
+                    />
+                  </td>
+                  <td>
+                    <v-btn
+                      color="primary"
+                      variant="outlined"
+                      icon="mdi-stop"
+                      @click="stopPlayer()"
+                    />
+                  </td>
+                  <td>
+                    <v-btn
+                      color="primary"
+                      size="x-large"
+                      icon="mdi-play"
+                      v-if="!playing"
+                      @click="togglePlayback()"
+                    />
+                    <v-btn
+                      color="primary"
+                      size="x-large"
+                      icon="mdi-pause"
+                      v-if="playing"
+                      @click="togglePlayback()"
+                    />
+                  </td>
+                  <td>
+                    <v-btn
+                      color="primary"
+                      variant="outlined"
+                      icon="mdi-skip-next"
+                      @click="nextTrack"
+                    />
+                  </td>
+                  <td>
+                    <v-btn
+                      color="primary"
+                      icon="mdi-volume-medium"
+                      variant="outlined"
+                      v-if="volumeStore.muted"
+                      @click="unmuteVolume()"
+                    />
+                    <v-btn
+                      color="primary"
+                      icon="mdi-volume-mute"
+                      variant="outlined"
+                      v-if="!volumeStore.muted"
+                      @click="muteVolume()"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="5">
+                    <VolumeControl />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </center>
+        </div>
       </div>
     </div>
   </v-card>

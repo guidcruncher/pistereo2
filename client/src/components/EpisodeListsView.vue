@@ -24,6 +24,10 @@ export default {
   },
   beforeUnmount() {},
   methods: {
+    addPreset(uri) {
+      const playerService = new PlayerService()
+      playerService.addPreset(uri)
+    },
     onResize() {
       this.windowSize = { x: window.innerWidth, y: window.innerHeight - 240 }
     },
@@ -69,17 +73,24 @@ export default {
       <v-infinite-scroll :height="windowSize.y" v-resize="onResize" :items="items" @load="loadData">
         <template v-for="item in items" :key="item" :value="item">
           <div class="pa-1" v-ripple @click="loadPlaylist(item)">
-            <table border="0" cellpadding="0" cellspacing="0">
-              <tbody>
-                <tr>
-                  <td><ScaledImage :src="item.imageUrl" size="xs" style="margin-right: 16px" /></td>
-                  <td>
-                    <div class="text-subtitle-1">{{ item.name }}</div>
-                    <div class="text-body-2">{{ item.show.name }}</div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <div style="float: left">
+              <table border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                  <tr>
+                    <td>
+                      <ScaledImage :src="item.imageUrl" size="xs" style="margin-right: 16px" />
+                    </td>
+                    <td>
+                      <div class="text-subtitle-1">{{ item.name }}</div>
+                      <div class="text-body-2">{{ item.show.name }}</div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div style="float: right">
+              <v-btn icon="mdi-star-plus" @click="addPreset(item.uri)"></v-btn>
+            </div>
           </div>
         </template>
       </v-infinite-scroll>

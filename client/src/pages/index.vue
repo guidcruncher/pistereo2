@@ -16,7 +16,18 @@
           <Player />
         </div>
       </div>
-      <Mixer />
+
+      <div class="pa-2">
+        <div>
+          <Presets />
+        </div>
+      </div>
+
+      <div class="pa-2">
+        <div>
+          <Mixer />
+        </div>
+      </div>
     </v-tabs-window-item>
     <v-tabs-window-item value="myplaylists">
       <PlaylistsView />
