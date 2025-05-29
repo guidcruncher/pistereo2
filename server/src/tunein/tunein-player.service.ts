@@ -74,4 +74,36 @@ export class TuneinPlayerService {
     }
     throw new HttpException('Station url not found', 404)
   }
+
+  public async search(query: string, offset: number, limit: number): Promise<any> {
+    const params = new URLSearchParams()
+    params.append('fullTextSearch', 'true')
+    params.append('formats', 'mp3,aac,ogg,flash,html,hls,wma')
+    params.append('partnerId', 'RadioTime')
+    params.append('itemUrlScheme', 'secure')
+    params.append('reqAttempt', '1')
+    params.append('query', query)
+    const url = 'https://api.tunein.com/profiles?' + params.toString()
+
+    const result = await fetch(url, { method: 'GET' })
+
+    const obj = await result.json()
+
+    let view: any[] = []
+
+    for (const item of obj.Items) {
+      switch (item.ContainerType) {
+        case 'Stations':
+          item.Children.forEach((c) => {
+            let ch: any = { Item: c }
+            ch.Item.url = ''
+            let st = TuneinMapper(ch.Item)
+            view.push(st)
+          })
+          break
+      }
+    }
+
+    return view
+  }
 }
