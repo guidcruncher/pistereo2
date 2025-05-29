@@ -17,7 +17,7 @@ async function bootstrap() {
   const baseUrl: string = process.env.PISTEREO_BASEURL as string
   const listenAddr = (process.env.PISTEREO_LISTEN_PORT ?? '3000') as string
 
-//  app.use(helmet())
+  //  app.use(helmet())
   app.use(compression())
 
   const config = new DocumentBuilder()
