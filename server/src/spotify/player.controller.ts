@@ -18,7 +18,7 @@ import { Public, Private, AuthToken } from '@auth/decorators'
 import { Uri } from '@views/uri'
 import { ApiOAuth2, ApiExcludeController, ApiExcludeEndpoint } from '@nestjs/swagger'
 
-// @ApiExcludeController()
+@ApiExcludeController()
 @ApiOAuth2(
   ['user-read-playback-state', 'user-modify-playback-state', 'user-read-recently-played'],
   'Api',

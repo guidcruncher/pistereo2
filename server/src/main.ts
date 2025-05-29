@@ -5,6 +5,7 @@ import { AppModule } from './app.module'
 import { config } from '@dotenvx/dotenvx'
 import { getScopes } from '@auth/scopes'
 import compression = require('compression')
+import helmet from 'helmet'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -16,6 +17,7 @@ async function bootstrap() {
   const baseUrl: string = process.env.PISTEREO_BASEURL as string
   const listenAddr = (process.env.PISTEREO_LISTEN_PORT ?? '3000') as string
 
+//  app.use(helmet())
   app.use(compression())
 
   const config = new DocumentBuilder()

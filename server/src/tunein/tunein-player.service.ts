@@ -1,6 +1,6 @@
 import { Logger } from '@nestjs/common'
 import { Injectable, HttpException } from '@nestjs/common'
-import { Uri } from '@views/uri'
+import { PlayableItem, Uri, PagedListBuilder } from '@views/index'
 import { TuneinMapper, PlayableItemMapper } from '@mappers/index'
 import { MpvPlayerService } from '../mpv/mpv-player.service'
 
@@ -22,6 +22,24 @@ export class TuneinPlayerService {
   public async getStatus() {
     let state = await this.mpvService.getStatus()
     return state
+  }
+
+  public async getDetail(uri: Uri) {
+    const params = new URLSearchParams()
+    params.append('render', 'json')
+    params.append('id', uri.id)
+
+    const result = await fetch('https://opml.radiotime.com/describe.ashx?' + params.toString(), {
+      method: 'GET',
+    })
+
+    if (!result.ok) {
+      throw new HttpException(result.statusText, result.status)
+    }
+
+    const obj: any = (await result.json()).body[0]
+    obj.uri = uri
+    return obj
   }
 
   public async getStation(parsedUri: Uri) {
@@ -73,5 +91,41 @@ export class TuneinPlayerService {
       return obj.body
     }
     throw new HttpException('Station url not found', 404)
+  }
+
+  public async search(query: string, offset: number, limit: number): Promise<any> {
+    const params = new URLSearchParams()
+    params.append('fullTextSearch', 'true')
+    params.append('formats', 'mp3,aac,ogg,flash,html,hls,wma')
+    params.append('partnerId', 'RadioTime')
+    params.append('itemUrlScheme', 'secure')
+    params.append('reqAttempt', '1')
+    params.append('query', query)
+    const url = 'https://api.tunein.com/profiles?' + params.toString()
+
+    const result = await fetch(url, { method: 'GET' })
+
+    const obj = await result.json()
+
+    let view: any[] = []
+
+    for (const item of obj.Items) {
+      switch (item.ContainerType) {
+        case 'Stations':
+          item.Children.forEach((c) => {
+            let ch: any = { Item: c }
+            ch.Item.url = ''
+            let st = TuneinMapper(ch.Item)
+            view.push(st)
+          })
+          break
+      }
+    }
+
+    view = view.sort((a, b) => {
+      return a.name.localeCompare(b.name)
+    })
+
+    return PagedListBuilder.fromMappedArray<PlayableItem>(view, offset, limit)
   }
 }

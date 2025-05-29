@@ -5,6 +5,7 @@ import { Model } from 'mongoose'
 import { Connection } from 'mongoose'
 import { Inject, Injectable, Dependencies } from '@nestjs/common'
 import { UserStream } from '@schemas/index'
+import { PagedListBuilder } from './views/index'
 
 @Injectable()
 export class UserStreamService {
@@ -38,5 +39,14 @@ export class UserStreamService {
 
   async getUserStreamById(id: string): Promise<any> {
     return (await this.userStreamModel.findOne({ id: id }).lean()) as UserStream
+  }
+
+  async search(query: string, offset: number, limit: number) {
+    const res = await this.userStreamModel
+      .find({ $text: { $search: query } })
+      .sort('name')
+      .lean()
+
+    return PagedListBuilder.fromMappedArray(res, offset, limit)
   }
 }

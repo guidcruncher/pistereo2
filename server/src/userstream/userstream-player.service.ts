@@ -1,9 +1,9 @@
+import { PlayableItem, Uri, PagedListBuilder } from '@views/index'
 import { Logger } from '@nestjs/common'
 import { HttpException, Injectable } from '@nestjs/common'
 import { UserStreamService } from '@data/userstream.service'
 import { UserStream } from '@schemas/index'
 import { AuthService } from '@auth/auth.service'
-import { Uri } from '@views/uri'
 import { MpvPlayerService } from '../mpv/mpv-player.service'
 import { PlayableItemMapper, UserStreamMapper } from '@mappers/index'
 
@@ -49,5 +49,9 @@ export class UserStreamPlayerService {
     }
 
     throw new HttpException('User stream not found', 404)
+  }
+
+  public async search(q: string, offset: number, limit: number): Promise<any> {
+    return await this.userStreamService.search(q, offset, limit)
   }
 }
