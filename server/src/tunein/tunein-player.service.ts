@@ -37,7 +37,7 @@ export class TuneinPlayerService {
       throw new HttpException(result.statusText, result.status)
     }
 
-    const obj: any = await result.json().body[0]
+    const obj: any = (await result.json()).body[0]
     obj.uri = uri
     return obj
   }
