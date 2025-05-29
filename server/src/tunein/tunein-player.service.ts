@@ -1,6 +1,6 @@
 import { Logger } from '@nestjs/common'
 import { Injectable, HttpException } from '@nestjs/common'
-import { Uri } from '@views/uri'
+import { PlayableItem, Uri, PagedListBuilder } from '@views/index'
 import { TuneinMapper, PlayableItemMapper } from '@mappers/index'
 import { MpvPlayerService } from '../mpv/mpv-player.service'
 
@@ -93,7 +93,7 @@ export class TuneinPlayerService {
     throw new HttpException('Station url not found', 404)
   }
 
-  public async search(query: string): Promise<any> {
+  public async search(query: string, offset: number, limit: number): Promise<any> {
     const params = new URLSearchParams()
     params.append('fullTextSearch', 'true')
     params.append('formats', 'mp3,aac,ogg,flash,html,hls,wma')
@@ -126,6 +126,6 @@ export class TuneinPlayerService {
       return a.name.localeCompare(b.name)
     })
 
-    return view
+    return PagedListBuilder.fromMappedArray<PlayableItem>(view, offset, limit)
   }
 }
