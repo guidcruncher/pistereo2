@@ -316,10 +316,8 @@ export class SpotifyPlayerService extends EventBaseService {
     )
 
     if (types.length == 1) {
-      return PagedListBuilder.fromPagedObject<PlayableItem>(
-        result.value[types[0] + 's'],
-        PlayableItemMapper,
-      )
+      let key = types[0] + 's'
+      return PagedListBuilder.fromPagedObject<PlayableItem>(result.value[key], PlayableItemMapper)
     }
     return result.value
   }

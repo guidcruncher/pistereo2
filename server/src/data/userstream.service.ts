@@ -47,6 +47,6 @@ export class UserStreamService {
       .sort('name')
       .lean()
 
-    return PagedListBuilder.fromaMappedArray(res, offset, res.value[types[0] + 's'])
+    return PagedListBuilder.fromMappedArray(res, offset, limit)
   }
 }
