@@ -32,6 +32,9 @@
     <v-tabs-window-item value="myplaylists">
       <PlaylistsView />
     </v-tabs-window-item>
+    <v-tabs-window-item value="queue">
+      <QueueView />
+    </v-tabs-window-item>
     <v-tabs-window-item value="savedalbums">
       <AlbumListsView />
     </v-tabs-window-item>

@@ -20,6 +20,11 @@ export class PlayerService extends BaseService {
     return response.data
   }
 
+  async listQueue(offset:mumber, limit:number)
+    const response: AxiosResponse<any> = await this.client().get('/queue')
+    return response.data
+  }
+
   async addPreset(uri: Uri) {
     const params = new URLSearchParams()
     params.append('uri', this.uriString(uri))

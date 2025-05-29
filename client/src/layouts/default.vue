@@ -86,6 +86,11 @@ export default {
           <v-icon icon="mdi-playlist-play"></v-icon>
         </template>
       </v-list-item>
+      <v-list-item link title="Playing Queue" @click="showTab('queue')"
+        ><template v-slot:prepend>
+          <v-icon icon="mdi-humanqueue"></v-icon>
+        </template>
+      </v-list-item>
       <v-list-item link title="Saved albums" @click="showTab('savedalbums')"
         ><template v-slot:prepend>
           <v-icon icon="mdi-album"></v-icon>
