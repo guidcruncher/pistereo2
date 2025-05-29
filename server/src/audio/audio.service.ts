@@ -229,19 +229,19 @@ export class AudioService {
     let state = await this.getStatus(user, token)
 
     if (state && state.track) {
-    switch (state.track.uri.source) {
-      case 'spotify':
-        return await this.spotifyPlayer.playerCommand(
-          token,
-          await this.ensureDeviceId(token),
-          'next',
-        )
-        break
-      case 'tunein':
-      case 'user':
-        return {}
-        break
-    }
+      switch (state.track.uri.source) {
+        case 'spotify':
+          return await this.spotifyPlayer.playerCommand(
+            token,
+            await this.ensureDeviceId(token),
+            'next',
+          )
+          break
+        case 'tunein':
+        case 'user':
+          return {}
+          break
+      }
     }
 
     throw new HttpException(`Unsupported Uri source ${this.currentTrack.uri.source}`, 400)

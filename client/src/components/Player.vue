@@ -141,7 +141,7 @@ export default {
 }
 </script>
 <template>
-  <v-card>
+  <v-card v-intersect="updateDisplay">
     <div class="pa-5">
       <div>
         <div class="center">
