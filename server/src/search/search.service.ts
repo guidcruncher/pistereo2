@@ -13,7 +13,7 @@ export class SearchService {
   ) {}
 
   async query(token: string, user: any, query: string, offset: number, limit: number) {
-    return await this.tuneinPlayer.search(query, offset, limit)
+    return await this.tuneinPlayer.search(query)
   }
 
   async search(token: string, user: any, query: any, offset: number, limit: number) {

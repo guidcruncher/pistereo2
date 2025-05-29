@@ -93,7 +93,7 @@ export class TuneinPlayerService {
     throw new HttpException('Station url not found', 404)
   }
 
-  public async search(query: string, offset: number, limit: number): Promise<any> {
+  public async search(query: string): Promise<any> {
     const params = new URLSearchParams()
     params.append('fullTextSearch', 'true')
     params.append('formats', 'mp3,aac,ogg,flash,html,hls,wma')
@@ -121,6 +121,10 @@ export class TuneinPlayerService {
           break
       }
     }
+
+    view = view.sort((a, b) => {
+      return a.name.localeCompare(b.name)
+    })
 
     return view
   }

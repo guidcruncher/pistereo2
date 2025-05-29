@@ -1,7 +1,14 @@
 import { Logger } from '@nestjs/common'
 import { HttpException, Injectable } from '@nestjs/common'
 import { HttpTransportService } from '@core/http-transport.service'
-import { PlayableItem, PlaybackQueue, PlayerStatus, Track, DeviceProp } from '@views/index'
+import {
+  PagedListBuilder,
+  PlayableItem,
+  PlaybackQueue,
+  PlayerStatus,
+  Track,
+  DeviceProp,
+} from '@views/index'
 import { PlayableItemMapper, PlaybackQueueMapper, SpotifyStatusMapper } from '@mappers/index'
 import { EventBaseService } from '@core/event-base.service'
 import { Uri } from '@views/uri'
@@ -285,5 +292,35 @@ export class SpotifyPlayerService extends EventBaseService {
 
     this.emit('streamer.disconnect', {})
     return device
+  }
+
+  async search(
+    token: string,
+    user: any,
+    types: string[],
+    q: string,
+    offset: number,
+    limit: number,
+  ) {
+    const params = new URLSearchParams()
+    params.append('q', q)
+    params.append('market', user.country)
+    params.append('type', types.join(','))
+    params.append('offset', offset.toString())
+    params.append('limit', limit.toString())
+
+    const result = await this.transport.request(
+      'GET',
+      `https://api.spotify.com/v1/search?${params.toString()}`,
+      { Authorization: `Bearer ${token}` },
+    )
+
+    if (types.length == 1) {
+      return PagedListBuilder.fromPagedObject<PlayableItem>(
+        result.value[types[0] + 's'],
+        PlayableItemMapper,
+      )
+    }
+    return result.value
   }
 }

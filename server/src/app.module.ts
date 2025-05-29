@@ -16,10 +16,11 @@ import { AudioModule } from './audio/audio.module'
 import { MetadataModule } from './metadata/metadata.module'
 import { AllExceptionFilter } from './exception.filter'
 import { SearchModule } from './search/search.module'
+import { CacheModule } from '@nestjs/cache-manager'
 
 @Module({
   imports: [
-    //    LoggerModule.forRoot(),
+    CacheModule.register({ isGlobal: true }),
     EventEmitterModule.forRoot(),
     DataModule,
     AuthModule,
