@@ -15,6 +15,7 @@ declare module 'vue' {
     Player: typeof import('./components/Player.vue')['default']
     PlaylistsView: typeof import('./components/PlaylistsView.vue')['default']
     Presets: typeof import('./components/Presets.vue')['default']
+    QueueView: typeof import('./components/QueueView.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ScaledImage: typeof import('./components/ScaledImage.vue')['default']

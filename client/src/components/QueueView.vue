@@ -20,6 +20,7 @@ export default {
   },
   mounted() {
     this.onResize()
+    this.loadData()
   },
   beforeUnmount() {},
   methods: {
@@ -39,7 +40,7 @@ export default {
           console.error(err)
         })
     },
-    loadData({ done }) {
+    loadData() {
       const playerService = new PlayerService()
       playerService
         .listQueue(this.paging.offset, this.paging.limit)
@@ -49,14 +50,11 @@ export default {
             this.paging = list.paging
             this.ready = true
             this.paging.offset += this.paging.limit
-            done('empty')
           } else {
-            done('empty')
           }
         })
         .catch((err) => {
           console.error(err)
-          done('error')
         })
     },
   },
@@ -69,9 +67,9 @@ export default {
       <v-card-subtitle></v-card-subtitle>
     </v-card-item>
     <v-card-text>
-      <v-infinite-scroll :height="windowSize.y" v-resize="onResize" :items="items" @load="loadData">
+      <v-sheet :height="windowSize.y" v-resize="onResize" :items="items">
         <template v-for="item in items" :key="item" :value="item">
-          <div class="pa-1" v-ripple >
+          <div class="pa-1" v-ripple>
             <div style="float: left" @click="loadPlaylist(item)">
               <table border="0" cellpadding="0" cellspacing="0">
                 <tbody>
@@ -92,7 +90,7 @@ export default {
             </div>
           </div>
         </template>
-      </v-infinite-scroll>
+      </v-sheet>
     </v-card-text>
   </v-card>
 </template>

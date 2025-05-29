@@ -20,7 +20,7 @@ export class PlayerService extends BaseService {
     return response.data
   }
 
-  async listQueue(offset:mumber, limit:number) {
+  async listQueue(offset: number, limit: number) {
     const response: AxiosResponse<any> = await this.client().get('/queue')
     return response.data
   }
