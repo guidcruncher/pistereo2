@@ -53,6 +53,13 @@ export class AudioController {
     return await this.presetService.getPresets(token, user)
   }
 
+  @Get("/queue")
+  async getPlaybackQueue(@User() user: any, AuthToken() token: string) {
+     let state  = await this.getStatus(token)
+
+     return await this.spotifyPlayerService.getPlaybackQueue(token: string)
+  }
+
   @Put('/presets')
   async addPresets(@User() user: any, @AuthToken() token: string, @Query('uri') uri: string) {
     let metadata = await this.audioService.getTrackDetail(token, uri)
@@ -124,3 +131,4 @@ export class AudioController {
     return await this.mixerService.updateMixer(device, mixer)
   }
 }
+
