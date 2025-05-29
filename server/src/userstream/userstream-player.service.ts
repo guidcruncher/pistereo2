@@ -1,3 +1,4 @@
+import { PlayableItem, Uri, PagedListBuilder } from '@views/index'
 import { Logger } from '@nestjs/common'
 import { HttpException, Injectable } from '@nestjs/common'
 import { UserStreamService } from '@data/userstream.service'
@@ -49,5 +50,9 @@ export class UserStreamPlayerService {
     }
 
     throw new HttpException('User stream not found', 404)
+  }
+
+  public async search(query: string, offset: number, limit: number): Promise<any> {
+    return await this.userStreamService.search(q, offset, limit)
   }
 }
