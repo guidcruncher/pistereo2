@@ -24,6 +24,24 @@ export class TuneinPlayerService {
     return state
   }
 
+  public async getDetail(uri: Uri) {
+    const params = new URLSearchParams()
+    params.append('render', 'json')
+    params.append('id', uri.id)
+
+    const result = await fetch('https://opml.radiotime.com/describe.ashx?' + params.toString(), {
+      method: 'GET',
+    })
+
+    if (!result.ok) {
+      throw new HttpException(result.statusText, result.status)
+    }
+
+    const obj: any = await result.json().body[0]
+    obj.uri = uri
+    return obj
+  }
+
   public async getStation(parsedUri: Uri) {
     if (parsedUri.source != 'tunein') {
       throw new HttpException(`Expected source tunein, got ${parsedUri.source}`, 400)
