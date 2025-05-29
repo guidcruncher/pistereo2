@@ -67,8 +67,8 @@ export default {
     <div class="text-h6">Saved Podcsts and shows</div>
     <v-infinite-scroll :height="windowSize.y" v-resize="onResize" :items="items" @load="loadData">
       <template v-for="item in items" :key="item" :value="item">
-        <div class="pa-1" v-ripple @click="loadPlaylist(item)">
-          <div style="float: left">
+        <div class="pa-1" v-ripple >
+         <div style="float: left" @click="loadPlaylist(item)">
             <table border="0" cellpadding="0" cellspacing="0">
               <tbody>
                 <tr>

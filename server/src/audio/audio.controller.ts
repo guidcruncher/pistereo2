@@ -55,9 +55,7 @@ export class AudioController {
 
   @Get('/queue')
   async getPlaybackQueue(@User() user: any, @AuthToken() token: string) {
-    let state = await this.getStatus(token)
-
-    return await this.spotifyPlayerService.getPlaybackQueue(token)
+      return await this.spotifyPlayerService.getPlaybackQueue(token)
   }
 
   @Put('/presets')

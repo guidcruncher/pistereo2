@@ -226,11 +226,10 @@ export class AudioService {
   }
 
   async nextTrack(user: any, token: string) {
-    if (this.currentUri() == '') {
-      throw new HttpException('Nothing playing', 400)
-    }
+    let state = await this.getStatus(user, token)
 
-    switch (this.currentTrack.uri.source) {
+    if (state && state.track) {
+    switch (state.track.uri.source) {
       case 'spotify':
         return await this.spotifyPlayer.playerCommand(
           token,
@@ -242,6 +241,7 @@ export class AudioService {
       case 'user':
         return {}
         break
+    }
     }
 
     throw new HttpException(`Unsupported Uri source ${this.currentTrack.uri.source}`, 400)
