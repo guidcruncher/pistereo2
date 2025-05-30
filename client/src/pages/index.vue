@@ -48,7 +48,9 @@
       <EpisodeListsView />
     </v-tabs-window-item>
     <v-tabs-window-item value="radio"> Radio </v-tabs-window-item>
-    <v-tabs-window-item value="search"> Search </v-tabs-window-item>
+    <v-tabs-window-item value="search">
+      <SearchControl />
+    </v-tabs-window-item>
   </v-tabs-window>
 </template>
 
@@ -66,8 +68,8 @@ export default {
   data() {
     return {}
   },
-  mounted() {},
-  beforeUnmount() {},
+  mounted() { },
+  beforeUnmount() { },
   methods: {},
 }
 </script>
