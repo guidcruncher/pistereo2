@@ -14,7 +14,7 @@ export class Album implements PlayableItem {
   owner: string = ''
 
   static create(uri: string, name: string, artists: string[], images: any[]) {
-    let alb = new Album()
+    const alb = new Album()
     alb.uri = Uri.fromUriString(uri)
     alb.name = name
     alb.artists = artists

@@ -1,9 +1,9 @@
-import { imageUrl, Mapper } from './mapper'
-import { PlayableItem, Uri, Context } from '../views/index'
+import { Mapper, imageUrl } from './mapper'
+import { Context, PlayableItem, Uri } from '../views/index'
 import { Preset } from '../schemas/index'
 
 export const PresetMapper: Mapper<PlayableItem> = (value: Preset) => {
-  let result: PlayableItem = {} as PlayableItem
+  const result: PlayableItem = {} as PlayableItem
   result.uri = Uri.fromUriString(value.id)
   result.owner = value.owner
   result.uri = value.uri

@@ -1,4 +1,4 @@
-import { Uri, Profile } from './index'
+import { Profile, Uri } from './index'
 
 export class PlaylistDefinition {
   uri: Uri = new Uri()

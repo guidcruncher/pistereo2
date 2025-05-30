@@ -1,6 +1,6 @@
 import { Logger } from '@nestjs/common'
-import { Injectable, Inject } from '@nestjs/common'
-import { EventEmitterReadinessWatcher, EventEmitter2 } from '@nestjs/event-emitter'
+import { Inject, Injectable } from '@nestjs/common'
+import { EventEmitter2, EventEmitterReadinessWatcher } from '@nestjs/event-emitter'
 import { BaseService } from './base.service'
 
 @Injectable()
@@ -17,7 +17,7 @@ export class EventBaseService extends BaseService {
 
   protected async emit(name: string, event: any) {
     await this.eventEmitterReadinessWatcher.waitUntilReady()
-    let ev: any = event
+    const ev: any = event
     ev._emittedOn = new Date().toISOString()
     ev._sender = this.__caller()
 

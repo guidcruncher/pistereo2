@@ -1,11 +1,11 @@
-import { imageUrl, Mapper } from './mapper'
+import { Mapper, imageUrl } from './mapper'
 import { Uri } from '../views/uri'
 import { Context } from '../views/context'
 import { PlaylistDefinition } from '../views/playlist'
 import { ProfileMapper } from './profile-mapper'
 
 export const PlaylistMapper: Mapper<PlaylistDefinition> = (value: any) => {
-  let result = new PlaylistDefinition()
+  const result = new PlaylistDefinition()
   result.uri = Uri.fromUriString(value.uri)
   result.name = value.name
   result.description = value.description

@@ -1,10 +1,10 @@
-import { imageUrl, Mapper } from './mapper'
+import { Mapper, imageUrl } from './mapper'
 import { Uri } from '../views/uri'
 import { Context } from '../views/context'
 import { Album } from '../views/album'
 
 export const AlbumMapper: Mapper<Album> = (value: any) => {
-  let result = new Album()
+  const result = new Album()
   result.uri = Uri.fromUriString(value.uri)
   result.name = value.name
   result.imageUrl = ''

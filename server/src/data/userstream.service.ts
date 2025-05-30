@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose'
 import { InjectConnection } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { Connection } from 'mongoose'
-import { Inject, Injectable, Dependencies } from '@nestjs/common'
+import { Dependencies, Inject, Injectable } from '@nestjs/common'
 import { UserStream } from '@schemas/index'
 import { PagedListBuilder } from './views/index'
 
@@ -28,7 +28,7 @@ export class UserStreamService {
       .lean()
       .exec()) as UserStream[]
 
-    return res as UserStream[]
+    return res
   }
 
   async getUserStream(id: string, user: string): Promise<any> {

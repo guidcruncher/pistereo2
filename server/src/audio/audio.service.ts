@@ -8,9 +8,9 @@ import { TuneinPlayerService } from '../tunein/tunein-player.service'
 import { UserStreamPlayerService } from '../userstream/userstream-player.service'
 import { AuthService } from '../auth/auth.service'
 import { HistoryService } from '../data/history.service'
-import { PlayerStatus, PlayableItem, DeviceProp } from '@views/index'
+import { DeviceProp, PlayableItem, PlayerStatus } from '@views/index'
 import { History } from '@schemas/history'
-import { OnEvent, EventEmitter2, EventEmitterModule } from '@nestjs/event-emitter'
+import { EventEmitter2, EventEmitterModule, OnEvent } from '@nestjs/event-emitter'
 import * as fs from 'fs'
 import * as path from 'path'
 
@@ -31,10 +31,10 @@ export class AudioService {
   ) {}
 
   private async ensureDeviceId(token: string) {
-    let filename = path.join(process.env.PISTEREO_CONFIG as string, 'librespot', 'state.json')
+    const filename = path.join(process.env.PISTEREO_CONFIG as string, 'librespot', 'state.json')
 
     if (fs.existsSync(filename)) {
-      let obj = JSON.parse(fs.readFileSync(filename, 'utf8'))
+      const obj = JSON.parse(fs.readFileSync(filename, 'utf8'))
       this._deviceId = obj.device_id
     }
 
@@ -44,14 +44,14 @@ export class AudioService {
   async startLastPlayed(token: string, user: any) {
     let nothingPlaying = false
     try {
-      let status = await this.getStatus(user, token)
+      const status = await this.getStatus(user, token)
       nothingPlaying = status.device ? !status.device.playing : false
     } catch (err) {
       nothingPlaying = true
     }
 
     if (nothingPlaying) {
-      let lastPlayed = await this.historyService.getLastPlayed(user.id)
+      const lastPlayed = await this.historyService.getLastPlayed(user.id)
       if (lastPlayed) {
         await this.playMedia(user, token, lastPlayed.uri.toString())
         return true
@@ -79,7 +79,7 @@ export class AudioService {
         return status
       }
     } catch (err) {}
-    let lastPlayed: History = await this.historyService.getLastPlayed(user.id)
+    const lastPlayed: History = await this.historyService.getLastPlayed(user.id)
 
     if (lastPlayed) {
       switch (lastPlayed.uri.source) {
@@ -114,8 +114,8 @@ export class AudioService {
   }
 
   async playMedia(user: any, token: string, uri: string) {
-    let uriParts = Uri.fromUriString(uri)
-    let deviceid: string = await this.ensureDeviceId(token)
+    const uriParts = Uri.fromUriString(uri)
+    const deviceid: string = await this.ensureDeviceId(token)
     let track: PlayableItem
 
     await this.mpvPlayer.stop()
@@ -167,7 +167,7 @@ export class AudioService {
   }
 
   async getTrackDetail(token: string, uri: string) {
-    let uriParts: Uri = Uri.fromUriString(uri)
+    const uriParts: Uri = Uri.fromUriString(uri)
 
     switch (uriParts.source) {
       case 'spotify':
@@ -192,7 +192,7 @@ export class AudioService {
 
     switch (this.currentTrack.uri.source) {
       case 'spotify':
-        let status = await this.spotifyPlayer.getStatus(token)
+        const status = await this.spotifyPlayer.getStatus(token)
         if (status) {
           if (status.device.playing) {
             return await this.spotifyPlayer.playerCommand(
@@ -226,7 +226,7 @@ export class AudioService {
   }
 
   async nextTrack(user: any, token: string) {
-    let state = await this.getStatus(user, token)
+    const state = await this.getStatus(user, token)
 
     if (state && state.track) {
       switch (state.track.uri.source) {

@@ -1,20 +1,20 @@
-import { Channel, Mixer, Frequency } from '@views/index'
+import { Channel, Frequency, Mixer } from '@views/index'
 import { User } from '@auth/decorators'
 import {
-  Param,
   Body,
   Controller,
+  Delete,
   Get,
+  HttpException,
+  Param,
   Post,
   Put,
-  Delete,
   Query,
   Res,
   Session,
-  HttpException,
 } from '@nestjs/common'
-import { Public, Private, AuthToken } from '@auth/decorators'
-import { ApiOAuth2, ApiExcludeController, ApiExcludeEndpoint } from '@nestjs/swagger'
+import { AuthToken, Private, Public } from '@auth/decorators'
+import { ApiExcludeController, ApiExcludeEndpoint, ApiOAuth2 } from '@nestjs/swagger'
 import { MpvPlayerService } from '../mpv/mpv-player.service'
 import { SpotifyPlayerService } from '../spotify/spotify-player.service'
 import { TuneinPlayerService } from '../tunein/tunein-player.service'
@@ -22,7 +22,7 @@ import { UserStreamPlayerService } from '../userstream/userstream-player.service
 import { PresetService } from './preset.service'
 import { PlayableItem, Uri } from '@views/index'
 import { AudioService } from './audio.service'
-import { OnEvent, EventEmitter2, EventEmitterModule } from '@nestjs/event-emitter'
+import { EventEmitter2, EventEmitterModule, OnEvent } from '@nestjs/event-emitter'
 import { MixerService } from './mixer.service'
 
 @ApiOAuth2(
@@ -60,7 +60,7 @@ export class AudioController {
 
   @Put('/presets')
   async addPresets(@User() user: any, @AuthToken() token: string, @Query('uri') uri: string) {
-    let metadata = await this.audioService.getTrackDetail(token, uri)
+    const metadata = await this.audioService.getTrackDetail(token, uri)
     metadata.uri = Uri.fromUriString(uri)
     return await this.presetService.addPreset(token, user, metadata)
   }

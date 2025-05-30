@@ -11,6 +11,6 @@ export const userAgents: string[] = [
 ]
 
 export const getUserAgent = () => {
-  let currentUserAgent = userAgents[Math.floor(Math.random() * userAgents.length)]
+  const currentUserAgent = userAgents[Math.floor(Math.random() * userAgents.length)]
   return currentUserAgent
 }

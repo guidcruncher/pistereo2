@@ -2,13 +2,13 @@ import { Logger } from '@nestjs/common'
 import { HttpException, Injectable } from '@nestjs/common'
 import { HttpTransportService } from '@core/http-transport.service'
 import {
-  PlaylistDefinition,
-  PagedListBuilder,
-  PlayableItemList,
-  PlayableItem,
   PagedList,
+  PagedListBuilder,
+  PlayableItem,
+  PlayableItemList,
+  PlaylistDefinition,
 } from '@views/index'
-import { PlaylistMapper, PlayableItemMapper, PlayableItemListMapper } from '@mappers/index'
+import { PlayableItemListMapper, PlayableItemMapper, PlaylistMapper } from '@mappers/index'
 
 @Injectable()
 export class SpotifyListService {
@@ -20,8 +20,8 @@ export class SpotifyListService {
     offset: number,
     limit: number,
   ): Promise<PlayableItemList> {
-    let query = this.transport.getQueryString({ offset: offset, limit: limit })
-    let result = await this.transport.request(
+    const query = this.transport.getQueryString({ offset: offset, limit: limit })
+    const result = await this.transport.request(
       'GET',
       `https://api.spotify.com/v1/playlists/${uri}${query}`,
       { Authorization: `Bearer ${token}` },
@@ -37,8 +37,8 @@ export class SpotifyListService {
     offset: number,
     limit: number,
   ): Promise<PagedList<PlaylistDefinition>> {
-    let query = this.transport.getQueryString({ offset: offset, limit: limit })
-    let result = await this.transport.request(
+    const query = this.transport.getQueryString({ offset: offset, limit: limit })
+    const result = await this.transport.request(
       'GET',
       `https://api.spotify.com/v1/users/${user}/playlists${query}`,
       { Authorization: `Bearer ${token}` },
@@ -53,8 +53,8 @@ export class SpotifyListService {
     offset: number,
     limit: number,
   ): Promise<PagedList<PlaylistDefinition>> {
-    let query = this.transport.getQueryString({ offset: offset, limit: limit })
-    let result = await this.transport.request(
+    const query = this.transport.getQueryString({ offset: offset, limit: limit })
+    const result = await this.transport.request(
       'GET',
       `https://api.spotify.com/v1/me/playlists${query}`,
       { Authorization: `Bearer ${token}` },
@@ -69,8 +69,8 @@ export class SpotifyListService {
     offset: number,
     limit: number,
   ): Promise<PagedList<PlayableItem>> {
-    let query = this.transport.getQueryString({ offset: offset, limit: limit })
-    let result = await this.transport.request(
+    const query = this.transport.getQueryString({ offset: offset, limit: limit })
+    const result = await this.transport.request(
       'GET',
       `https://api.spotify.com/v1/me/albums${query}`,
       { Authorization: `Bearer ${token}` },
@@ -85,8 +85,8 @@ export class SpotifyListService {
     offset: number,
     limit: number,
   ): Promise<PagedList<PlayableItem>> {
-    let query = this.transport.getQueryString({ offset: offset, limit: limit })
-    let result = await this.transport.request(
+    const query = this.transport.getQueryString({ offset: offset, limit: limit })
+    const result = await this.transport.request(
       'GET',
       `https://api.spotify.com/v1/me/episodes${query}`,
       { Authorization: `Bearer ${token}` },
@@ -105,8 +105,8 @@ export class SpotifyListService {
     offset: number,
     limit: number,
   ): Promise<PagedList<PlayableItem>> {
-    let query = this.transport.getQueryString({ offset: offset, limit: limit })
-    let result = await this.transport.request(
+    const query = this.transport.getQueryString({ offset: offset, limit: limit })
+    const result = await this.transport.request(
       'GET',
       `https://api.spotify.com/v1/me/shows${query}`,
       { Authorization: `Bearer ${token}` },
@@ -121,8 +121,8 @@ export class SpotifyListService {
     offset: number,
     limit: number,
   ): Promise<PagedList<PlayableItem>> {
-    let query = this.transport.getQueryString({ offset: offset, limit: limit })
-    let result = await this.transport.request(
+    const query = this.transport.getQueryString({ offset: offset, limit: limit })
+    const result = await this.transport.request(
       'GET',
       `https://api.spotify.com/v1/me/tracks${query}`,
       { Authorization: `Bearer ${token}` },

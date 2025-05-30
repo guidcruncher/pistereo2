@@ -1,4 +1,4 @@
-import { Module, Logger } from '@nestjs/common'
+import { Logger, Module } from '@nestjs/common'
 import { APP_FILTER } from '@nestjs/core'
 import { EventEmitterModule } from '@nestjs/event-emitter'
 import { AppService } from './app.service'

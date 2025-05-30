@@ -3,9 +3,9 @@ import { InjectModel } from '@nestjs/mongoose'
 import { InjectConnection } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { Connection } from 'mongoose'
-import { Inject, Injectable, Dependencies } from '@nestjs/common'
+import { Dependencies, Inject, Injectable } from '@nestjs/common'
 import { Profile } from '@views/index'
-import { User, Session } from '@schemas/index'
+import { Session, User } from '@schemas/index'
 
 @Injectable()
 export class UserService {
@@ -15,8 +15,8 @@ export class UserService {
   ) {}
 
   async addSession(token: string, refresh: string, user: Profile, expires: number = 3600) {
-    let session = new Session()
-    let expiresAt = new Date()
+    const session = new Session()
+    const expiresAt = new Date()
     expiresAt.setSeconds(expiresAt.getSeconds() + expires)
     session.authToken = token
     session.refreshToken = refresh
@@ -28,15 +28,15 @@ export class UserService {
   }
 
   async getSession(token: string) {
-    let res = (await this.sessionModel.findOne({ authToken: token }).lean()) as Session
-    let expires = new Date()
+    const res = (await this.sessionModel.findOne({ authToken: token }).lean()) as Session
+    const expires = new Date()
     expires.setHours(expires.getHours() + 2)
 
     return res
   }
 
   async addUser(profile: Profile) {
-    let user = new User()
+    const user = new User()
     user.userId = profile.id
     user.uri = profile.uri
     user.imageUrl = profile.imageUrl

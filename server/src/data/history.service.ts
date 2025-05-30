@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose'
 import { InjectConnection } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { Connection } from 'mongoose'
-import { Inject, Injectable, Dependencies } from '@nestjs/common'
+import { Dependencies, Inject, Injectable } from '@nestjs/common'
 import { PlayableItem } from '@views/index'
 import { History, LastPlayed } from '@schemas/index'
 import * as crypto from 'crypto'
@@ -16,7 +16,7 @@ export class HistoryService {
   ) {}
 
   async saveHistory(item: History, user: string) {
-    let history: History = item as History
+    const history: History = item
     history.userId = user
     history.source = history.uri.source
     return await this.historyModel.findOneAndUpdate(
@@ -29,7 +29,7 @@ export class HistoryService {
   }
 
   async addAnonHistory(item: PlayableItem) {
-    let history: History = item as History
+    const history: History = item as History
     history.userId = 'remote'
     history.source = history.uri.source
     history.id = history.uri.id
@@ -43,7 +43,7 @@ export class HistoryService {
   }
 
   async getLastPlayed(user: string) {
-    let item = await this.lastPlayedModel.findOne({ userId: user }).lean()
+    const item = await this.lastPlayedModel.findOne({ userId: user }).lean()
 
     if (!item && user != 'remote') {
       return await this.getLastPlayed('remote')
@@ -52,7 +52,7 @@ export class HistoryService {
   }
 
   async addLastPlayed(item: PlayableItem, user: string) {
-    let history: LastPlayed = item as LastPlayed
+    const history: LastPlayed = item as LastPlayed
     history.userId = user
     history.source = history.uri.source
     history.id = history.uri.id
@@ -64,7 +64,7 @@ export class HistoryService {
   }
 
   async addHistory(item: PlayableItem, user: string) {
-    let history: History = item as History
+    const history: History = item as History
     history.userId = user
     history.source = history.uri.source
     history.id = history.uri.id

@@ -1,4 +1,4 @@
-import { Channel, Mixer, Frequency } from '@views/index'
+import { Channel, Frequency, Mixer } from '@views/index'
 import { Injectable, Logger } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
 import * as cp from 'child_process'
@@ -15,8 +15,8 @@ export class MixerService {
   }
 
   async updateMixer(device: string, mixer: Mixer) {
-    for (var i = 0; i < mixer.frequencies.length; i++) {
-      let f: Frequency = mixer.frequencies[i]
+    for (let i = 0; i < mixer.frequencies.length; i++) {
+      const f: Frequency = mixer.frequencies[i]
       await this.cset(device, f.numid, f.channels)
     }
   }
@@ -36,9 +36,9 @@ export class MixerService {
   }
 
   private async contents(device: string): Promise<Mixer> {
-    let ch = await this.amixer(['-D', device, 'scontents'])
-    let res = await this.amixer(['-D', device, 'contents'])
-    let contents = await this.parseContents(res, ch)
+    const ch = await this.amixer(['-D', device, 'scontents'])
+    const res = await this.amixer(['-D', device, 'contents'])
+    const contents = await this.parseContents(res, ch)
     contents.device = device
     return contents
   }
@@ -69,8 +69,8 @@ export class MixerService {
   }
 
   private async parseContents(data: string, controls: string): Promise<Mixer> {
-    let m: Mixer = new Mixer()
-    let channels: string[] = controls
+    const m: Mixer = new Mixer()
+    const channels: string[] = controls
       .split('\n')
       .map((a) => {
         return a.trim()
@@ -79,7 +79,7 @@ export class MixerService {
         return a.startsWith('Playback channels:')
       })
       .map((a) => a.slice(18).split('-'))[0]
-    let lines: string[] = data
+    const lines: string[] = data
       .split('\n')
       .filter((n) => n && n.trim() != '')
       .map((n) => {
@@ -93,13 +93,13 @@ export class MixerService {
 
     while (i < lines.length) {
       if (lines[i].startsWith('num')) {
-        let obj = {} as any
-        let fields: string[] =
+        const obj = {} as any
+        const fields: string[] =
           `${lines[i]},${lines[i + 1].replaceAll('values', 'channels')},${lines[i + 2].replaceAll(',', '_')}`
             .replaceAll("'", '')
             .split(',')
         fields.map((a) => {
-          let b = a.split('=')
+          const b = a.split('=')
           if (b[0] == 'values') {
             b[1] = b[1].replace('_', ',')
           }
@@ -107,7 +107,7 @@ export class MixerService {
           obj[b[0]] = b[1]
           return b
         })
-        let f = new Frequency()
+        const f = new Frequency()
         f.numid = parseInt(obj['numid'])
         f.min = parseInt(obj['min'])
         f.max = parseInt(obj['max'])

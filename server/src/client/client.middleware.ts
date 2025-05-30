@@ -1,5 +1,5 @@
 import { Public } from '@auth/decorators'
-import { Request, Response, NextFunction } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import * as fs from 'fs'
 import db from 'mime-db'
 import { MimeType } from 'mime-type'

@@ -1,6 +1,6 @@
 import { User } from '@auth/decorators'
 import { Public } from '@auth/decorators'
-import { Query, Controller, Get, Logger, Req, Res } from '@nestjs/common'
+import { Controller, Get, Logger, Query, Req, Res } from '@nestjs/common'
 import * as fs from 'fs'
 import db from 'mime-db'
 import { MimeType } from 'mime-type'

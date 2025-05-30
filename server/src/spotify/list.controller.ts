@@ -1,8 +1,8 @@
 import { User } from '@auth/decorators'
 import { ApiBody, ApiConsumes, ApiOAuth2, ApiOperation, ApiParam } from '@nestjs/swagger'
-import { Param, Body, Controller, Get, Post, Put, Delete, Query, Res, Req } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req, Res } from '@nestjs/common'
 import { SpotifyListService } from './spotify-list.service'
-import { Public, Private, AuthToken } from '@auth/decorators'
+import { AuthToken, Private, Public } from '@auth/decorators'
 import { ApiExcludeController, ApiExcludeEndpoint } from '@nestjs/swagger'
 import { PlaylistImportService } from './playlist-import.service'
 import getRawBody = require('raw-body')

@@ -1,4 +1,4 @@
-import { Pager, PagedList } from './index'
+import { PagedList, Pager } from './index'
 import { Mapper } from '../mappers/mapper'
 
 export class PagedListBuilder {

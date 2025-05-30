@@ -22,7 +22,7 @@ export class UserStreamService {
   }
 
   async saveUserStream(token: string, user: any, userstream: UserStream) {
-    let item: UserStream = userstream
+    const item: UserStream = userstream
     if (userstream.id === '') {
       item.uri = Uri.fromUriString(`user:stream:${crypto.randomUUID().replaceAll('-', '')}`)
       item.id = item.uri.id

@@ -1,19 +1,19 @@
 import { User } from '@auth/decorators'
 import {
-  HttpException,
-  Param,
-  Req,
   Body,
   Controller,
   Get,
+  HttpException,
+  Param,
   Post,
   Query,
+  Req,
   Res,
   Session,
 } from '@nestjs/common'
 import { AuthService } from './auth.service'
-import { Public, Private, AuthToken } from './decorators'
-import { ApiOAuth2, ApiExcludeController, ApiExcludeEndpoint } from '@nestjs/swagger'
+import { AuthToken, Private, Public } from './decorators'
+import { ApiExcludeController, ApiExcludeEndpoint, ApiOAuth2 } from '@nestjs/swagger'
 
 @Public()
 @Controller('/api/auth')
@@ -87,7 +87,7 @@ export class AuthController {
   @Post('refresh')
   @Private()
   async tokenRefresh(@User() user: any, @AuthToken() token: string, @Body() data: any) {
-    let result = await this.authService.getRefreshToken(token, data.refresh_token)
+    const result = await this.authService.getRefreshToken(token, data.refresh_token)
     return result
   }
 
@@ -95,7 +95,7 @@ export class AuthController {
   @Get('user/:user')
   @Private()
   async getProfile(@AuthToken() token, @Param('user') user: string) {
-    let result = await this.authService.getProfile(token, user)
+    const result = await this.authService.getProfile(token, user)
     return result
   }
 
@@ -103,7 +103,7 @@ export class AuthController {
   @Get('user')
   @Private()
   async getMyProfile(@AuthToken() token) {
-    let result = await this.authService.getProfile(token)
+    const result = await this.authService.getProfile(token)
     return result
   }
 }

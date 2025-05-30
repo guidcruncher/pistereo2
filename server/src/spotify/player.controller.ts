@@ -1,22 +1,22 @@
 import { User } from '@auth/decorators'
 import {
-  Param,
   Body,
   Controller,
+  Delete,
   Get,
   HttpException,
+  Param,
   Post,
   Put,
-  Delete,
   Query,
   Res,
   Session,
 } from '@nestjs/common'
 import { SpotifyPlayerService } from './spotify-player.service'
 import { LibrespotPlayerService } from '../spotify/librespot-player.service'
-import { Public, Private, AuthToken } from '@auth/decorators'
+import { AuthToken, Private, Public } from '@auth/decorators'
 import { Uri } from '@views/uri'
-import { ApiOAuth2, ApiExcludeController, ApiExcludeEndpoint } from '@nestjs/swagger'
+import { ApiExcludeController, ApiExcludeEndpoint, ApiOAuth2 } from '@nestjs/swagger'
 
 @ApiExcludeController()
 @ApiOAuth2(

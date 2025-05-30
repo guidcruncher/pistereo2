@@ -1,8 +1,8 @@
-import { imageUrl, Mapper } from './mapper'
+import { Mapper, imageUrl } from './mapper'
 import { Profile } from '../views/profile'
 
 export const ProfileMapper: Mapper<Profile> = (value: any) => {
-  let result = new Profile()
+  const result = new Profile()
 
   result.imageUrl = imageUrl(value.images)
 

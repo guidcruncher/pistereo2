@@ -1,8 +1,8 @@
 import { User } from '@auth/decorators'
 import { Public } from '@auth/decorators'
 import { Controller, Logger, MessageEvent, Sse } from '@nestjs/common'
-import { OnEvent, EventEmitter2 } from '@nestjs/event-emitter'
-import { fromEvent, map, Observable } from 'rxjs'
+import { EventEmitter2, OnEvent } from '@nestjs/event-emitter'
+import { Observable, fromEvent, map } from 'rxjs'
 import * as crypto from 'crypto'
 import { LibrespotClientService } from './librespot-client.service'
 

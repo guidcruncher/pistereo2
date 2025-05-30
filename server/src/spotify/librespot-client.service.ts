@@ -1,5 +1,5 @@
 import { Logger } from '@nestjs/common'
-import { Scope, OnModuleDestroy, Injectable } from '@nestjs/common'
+import { Injectable, OnModuleDestroy, Scope } from '@nestjs/common'
 import { EventEmitter2, EventEmitterModule } from '@nestjs/event-emitter'
 import { WebSocket } from 'ws'
 import { LibrespotMetadataMapper } from '@mappers/librespotmetadata-mapper'
@@ -56,7 +56,7 @@ export class LibrespotClientService implements OnModuleDestroy {
         await this.mpvPlayer.stop()
         break
       case 'metadata':
-        let mapped = LibrespotMetadataMapper(payload.data)
+        const mapped = LibrespotMetadataMapper(payload.data)
         await this.historyService.addAnonHistory(mapped)
         await this.historyService.addLastPlayed(mapped, 'remote')
         this.eventEmitter.emit('player', { type: 'trackChanged', track: mapped })

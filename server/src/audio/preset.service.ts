@@ -22,7 +22,7 @@ export class PresetService {
   }
 
   async savePreset(token: string, user: any, preset: Preset) {
-    let item: Preset = preset
+    const item: Preset = preset
     if (item.presetid === '') {
       item.presetid = crypto.randomUUID()
     }
@@ -33,7 +33,7 @@ export class PresetService {
   }
 
   async addPreset(token: string, user: any, data: PlayableItem) {
-    let item = new Preset()
+    const item = new Preset()
     item.context = data.context
     item.uri = data.uri
     item.url = data.url

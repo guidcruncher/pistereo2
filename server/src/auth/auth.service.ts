@@ -37,7 +37,7 @@ export class AuthService {
       },
     })
 
-    let json = await result.json()
+    const json = await result.json()
     return ProfileMapper(json)
   }
 
@@ -86,10 +86,10 @@ export class AuthService {
       body: params,
     })
 
-    let body: any = await result.json()
+    const body: any = await result.json()
 
     if (body) {
-      let user = await this.getProfile(body.access_token)
+      const user = await this.getProfile(body.access_token)
       await this.userService.addSession(body.access_token, body.refresh_token, user, body.expires)
       await this.userService.addUser(user)
       body.user = user ? user : {}
@@ -117,7 +117,7 @@ export class AuthService {
 
     const body = await fetch(url, payload)
     const response = await body.json()
-    let user = await this.getProfile(response.access_token)
+    const user = await this.getProfile(response.access_token)
     await this.userService.addSession(
       response.access_token,
       response.refresh_token,

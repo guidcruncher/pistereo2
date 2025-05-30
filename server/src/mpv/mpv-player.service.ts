@@ -131,11 +131,11 @@ export class MpvPlayerService {
 
   public async togglePlayback() {
     await this.sendCommand('cycle', ['pause'])
-    let prop = await this.sendCommand('get_property', ['pause'])
+    const prop = await this.sendCommand('get_property', ['pause'])
     if (!prop) {
       return false
     }
-    let playing = !prop.data
+    const playing = !prop.data
     if (!playing) {
       this.eventEmitter.emit('player', { type: 'paused', playing: false })
     } else {

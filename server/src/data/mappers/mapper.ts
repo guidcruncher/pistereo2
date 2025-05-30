@@ -3,7 +3,7 @@ export type Mapper<TOut> = (input: any) => TOut
 export const imageUrl = (images: any[]) => {
   if (images) {
     if (images.length > 0) {
-      let h = images
+      const h = images
         .map((i) => {
           return i.height
         })
