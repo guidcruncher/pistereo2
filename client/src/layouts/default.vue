@@ -83,7 +83,7 @@ export default {
       </v-list-item>
       <v-list-item link title="Playing Queue" @click="showTab('queue')"
         ><template v-slot:prepend>
-          <v-icon icon="mdi-humanqueue"></v-icon>
+          <v-icon icon="mdi-human-queue"></v-icon>
         </template>
       </v-list-item>
       <v-list-item link title="My Playlists" @click="showTab('myplaylists')"
