@@ -161,7 +161,7 @@ export class AudioService {
   async getStatus(user: any, token: string) {
     let status: any = new PlayerStatus()
     status = await this.determineStatus(token, user)
-    statis.device.volume =(await this.getVolume(token)).volume
+    status.device.volume = (await this.getVolume(token)).volume
     if (status.track) {
       this.currentTrack = status.track
 
