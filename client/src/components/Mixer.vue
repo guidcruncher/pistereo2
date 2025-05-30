@@ -7,7 +7,7 @@ export default {
   name: 'Mixer',
   props: {},
   data() {
-    return { mixer: {} as any, hasData: false, mode: 'simple', curvelock: false, draglock: false }
+    return { mixer: {} as any, hasData: false, mode: 'simple', draglock: false }
   },
   mounted() {
     const playerService = new PlayerService()
@@ -114,8 +114,6 @@ export default {
       ></v-switch>
 
       <v-switch v-model="draglock" label="Drag lock" hide-details></v-switch>
-
-      <v-switch v-model="curvelock" label="Curve lock" hide-details></v-switch>
     </v-card-actions>
   </v-card>
 </template>

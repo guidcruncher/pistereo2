@@ -15,6 +15,8 @@ const errorCodes: Record<string, number> = {
 
 @Injectable()
 export class MpvPlayerService {
+  private readonly logger = new Logger(MpvPlayerService.name, { timestamp: true })
+
   constructor(private readonly eventEmitter: EventEmitter2) {}
 
   public async getMetaData() {
@@ -48,11 +50,14 @@ export class MpvPlayerService {
           }
         }
 
+        this.logger.debug(`sendCommand: ${cmdArgs.join(' ')}`)
+
         execFile('sh', cmdArgs)
           .then((result) => {
             try {
               const json: any = JSON.parse(result.stdout)
               if (json.error) {
+                this.logger.warn('sendCommand Error ', json)
                 json.statusCode = errorCodes[json.error] ?? 500
                 json.command = jsonCmd
                 resolve(json)
@@ -60,6 +65,7 @@ export class MpvPlayerService {
                 resolve(json)
               }
             } catch (err) {
+              this.logger.warn('sendCommand Error ', err)
               resolve({
                 statusCode: 500,
                 command: jsonCmd,

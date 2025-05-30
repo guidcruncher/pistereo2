@@ -147,14 +147,21 @@ export class AudioService {
   }
 
   async changeVolume(user: any, token, volume: number) {
-    await this.spotifyPlayer.setVolume(token, await this.ensureDeviceId(token), volume)
-    await this.mpvPlayer.setVolume(volume)
+    try {
+      await this.spotifyPlayer.setVolume(token, await this.ensureDeviceId(token), volume)
+    } catch {}
+
+    try {
+      await this.mpvPlayer.setVolume(volume)
+    } catch {}
+
     return await this.getVolume(token)
   }
 
   async getStatus(user: any, token: string) {
     let status: any = new PlayerStatus()
     status = await this.determineStatus(token, user)
+    statis.device.volume =(await this.getVolume(token)).volume
     if (status.track) {
       this.currentTrack = status.track
 
@@ -182,7 +189,11 @@ export class AudioService {
   }
 
   async getVolume(token: string) {
-    return { volume: await this.mpvPlayer.getVolume() }
+    try {
+      return { volume: await this.spotifyPlayer.getVolume(token) }
+    } catch {
+      return { volume: await this.mpvPlayer.getVolume() }
+    }
   }
 
   async togglePlayback(user: any, token: string) {
