@@ -1,9 +1,8 @@
 <template>
   <v-tabs v-model="currentTab" align-tabs="title">
     <v-tab text="Now Playing" value="nowplaying"></v-tab>
-    <v-tab text="My Playlists" value="myplaylists"></v-tab>
-    <v-tab text="My Playlists" value="myplaylists"></v-tab>
     <v-tab text="Queue" value="queue"></v-tab>
+    <v-tab text="My Playlists" value="myplaylists"></v-tab>
     <v-tab text="Saved Tracks" value="savedtracks"></v-tab>
     <v-tab text="Saved Podcasts" value="savedpodcasts"></v-tab>
     <v-tab text="Saved Episodes" value="savedepisodes"></v-tab>

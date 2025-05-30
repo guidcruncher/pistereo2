@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { on, emit, off } from '@/composables/useeventbus'
 import { PlayerService } from '@/services/player.service'
 import { type PlayableItem } from '@/dto/playableitem'
 import { storeToRefs } from 'pinia'
@@ -18,6 +19,7 @@ const playerEventSource = useEventSource('player', (type, payload) => {
           .getMetaData(payload.track.uri)
           .then((track) => {
             playerStore.updatePlaying(track)
+            emit('track_changed')
           })
           .catch((err) => {
             console.error(err)
@@ -32,7 +34,6 @@ const playerEventSource = useEventSource('player', (type, payload) => {
 </script>
 <script lang="ts">
 import { ref } from 'vue'
-import { on, emit, off } from '@/composables/useeventbus'
 
 export default {
   name: 'Player',

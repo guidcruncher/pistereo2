@@ -14,15 +14,19 @@ export default {
     return {
       windowSize: { x: 0, y: 300 },
       items: [] as any,
-      paging: { offset: 0, limit: 5, total: 0, page: 1, pageCount: 0 },
       ready: false,
     }
   },
   mounted() {
     this.onResize()
     this.loadData()
+    on('track_changed', () => {
+      this.loadData()
+    })
   },
-  beforeUnmount() {},
+  beforeUnmount() {
+    off('track_changed')
+  },
   methods: {
     addPreset(uri) {
       const playerService = new PlayerService()
@@ -43,13 +47,11 @@ export default {
     loadData() {
       const playerService = new PlayerService()
       playerService
-        .listQueue(this.paging.offset, this.paging.limit)
+        .listQueue(0, 10)
         .then((list) => {
-          if (list.items.length > 0) {
-            this.items.push(...list.items)
-            this.paging = list.paging
+          if (list.queue.length > 0) {
+            this.items = list.queue
             this.ready = true
-            this.paging.offset += this.paging.limit
           } else {
           }
         })
@@ -67,29 +69,33 @@ export default {
       <v-card-subtitle></v-card-subtitle>
     </v-card-item>
     <v-card-text>
-      <v-sheet :height="windowSize.y" v-resize="onResize" :items="items">
-        <template v-for="item in items" :key="item" :value="item">
-          <div class="pa-1" v-ripple>
-            <div style="float: left" @click="loadPlaylist(item)">
-              <table border="0" cellpadding="0" cellspacing="0">
-                <tbody>
-                  <tr>
-                    <td>
-                      <ScaledImage :src="item.imageUrl" size="xs" style="margin-right: 16px" />
-                    </td>
-                    <td>
-                      <div class="text-subtitle-1">{{ item.name }}</div>
-                      <div class="text-body-2">{{ item.album.name }}</div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div style="float: right">
-              <v-btn icon="mdi-star-plus" @click="addPreset(item.uri)"></v-btn>
-            </div>
-          </div>
-        </template>
+      <v-sheet :height="windowSize.y" v-resize="onResize">
+        <div style="height: 100%; overflow-y: scroll">
+          <v-list>
+            <v-list-item v-for="item in items" :key="item" :value="item">
+              <div class="pa-1" v-ripple>
+                <div style="float: left" @click="loadPlaylist(item)">
+                  <table border="0" cellpadding="0" cellspacing="0">
+                    <tbody>
+                      <tr>
+                        <td>
+                          <ScaledImage :src="item.imageUrl" size="xs" style="margin-right: 16px" />
+                        </td>
+                        <td>
+                          <div class="text-subtitle-1">{{ item.name }}</div>
+                          <div class="text-body-2">{{ item.album.name }}</div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div style="float: right">
+                  <v-btn icon="mdi-star-plus" @click="addPreset(item.uri)"></v-btn>
+                </div>
+              </div>
+            </v-list-item>
+          </v-list>
+        </div>
       </v-sheet>
     </v-card-text>
   </v-card>
