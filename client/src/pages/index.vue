@@ -68,8 +68,8 @@ export default {
   data() {
     return {}
   },
-  mounted() { },
-  beforeUnmount() { },
+  mounted() {},
+  beforeUnmount() {},
   methods: {},
 }
 </script>

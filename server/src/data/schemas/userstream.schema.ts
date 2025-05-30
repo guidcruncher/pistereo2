@@ -43,4 +43,4 @@ export class UserStream implements PlayableItem {
 
 export type UserStreamDocument = HydratedDocument<UserStream>
 export const UserStreamSchema = SchemaFactory.createForClass(UserStream)
-UserStreamSchema.index({ name: 'text' });
+UserStreamSchema.index({ name: 'text' })

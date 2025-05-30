@@ -1,5 +1,4 @@
-<script lang="ts" setup>
-</script>
+<script lang="ts" setup></script>
 <script lang="ts">
 import { PlayerService } from '@/services/player.service'
 import { on, emit, off } from '@/composables/useeventbus'
@@ -19,7 +18,7 @@ export default {
   mounted() {
     this.onResize()
   },
-  beforeUnmount() { },
+  beforeUnmount() {},
   methods: {
     addPreset(uri) {
       const playerService = new PlayerService()
@@ -32,7 +31,7 @@ export default {
       const playerService = new PlayerService()
       playerService
         .play(item.uri)
-        .then((res) => { })
+        .then((res) => {})
         .catch((err) => {
           console.error(err)
         })
@@ -60,7 +59,7 @@ export default {
     searchClick() {
       this.items = []
       this.paging = { offset: 0, limit: 5, total: 0, page: 1, pageCount: 0 }
-      this.loadData({ done: () => { } })
+      this.loadData({ done: () => {} })
     },
   },
 }
@@ -74,8 +73,11 @@ export default {
     <v-card-text>
       <v-row>
         <v-col cols="11">
-          <v-text-field v-model="query" label="Search for albums, artists, or tracks"
-            @keyup.enter="searchClick()"></v-text-field>
+          <v-text-field
+            v-model="query"
+            label="Search for albums, artists, or tracks"
+            @keyup.enter="searchClick()"
+          ></v-text-field>
         </v-col>
         <v-col cols="1">
           <v-btn icon="mdi-magnify" @click="searchClick()"></v-btn>
