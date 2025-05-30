@@ -35,7 +35,7 @@ app.config.globalProperties.emitter = emitter
 if (authStore.tokens.access != '') {
   const playerService = new PlayerService()
   playerService
-    .restoreSettings("equal")
+    .restoreSettings('equal')
     .then((res) => {
       app.mount('#app')
     })

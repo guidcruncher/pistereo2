@@ -13,6 +13,7 @@ import { History } from '@schemas/history'
 import { EventEmitter2, EventEmitterModule, OnEvent } from '@nestjs/event-emitter'
 import * as fs from 'fs'
 import * as path from 'path'
+import { SettingService } from '@data/setting.service'
 
 @Injectable({ scope: Scope.DEFAULT })
 export class AudioService {
@@ -28,6 +29,7 @@ export class AudioService {
     private readonly userStreamPlayer: UserStreamPlayerService,
     private readonly authService: AuthService,
     private readonly historyService: HistoryService,
+    private readonly settingService: SettingService,
   ) {}
 
   private async ensureDeviceId(token: string) {

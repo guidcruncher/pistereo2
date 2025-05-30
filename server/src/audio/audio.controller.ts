@@ -104,6 +104,7 @@ export class AudioController {
     @AuthToken() token: string,
     @Query('volume') volume: number,
   ) {
+    await this.settingService.updateVolume(user.id, volume)
     return await this.audioService.changeVolume(user, token, volume)
   }
 
@@ -148,7 +149,8 @@ export class AudioController {
   }
 
   @Post('/mixer/:device')
-  async updateMixer(@AuthToken() token, @Param('device') device: string, @Body() mixer: Mixer) {
+  async updateMixer(@AuthToken() token, @User() user: any, @Param('device') device: string, @Body() mixer: Mixer) {
+    await this.settingService.updateMixer(user.id, mixer)
     return await this.mixerService.updateMixer(device, mixer)
   }
 }
