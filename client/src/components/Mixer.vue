@@ -7,7 +7,7 @@ export default {
   name: 'Mixer',
   props: {},
   data() {
-    return { mixer: {} as any, hasData: false, mode: 'simple' }
+    return { mixer: {} as any, hasData: false, mode: 'simple', curvelock: false, draglock:false }
   },
   mounted() {
     const playerService = new PlayerService()
@@ -27,10 +27,16 @@ export default {
       playerService.updateMixer('equal', this.mixer)
     },
     setEqualiser(item, index) {
+
+      if (this.draglock) {
+        this.setAlll(item.value)
+      } else {
+
       if (this.mode == 'simple') {
         item.channels.forEach((c) => {
           c.value = item.value
         })
+      }
       }
 
       this.saveMixer()
@@ -108,6 +114,19 @@ export default {
         true-value="advanced"
         hide-details
       ></v-switch>
+
+ <v-switch
+        v-model="draglock"
+        label="Drag lock"
+        hide-details
+      ></v-switch>
+
+ <v-switch
+        v-model="curvelock"
+        label="Curve lock"
+        hide-details
+      ></v-switch>
+
     </v-card-actions>
   </v-card>
 </template>

@@ -9,7 +9,7 @@ RUN apk -U --no-cache add libpulse avahi libgcc gcompat alsa-lib envsubst mpv al
 COPY ./mediaserver/lib/caps.so /usr/lib
 COPY ./mediaserver/lib/libasound* /usr/lib/alsa-lib/
 
-RUN npm i -g @nestjs/cli grunt-cli pm2 dotenv-cli --no-audit
+RUN npm i -g grunt-cli pm2 dotenv-cli --no-audit
 RUN npm cache clean --force
 RUN pm2 install pm2-logrotate
 RUN pm2 set pm2-logrotate:retain 2
@@ -50,7 +50,7 @@ COPY --from=build /src/build .
 COPY --from=build /src/config /config
 COPY --from=build /src/mediaserver/audio/100-equal.conf /etc/alsa/conf.d/100-equal.conf
 COPY --from=build /src/mediaserver/audio/asound.conf /etc/asound.conf
-COPY ecosystem.config.js .
+COPY ecosystem-media.config.js ecosystem.config.js
 
 ENV PISTEREO_ALSA_DEVICE=equal
 ENV PISTEREO_LIBRESPOT_ALSA_MIXER_DEVICE=

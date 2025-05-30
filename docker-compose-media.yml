@@ -2,7 +2,7 @@ name: pistereo2
 
 services:
   pistereo2-media:
-    image: guidcruncher/pistereo2-media:latest
+    image: guidcruncher/pistereo2:mediaserver
     extra_hosts:
       - pistereo2:127.0.0.1
     dns:
