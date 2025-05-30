@@ -34,15 +34,4 @@ export class SearchController {
   ) {
     return await this.searchService.query(token, user, query, offset, limit)
   }
-
-  @Post()
-  async search(
-    @AuthToken() token: string,
-    @User() user: any,
-    @Body() query: any,
-    @Query('offset') offset: number,
-    @Query('limit') limit: number,
-  ) {
-    return await this.searchService.search(token, user, query, offset, limit)
-  }
 }

@@ -294,18 +294,11 @@ export class SpotifyPlayerService extends EventBaseService {
     return device
   }
 
-  async search(
-    token: string,
-    user: any,
-    types: string[],
-    q: string,
-    offset: number,
-    limit: number,
-  ) {
+  async search(token: string, user: any, type: string, q: string, offset: number, limit: number) {
     const params = new URLSearchParams()
     params.append('q', q)
     params.append('market', user.country)
-    params.append('type', types.join(','))
+    params.append('type', type)
     params.append('offset', offset.toString())
     params.append('limit', limit.toString())
 
@@ -315,10 +308,7 @@ export class SpotifyPlayerService extends EventBaseService {
       { Authorization: `Bearer ${token}` },
     )
 
-    if (types.length == 1) {
-      const key = types[0] + 's'
-      return PagedListBuilder.fromPagedObject<PlayableItem>(result.value[key], PlayableItemMapper)
-    }
-    return result.value
+    const key = type + 's'
+    return PagedListBuilder.fromPagedObject<PlayableItem>(result.value[key], PlayableItemMapper)
   }
 }
