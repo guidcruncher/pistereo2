@@ -57,10 +57,16 @@ export class MpvPlayerService {
             try {
               const json: any = JSON.parse(result.stdout)
               if (json.error) {
-                this.logger.warn('sendCommand Error ', json)
-                json.statusCode = errorCodes[json.error] ?? 500
-                json.command = jsonCmd
-                resolve(json)
+                if (json.error != 'success') {
+                  this.logger.warn('sendCommand Error ', json)
+                  json.statusCode = errorCodes[json.error] ?? 500
+                  json.command = jsonCmd
+                  resolve(json)
+                } else {
+                  json.statusCode = errorCodes[json.error] ?? 500
+                  json.command = jsonCmd
+                  resolve(json)
+                }
               } else {
                 resolve(json)
               }

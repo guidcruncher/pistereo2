@@ -190,9 +190,9 @@ export class AudioService {
 
   async getVolume(token: string) {
     try {
-      return { volume: await this.spotifyPlayer.getVolume(token) }
-    } catch {
       return { volume: await this.mpvPlayer.getVolume() }
+    } catch {
+      return { volume: await this.spotifyPlayer.getVolume(token) }
     }
   }
 
