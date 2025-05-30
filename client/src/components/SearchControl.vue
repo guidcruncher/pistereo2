@@ -26,7 +26,7 @@ export default {
       playerService.addPreset(uri)
     },
     onResize() {
-      this.windowSize = { x: window.innerWidth, y: window.innerHeight - 240 }
+      this.windowSize = { x: window.innerWidth, y: window.innerHeight - 300 }
     },
     loadPlaylist(item) {
       const playerService = new PlayerService()
@@ -57,6 +57,11 @@ export default {
           done('error')
         })
     },
+    searchClick() {
+      this.items = []
+      this.paging = { offset: 0, limit: 5, total: 0, page: 1, pageCount: 0 }
+      this.loadData({ done: () => { } })
+    },
   },
 }
 </script>
@@ -70,10 +75,10 @@ export default {
       <v-row>
         <v-col cols="11">
           <v-text-field v-model="query" label="Search for albums, artists, or tracks"
-            @keyup.enter="loadData({ done: () => { } })"></v-text-field>
+            @keyup.enter="searchClick()"></v-text-field>
         </v-col>
         <v-col cols="1">
-          <v-btn icon="mdi-magnify" @click="loadData({ done: () => { } })"></v-btn>
+          <v-btn icon="mdi-magnify" @click="searchClick()"></v-btn>
         </v-col>
       </v-row>
       <v-infinite-scroll :height="windowSize.y" v-resize="onResize" :items="items" @load="loadData">
