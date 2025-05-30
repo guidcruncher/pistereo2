@@ -47,6 +47,11 @@ export class PlayerService extends BaseService {
     return response.data
   }
 
+  async restoreSettings(device: string) {
+    const response: AxiosResponse<any> = await this.client().get(`/restore/${device}`)
+    return response.data
+  }
+
   async updateMixer(device: string, settings: any) {
     const response: AxiosResponse<any> = await this.client().post(`/mixer/${device}`, settings)
     return response.data

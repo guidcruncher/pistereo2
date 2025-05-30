@@ -43,6 +43,7 @@ export class MongoConnectionService {
       { name: 'LastPlayed', schema: schemas.LastPlayedSchema },
       { name: 'Session', schema: schemas.SessionSchema },
       { name: 'User', schema: schemas.UserSchema },
+      { name: 'Setting', schema: schemas.Setting },
     ])
   }
 }

@@ -24,6 +24,7 @@ import { PlayableItem, Uri } from '@views/index'
 import { AudioService } from './audio.service'
 import { EventEmitter2, EventEmitterModule, OnEvent } from '@nestjs/event-emitter'
 import { MixerService } from './mixer.service'
+import { SettingService } from '@data/setting.service'
 
 @ApiOAuth2(
   ['user-read-playback-state', 'user-modify-playback-state', 'user-read-recently-played'],
@@ -37,6 +38,7 @@ export class AudioController {
     private readonly presetService: PresetService,
     private readonly spotifyPlayerService: SpotifyPlayerService,
     private readonly mixerService: MixerService,
+    private readonly settingService: SettingService,
   ) {}
 
   @ApiExcludeEndpoint()
@@ -46,6 +48,27 @@ export class AudioController {
     const data = await fetch(url)
     res.header('Content-Type', data.headers.get('Content-Type'))
     return res.send(await data.bytes())
+  }
+
+  @Get('/restore/:device')
+  async restoreSettings(
+    @AuthToken() token: string,
+    @User() user: any,
+    @Param('device') device: string,
+  ) {
+    let setting = await this.settingService.getSetting(user.id)
+
+    if (!setting) {
+      throw new HttpException('No settings available', 404)
+    }
+
+    await this.audioService.changeVolume(user, token, setting.volume ?? 50)
+
+    if (setting.mixer) {
+      await this.mixerService.updateMixer(device, setting.mixer)
+    }
+
+    return {}
   }
 
   @Get('/presets')

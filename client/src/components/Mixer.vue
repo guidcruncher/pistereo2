@@ -7,7 +7,7 @@ export default {
   name: 'Mixer',
   props: {},
   data() {
-    return { mixer: {} as any, hasData: false, mode: 'simple', draglock: false }
+    return { locked: false, mixer: {} as any, hasData: false, mode: 'simple', draglock: false }
   },
   mounted() {
     const playerService = new PlayerService()
@@ -67,6 +67,7 @@ export default {
           :value="item"
         >
           <v-slider
+            :disabled="locked"
             v-model="item.value"
             direction="vertical"
             :min="item.min"
@@ -93,6 +94,7 @@ export default {
               :min="item.min"
               :max="item.max"
               :step="item.steps"
+              :disabled="locked"
               @end="setEqualiser(item, -1)"
             >
               <template #label>
@@ -104,7 +106,10 @@ export default {
       </v-slide-group>
     </v-card-text>
     <v-card-actions>
-      <v-btn @click="setAll(60)">Reset</v-btn>
+      <v-btn @click="setAll(50)">Reset</v-btn>
+
+      <v-switch v-model="locked" hide-details label="Locked"></v-switch>
+
       <v-switch
         v-model="mode"
         label="Advanced mode"
@@ -113,7 +118,7 @@ export default {
         hide-details
       ></v-switch>
 
-      <v-switch v-model="draglock" label="Drag lock" hide-details></v-switch>
+      <v-switch v-model="draglock" label="Drag Sync" hide-details></v-switch>
     </v-card-actions>
   </v-card>
 </template>
