@@ -19,6 +19,7 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ScaledImage: typeof import('./components/ScaledImage.vue')['default']
+    SearchControl: typeof import('./components/SearchControl.vue')['default']
     ShowListsView: typeof import('./components/ShowListsView.vue')['default']
     TrackListsView: typeof import('./components/TrackListsView.vue')['default']
     VolumeControl: typeof import('./components/VolumeControl.vue')['default']

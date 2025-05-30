@@ -24,7 +24,7 @@ import { SearchService } from './search.service'
 export class SearchController {
   constructor(private readonly searchService: SearchService) {}
 
-  @Get('query')
+  @Get()
   async query(
     @AuthToken() token: string,
     @User() user: any,
