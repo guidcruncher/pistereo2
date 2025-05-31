@@ -34,4 +34,23 @@ export class SettingService {
   async getSetting(userId: string) {
     return await this.settingModel.findOne({ userId: userId }).lean().exec()
   }
+
+  async getFlags(userId: string) {
+    let res = await this.settingModel.findOne({ userId: userId }).lean().exec()
+    if (res) {
+      return res.flags as Record<string, any>
+    }
+
+    return {} as Record<string, any>
+  }
+
+  async setFlags(userId: string, flags: Record<string, any>) {
+    return await this.settingModel.findOneAndUpdate(
+      { userId: userId },
+      { flags: flags },
+      {
+        upsert: true,
+      },
+    )
+  }
 }

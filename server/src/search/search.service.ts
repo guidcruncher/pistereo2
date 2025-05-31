@@ -13,33 +13,33 @@ export class SearchService {
     private readonly userStreamPlayer: UserStreamPlayerService,
   ) {}
 
-  async query(token: string, user: any, query: string, offset: number, limit: number) {
-    let combined: PlayableItem[] = []
+  async query(
+    token: string,
+    user: any,
+    source: string,
+    query: string,
+    offset: number,
+    limit: number,
+  ) {
     let res: any
     let pager: Pager = new Pager()
 
-    combined = (await this.tuneinPlayer.search(query, offset, limit)).items
-    combined.push(...(await this.userStreamPlayer.search(query, offset, limit)).items)
+    switch (source) {
+      case 'radio':
+        res = await this.tuneinPlayer.search(query, offset, limit)
+        break
+      case 'stream':
+        res = await this.userStreamPlayer.search(query, offset, limit)
+        break
+      case 'album':
+      case 'show':
+      case 'track':
+      case 'episode':
+      case 'playlist':
+        res = await this.spotifyPlayer.search(token, user, source, query, offset, limit)
 
-    combined.push(
-      ...(await this.spotifyPlayer.search(token, user, 'album', query, offset, limit)).items,
-    )
-    combined.push(
-      ...(await this.spotifyPlayer.search(token, user, 'show', query, offset, limit)).items,
-    )
-    combined.push(
-      ...(await this.spotifyPlayer.search(token, user, 'track', query, offset, limit)).items,
-    )
-    combined.push(
-      ...(await this.spotifyPlayer.search(token, user, 'episode', query, offset, limit)).items,
-    )
-
-    combined = combined.sort((a, b) => {
-      return a.name.localeCompare(b.name)
-    })
-    const results = PagedListBuilder.fromMappedArray(combined, 0, combined.length)
-    results.paging.offset = offset
-    results.paging.limit = limit
-    return results
+        break
+    }
+    return res
   }
 }

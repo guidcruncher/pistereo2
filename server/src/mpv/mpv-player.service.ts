@@ -50,7 +50,7 @@ export class MpvPlayerService {
           }
         }
 
-        this.logger.debug(`sendCommand: ${cmdArgs.join(' ')}`)
+        this.logger.verbose(`sendCommand: ${cmdArgs.join(' ')}`)
 
         execFile('sh', cmdArgs)
           .then((result) => {

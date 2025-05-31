@@ -13,6 +13,9 @@ export class Setting {
 
   @Prop({ type: Object })
   mixer: Mixer
+
+  @Prop({ type: Object })
+  flags: Record<string, any>
 }
 
 export type SettingDocument = HydratedDocument<Setting>

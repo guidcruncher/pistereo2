@@ -8,6 +8,7 @@ export default {
   props: {},
   data() {
     return {
+      type: 'Album',
       query: '',
       windowSize: { x: 0, y: 300 },
       items: [] as any,
@@ -17,6 +18,7 @@ export default {
   },
   mounted() {
     this.onResize()
+    this.searchClick()
   },
   beforeUnmount() {},
   methods: {
@@ -39,7 +41,7 @@ export default {
     loadData({ done }) {
       const playerService = new PlayerService()
       playerService
-        .search(this.query, this.paging.offset, this.paging.limit)
+        .search(this.type, this.query, this.paging.offset, this.paging.limit)
         .then((list) => {
           if (list.items.length > 0) {
             this.items.push(...list.items)
@@ -57,9 +59,11 @@ export default {
         })
     },
     searchClick() {
-      this.items = []
-      this.paging = { offset: 0, limit: 5, total: 0, page: 1, pageCount: 0 }
-      this.loadData({ done: () => {} })
+      if (this.query != '' && this.type != '') {
+        this.items = []
+        this.paging = { offset: 0, limit: 5, total: 0, page: 1, pageCount: 0 }
+        this.loadData({ done: () => {} })
+      }
     },
   },
 }
@@ -72,15 +76,26 @@ export default {
     </v-card-item>
     <v-card-text>
       <v-row>
-        <v-col cols="11">
+        <v-col cols="9">
           <v-text-field
             v-model="query"
-            label="Search for albums, artists, or tracks"
+            label="Search filter"
             @keyup.enter="searchClick()"
           ></v-text-field>
         </v-col>
+        <v-col cols="2">
+          <v-select
+            label="Show"
+            v-model="type"
+            :items="['Album', 'Show', 'Episode', 'Track', 'Playlist', 'Radio', 'Stream']"
+          ></v-select>
+        </v-col>
         <v-col cols="1">
-          <v-btn icon="mdi-magnify" @click="searchClick()"></v-btn>
+          <v-btn
+            icon="mdi-magnify"
+            @click="searchClick()"
+            :disabled="type == '' || query == ''"
+          ></v-btn>
         </v-col>
       </v-row>
       <v-infinite-scroll :height="windowSize.y" v-resize="onResize" :items="items" @load="loadData">

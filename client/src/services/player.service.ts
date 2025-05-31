@@ -155,12 +155,14 @@ export class PlayerService extends BaseService {
     return response.data
   }
 
-  async search(query: string, offset: number, limit: number) {
+  async search(type: string, query: string, offset: number, limit: number) {
     const params = new URLSearchParams()
     params.append('query', query)
     params.append('offset', offset.toString())
     params.append('limit', limit.toString())
-    const response: AxiosResponse<any> = await this.client().get(`/search?${params.toString()}`)
+    const response: AxiosResponse<any> = await this.client().get(
+      `/search/${type.toLowerCase()}?${params.toString()}`,
+    )
 
     return response.data
   }

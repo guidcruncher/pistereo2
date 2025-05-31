@@ -42,7 +42,7 @@ export class LibrespotClientService implements OnModuleDestroy {
   }
 
   private async onMessage(namespace: string, payload: any) {
-    this.logger.log('Librespot event fired', payload.type)
+    this.logger.verbose('Librespot event fired', payload.type)
 
     switch (payload.type) {
       case 'paused':

@@ -24,14 +24,15 @@ import { SearchService } from './search.service'
 export class SearchController {
   constructor(private readonly searchService: SearchService) {}
 
-  @Get()
+  @Get('/:tyoe')
   async query(
     @AuthToken() token: string,
     @User() user: any,
+    @Param('source') source: string,
     @Query('query') query: string,
     @Query('offset') offset: number,
     @Query('limit') limit: number,
   ) {
-    return await this.searchService.query(token, user, query, offset, limit)
+    return await this.searchService.query(token, user, source, query, offset, limit)
   }
 }
