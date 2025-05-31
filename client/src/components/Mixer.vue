@@ -11,7 +11,7 @@ export default {
   name: 'Mixer',
   props: {},
   data() {
-    return { mixer: {} as any, hasData: false}
+    return { mixer: {} as any, hasData: false }
   },
   mounted() {
     const playerService = new PlayerService()
@@ -31,11 +31,11 @@ export default {
       playerService.updateMixer('equal', this.mixer)
     },
     setEqualiser(item, index) {
-const mixerStore = useMixerStore()
+      const mixerStore = useMixerStore()
       if (mixerStore.draglock) {
         this.setAll(item.value)
       } else {
-        if (this.mode == 'simple') {
+        if (mixerStore.simple) {
           item.channels.forEach((c) => {
             c.value = item.value
           })
@@ -65,14 +65,14 @@ const mixerStore = useMixerStore()
     <v-card-text>
       <v-slide-group show-arrows v-if="hasData">
         <v-slide-group-item
-          v-if="mode == 'simple'"
+          v-if="mixerStore.simple"
           v-for="item in mixer.frequencies"
           :key="item"
           v-slot="{ isSelected, toggle }"
           :value="item"
         >
           <v-slider
-            :disabled="locked"
+            :disabled="mixerStore.locked"
             v-model="item.value"
             direction="vertical"
             :min="item.min"
@@ -115,11 +115,7 @@ const mixerStore = useMixerStore()
 
       <v-switch v-model="mixerStore.locked" hide-details label="Locked"></v-switch>
 
-      <v-switch
-        v-model="mixerStore.èmode"
-        label="Advanced mode"
-        hide-details
-      ></v-switch>
+      <v-switch v-model="mixerStore.simple" label="Simple mode" hide-details></v-switch>
 
       <v-switch v-model="mixerStore.draglock" label="Drag Sync" hide-details></v-switch>
     </v-card-actions>
