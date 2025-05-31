@@ -1,4 +1,8 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { useMixerStore } from '@/stores/mixer'
+
+const mixerStore = useMixerStore()
+</script>
 <script lang="ts">
 import { PlayerService } from '@/services/player.service'
 import { on, emit, off } from '@/composables/useeventbus'
@@ -7,7 +11,7 @@ export default {
   name: 'Mixer',
   props: {},
   data() {
-    return { locked: false, mixer: {} as any, hasData: false, mode: 'simple', draglock: false }
+    return { mixer: {} as any, hasData: false}
   },
   mounted() {
     const playerService = new PlayerService()
@@ -27,7 +31,8 @@ export default {
       playerService.updateMixer('equal', this.mixer)
     },
     setEqualiser(item, index) {
-      if (this.draglock) {
+const mixerStore = useMixerStore()
+      if (mixerStore.draglock) {
         this.setAll(item.value)
       } else {
         if (this.mode == 'simple') {
@@ -81,7 +86,7 @@ export default {
           </v-slider>
         </v-slide-group-item>
         <v-slide-group-item
-          v-if="mode == 'advanced'"
+          v-if="!mixerStore.simple"
           v-for="item in mixer.frequencies"
           :key="item"
           v-slot="{ isSelected, toggle }"
@@ -94,7 +99,7 @@ export default {
               :min="item.min"
               :max="item.max"
               :step="item.steps"
-              :disabled="locked"
+              :disabled="mixerStore.locked"
               @end="setEqualiser(item, -1)"
             >
               <template #label>
@@ -108,17 +113,15 @@ export default {
     <v-card-actions>
       <v-btn @click="setAll(50)">Reset</v-btn>
 
-      <v-switch v-model="locked" hide-details label="Locked"></v-switch>
+      <v-switch v-model="mixerStore.locked" hide-details label="Locked"></v-switch>
 
       <v-switch
-        v-model="mode"
+        v-model="mixerStore.èmode"
         label="Advanced mode"
-        false-value="simple"
-        true-value="advanced"
         hide-details
       ></v-switch>
 
-      <v-switch v-model="draglock" label="Drag Sync" hide-details></v-switch>
+      <v-switch v-model="mixerStore.draglock" label="Drag Sync" hide-details></v-switch>
     </v-card-actions>
   </v-card>
 </template>
