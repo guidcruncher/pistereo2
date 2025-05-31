@@ -298,7 +298,7 @@ export class SpotifyPlayerService extends EventBaseService {
     const params = new URLSearchParams()
     params.append('q', q)
     params.append('market', user.country)
-    params.append('type', type)
+    params.append('type', type.toLowerCase())
     params.append('offset', offset.toString())
     params.append('limit', limit.toString())
 
@@ -308,7 +308,12 @@ export class SpotifyPlayerService extends EventBaseService {
       { Authorization: `Bearer ${token}` },
     )
 
-    const key = type + 's'
+    const key = type.toLowerCase() + 's'
+
+    if (!result.value[key]) {
+      throw new HttpException(`Property "${key}" missing on results`, 500)
+    }
+
     return PagedListBuilder.fromPagedObject<PlayableItem>(result.value[key], PlayableItemMapper)
   }
 }

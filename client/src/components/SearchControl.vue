@@ -87,7 +87,7 @@ export default {
           <v-select
             label="Show"
             v-model="type"
-            :items="['Album', 'Show', 'Episode', 'Track', 'Playlist', 'Radio', 'Stream']"
+            :items="['Album', 'Show', 'Episode', 'Track', 'Radio', 'Stream']"
           ></v-select>
         </v-col>
         <v-col cols="1">
