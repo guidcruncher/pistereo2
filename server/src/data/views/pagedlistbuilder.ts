@@ -74,12 +74,13 @@ export class PagedListBuilder {
     l.paging.page = (l.paging.offset == 0 ? 0 : l.paging.offset / l.paging.limit) + 1
     items.forEach((item) => {
       if (itemProp && itemProp != '') {
-        if (item[itemProp].uri == null) {
-        } else {
+        if (item[itemProp] && item[itemProp].uri) {
           l.items.push(mapper(item[itemProp]))
         }
       } else {
-        l.items.push(mapper(item))
+        if (item) {
+          l.items.push(mapper(item))
+        }
       }
     })
     return l

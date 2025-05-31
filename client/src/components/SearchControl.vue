@@ -59,6 +59,7 @@ export default {
         })
     },
     searchClick() {
+      this.ready = false
       if (this.query != '' && this.type != '') {
         this.items = []
         this.paging = { offset: 0, limit: 5, total: 0, page: 1, pageCount: 0 }
@@ -98,7 +99,13 @@ export default {
           ></v-btn>
         </v-col>
       </v-row>
-      <v-infinite-scroll :height="windowSize.y" v-resize="onResize" :items="items" @load="loadData">
+      <v-infinite-scroll
+        v-if="ready"
+        :height="windowSize.y"
+        v-resize="onResize"
+        :items="items"
+        @load="loadData"
+      >
         <template v-for="item in items" :key="item" :value="item">
           <div class="pa-1" v-ripple>
             <div style="float: left" @click="loadPlaylist(item)">

@@ -33,6 +33,10 @@ export class SearchController {
     @Query('offset') offset: number,
     @Query('limit') limit: number,
   ) {
+    if (query == '') {
+      throw new HttpException('No query', 400)
+    }
+
     return await this.searchService.query(token, user, source.toLowerCase(), query, offset, limit)
   }
 }
