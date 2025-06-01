@@ -1,36 +1,41 @@
 name: pistereo2
 
 services:
-  pistereo2-media:
+  pistereo2-mediaserver:
     image: guidcruncher/pistereo2:mediaserver
     extra_hosts:
       - pistereo2:127.0.0.1
     dns:
       - 192.168.1.201
-    build:
-      context: .
-      dockerfile: Dockerfile-media
     network_mode: host
     expose:
-      -  3678
-    env_file: ./media.env
+      - 3678
+      - 3001
     environment:
       - TZ=Europe/London
       - PISTEREO_ALSA_DEVICE=equal
-      - PISTEREO_LIBRESPOT_ALSA_MIXER_DEVICE=default
+      - PISTEREO_LIBRESPOT_ALSA_MIXER_DEVICE=equal
       - PISTEREO_LIBRESPOT_ALSA_MIXER_CONTROL=Master
       - PISTEREO_LIBRESPOT_PLAYBACK_BITRATE=160
-      - PISTEREO_CLIENTID=""
-      - PISTEREO_CLIENTSECRET=""
-      - PISTEREO_BASEURL="http://192.168.1.201:3000"
+      - PISTEREO_CLIENTID="bfeb3abe6fa24e47803a2d7d72a4ee4c"
+      - PISTEREO_CLIENTSECRET="91cfa30ef3334cb09bd6c0b2417c9c1c"
       - PISTEREO_REMOTEDEVICE="Your Stereo"
       - PISTEREO_LOCALDEVICE="Your Device"
-      - PISTEREO_LISTEN_PORT=3000
-    container_name: pistereo2-media
-    hostname: pistereo2-media
+      - PISTEREO_DEVICEID=""
+      - PISTEREO_LISTEN_PORT=3001
+      - PISTEREO_STREAM_BUFFER_SIZE=1MiB
+      - PISTEREO_SPOTIFY_USERNAME=
+      - PISTEREO_SPOTIFY_ACCESS_TOKEN=
+      - PISTEREO_LIBRESPOT_MODE="zeroconf"
+    container_name: pistereo2-mediaserver
+    host name: pistereo2-mediaserver
     restart: unless-stopped
     volumes:
-      - /home/jcrocker/src/pistereo-config:/config
+      - ./config:/config
     devices:
       - /dev/snd:/dev/snd:rw
     privileged: true
+
+networks:
+  pistereo2:
+    external: true
