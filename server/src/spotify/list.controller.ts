@@ -89,6 +89,17 @@ export class ListController {
     return await this.listService.getSavedShows(token, offset, limit)
   }
 
+  @Get('spotify/show/episodes')
+  async getShowEpisodes(
+    @User() user: any,
+    @AuthToken() token: string,
+    @Query('uri') uri: string,
+    @Query('offset') offset: number,
+    @Query('limit') limit: number,
+  ) {
+    return await this.listService.getShowEpisodes(token, user, uri, offset, limit)
+  }
+
   @Get('spotify/tracks')
   async getSavedTracks(
     @User() user: any,

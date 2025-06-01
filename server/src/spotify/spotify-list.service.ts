@@ -2,6 +2,7 @@ import { Logger } from '@nestjs/common'
 import { HttpException, Injectable } from '@nestjs/common'
 import { HttpTransportService } from '@core/http-transport.service'
 import {
+  Uri,
   PagedList,
   PagedListBuilder,
   PlayableItem,
@@ -114,6 +115,23 @@ export class SpotifyListService {
     )
 
     return PagedListBuilder.fromPagedObject<PlayableItem>(result.value, PlayableItemMapper, 'show')
+  }
+
+  async getShowEpisodes(token: string, user: any, uri: string, offset: number, limit: number) {
+    const id = Uri.fromUriString(uri).id
+    const query = this.transport.getQueryString({
+      market: user.country,
+      offset: offset,
+      limit: limit,
+    })
+    const result = await this.transport.request(
+      'GET',
+      `https://api.spotify.com/v1/shows/${id}/episodes${query}`,
+      { Authorization: `Bearer ${token}` },
+      {},
+    )
+
+    return PagedListBuilder.fromPagedObject<PlayableItem>(result.value, PlayableItemMapper)
   }
 
   async getSavedTracks(

@@ -28,7 +28,6 @@ services:
       - PISTEREO_SPOTIFY_ACCESS_TOKEN=
       - PISTEREO_LIBRESPOT_MODE="zeroconf"
     container_name: pistereo2-mediaserver
-    host name: pistereo2-mediaserver
     restart: unless-stopped
     volumes:
       - ./config:/config

@@ -10,6 +10,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     AlbumListsView: typeof import('./components/AlbumListsView.vue')['default']
     AppFooter: typeof import('./components/AppFooter.vue')['default']
+    EpisodeBrowser: typeof import('./components/EpisodeBrowser.vue')['default']
     EpisodeListsView: typeof import('./components/EpisodeListsView.vue')['default']
     Mixer: typeof import('./components/Mixer.vue')['default']
     Player: typeof import('./components/Player.vue')['default']

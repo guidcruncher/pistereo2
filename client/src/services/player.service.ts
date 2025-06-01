@@ -144,6 +144,18 @@ export class PlayerService extends BaseService {
     return response.data
   }
 
+  async listShowEpisodes(uri: Uri, offset: number, limit: number) {
+    const params = new URLSearchParams()
+    params.append('uri', uri.uri)
+    params.append('offset', offset.toString())
+    params.append('limit', limit.toString())
+    const response: AxiosResponse<any> = await this.client().get(
+      `/list/spotify/show/episodes?${params.toString()}`,
+    )
+
+    return response.data
+  }
+
   async listSavedTracks(offset: number, limit: number) {
     const params = new URLSearchParams()
     params.append('offset', offset.toString())
