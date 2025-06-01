@@ -38,6 +38,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./config:/config
+      - ./streams:/streams
     devices:
       - /dev/snd:/dev/snd:rw
     privileged: true
