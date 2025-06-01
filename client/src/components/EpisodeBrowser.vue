@@ -31,7 +31,7 @@ export default {
       playerService.addPreset(uri)
     },
     onResize() {
-      this.windowSize = { x: window.innerWidth, y: window.innerHeight - 180 }
+      this.windowSize = { x: window.innerWidth, y: window.innerHeight - 140 }
     },
     loadPlaylist(item) {
       const playerService = new PlayerService()
