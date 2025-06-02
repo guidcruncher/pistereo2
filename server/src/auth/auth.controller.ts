@@ -105,7 +105,7 @@ export class AuthController {
   @Get('/user/settings')
   async getSettings(@AuthToken() token, @User() user: any) {
     const result = await this.settingService.getFlags(user.id)
-    return result /*  */
+    return result
   }
 
   @Private()

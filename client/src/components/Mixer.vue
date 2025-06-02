@@ -15,10 +15,39 @@ export default {
   },
   mounted() {
     const playerService = new PlayerService()
-    this.loadMixer()
+    const mixerStore = useMixerStore()
+
+    playerService
+      .getUserSettings()
+      .then((settings) => {
+        if (settings['mixer.locked']) {
+          mixerStore.setLocked(settings['mixer.locked'])
+        }
+        if (settings['mixer.simple']) {
+          mixerStore.setSimple(settings['mixer.simple'])
+        }
+        if (settings['mixer.draglock']) {
+          mixerStore.setDragLocked(settings['mixer.draglock'])
+        }
+
+        this.loadMixer()
+      })
+      .catch((err) => {
+        console.error('Error loading user settings:', err)
+        this.loadMixer()
+      })
   },
   beforeUnmount() {},
   methods: {
+    updateSetting(key, value) {
+      const playerService = new PlayerService()
+      playerService
+        .saveUserSetting(key, value)
+        .then(() => {})
+        .catch((err) => {
+          console.error(`Error updating setting ${key}:`, err)
+        })
+    },
     loadMixer() {
       const playerService = new PlayerService()
       playerService.getMixer('equal').then((data) => {
@@ -113,11 +142,26 @@ export default {
     <v-card-actions>
       <v-btn @click="setAll(50)">Reset</v-btn>
 
-      <v-switch v-model="mixerStore.locked" hide-details label="Locked"></v-switch>
+      <v-switch
+        v-model="mixerStore.locked"
+        hide-details
+        label="Locked"
+        update:modelValue="updateSetting('mixer.locked', mixerStore.locked)"
+      ></v-switch>
 
-      <v-switch v-model="mixerStore.simple" label="Simple mode" hide-details></v-switch>
+      <v-switch
+        v-model="mixerStore.simple"
+        label="Simple mode"
+        hide-details
+        update:modelValue="updateSetting('mixer.simple', mixerStore.simple)"
+      ></v-switch>
 
-      <v-switch v-model="mixerStore.draglock" label="Drag Sync" hide-details></v-switch>
+      <v-switch
+        v-model="mixerStore.draglock"
+        label="Drag Sync"
+        hide-details
+        update:modelValue="updateSetting('mixer.draglock', mixerStore.draglock)"
+      ></v-switch>
     </v-card-actions>
   </v-card>
 </template>
