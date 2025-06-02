@@ -1,6 +1,6 @@
 import { PlaylistDefinition } from '../views/playlist'
 import { Uri } from '../views/uri'
-import { imageUrl,Mapper } from './mapper'
+import { imageUrl, Mapper } from './mapper'
 import { ProfileMapper } from './profile-mapper'
 
 export const PlaylistMapper: Mapper<PlaylistDefinition> = (value: any) => {

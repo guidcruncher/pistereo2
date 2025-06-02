@@ -1,27 +1,18 @@
 import { User } from '@auth/decorators'
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  Put,
-  Query,
-  Res,
-} from '@nestjs/common'
+import { Body, Controller, Get, Param, Post, Put, Query, Res } from '@nestjs/common'
 import { ApiExcludeEndpoint, ApiOAuth2 } from '@nestjs/swagger'
 
 import { AuthService } from './auth.service'
 import { AuthToken, Private, Public } from './decorators'
 import { SettingService } from '@/data/setting.service'
 
-
 @Public()
 @Controller('/api/auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService,
-    private readonly settingService: SettingService
-  ) { }
+  constructor(
+    private readonly authService: AuthService,
+    private readonly settingService: SettingService,
+  ) {}
 
   @ApiExcludeEndpoint()
   @Get('authorise')
@@ -111,18 +102,21 @@ export class AuthController {
   }
 
   @Private()
-  @Get("/user/settings")
+  @Get('/user/settings')
   async getSettings(@AuthToken() token, @User() user: any) {
     const result = await this.settingService.getFlags(user.id)
-    return result/*  */
+    return result /*  */
   }
 
   @Private()
-  @Put("/user/setting/:key")
-  async saveSettings(@AuthToken() token, @User() user: any, @Param("key") key:string, @Query("value") value:any) {
+  @Put('/user/setting/:key')
+  async saveSettings(
+    @AuthToken() token,
+    @User() user: any,
+    @Param('key') key: string,
+    @Query('value') value: any,
+  ) {
     const result = await this.settingService.setFlag(user.id, key, value)
-    return result/*  */
+    return result /*  */
   }
-
-
 }

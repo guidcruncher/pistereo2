@@ -1,6 +1,6 @@
 import { UserStream } from '../schemas/index'
 import { PlayableItem } from '../views/index'
-import {Mapper } from './mapper'
+import { Mapper } from './mapper'
 
 export const UserStreamMapper: Mapper<PlayableItem> = (value: UserStream) => {
   const result: PlayableItem = {} as PlayableItem

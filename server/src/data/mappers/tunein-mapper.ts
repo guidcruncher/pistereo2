@@ -1,6 +1,6 @@
 import { Tunein } from '../views/tunein'
 import { Uri } from '../views/uri'
-import {Mapper } from './mapper'
+import { Mapper } from './mapper'
 
 export const TuneinMapper: Mapper<Tunein> = (value: any) => {
   const result = new Tunein()

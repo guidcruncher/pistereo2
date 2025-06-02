@@ -1,6 +1,6 @@
 import { Preset } from '../schemas/index'
 import { PlayableItem, Uri } from '../views/index'
-import {Mapper } from './mapper'
+import { Mapper } from './mapper'
 
 export const PresetMapper: Mapper<PlayableItem> = (value: Preset) => {
   const result: PlayableItem = {} as PlayableItem

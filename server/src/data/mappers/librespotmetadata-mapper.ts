@@ -9,7 +9,7 @@ import {
 
 import { PlayableItem } from '../views/playableitem'
 import { Uri } from '../views/uri'
-import {Mapper } from './mapper'
+import { Mapper } from './mapper'
 
 export const LibrespotMetadataMapper: Mapper<PlayableItem> = (data: any): PlayableItem => {
   const parts: string[] = data.uri.split(':')

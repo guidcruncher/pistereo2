@@ -27,14 +27,7 @@ export class Mixer {
 
   device = ''
 
-  add(
-    numid: number,
-    name: string,
-    channels: Channel[],
-    min = 0,
-    max = 100,
-    steps = 1,
-  ) {
+  add(numid: number, name: string, channels: Channel[], min = 0, max = 100, steps = 1) {
     this.frequencies.push({
       numid: numid,
       min: min,

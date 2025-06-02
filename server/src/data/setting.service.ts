@@ -6,7 +6,7 @@ import { Model } from 'mongoose'
 
 @Injectable()
 export class SettingService {
-  constructor(@InjectModel(Setting.name) private settingModel: Model<Setting>) { }
+  constructor(@InjectModel(Setting.name) private settingModel: Model<Setting>) {}
 
   async updateVolume(userId: string, volume: number) {
     return await this.settingModel.findOneAndUpdate(
@@ -74,6 +74,4 @@ export class SettingService {
       },
     )
   }
-
-
 }

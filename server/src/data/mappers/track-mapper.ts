@@ -1,6 +1,6 @@
 import { Track } from '../views/track'
 import { Uri } from '../views/uri'
-import { imageUrl,Mapper } from './mapper'
+import { imageUrl, Mapper } from './mapper'
 
 export const TrackMapper: Mapper<Track> = (value: any) => {
   const result = new Track()

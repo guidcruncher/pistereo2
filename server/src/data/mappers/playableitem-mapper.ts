@@ -9,7 +9,7 @@ import {
 
 import { PlayableItem } from '../views/playableitem'
 import { Uri } from '../views/uri'
-import {Mapper } from './mapper'
+import { Mapper } from './mapper'
 
 export const PlayableItemMapper: Mapper<PlayableItem> = (value: any): PlayableItem => {
   let uri: Uri = {} as Uri

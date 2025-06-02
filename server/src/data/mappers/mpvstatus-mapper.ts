@@ -1,5 +1,5 @@
 import { PlayerStatus } from '../views/index'
-import {Mapper } from './mapper'
+import { Mapper } from './mapper'
 
 export const MpvStatusMapper: Mapper<PlayerStatus> = (value: any) => {
   const result = new PlayerStatus()

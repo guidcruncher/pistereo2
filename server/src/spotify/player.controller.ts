@@ -1,14 +1,6 @@
 import { User } from '@auth/decorators'
 import { AuthToken, Private } from '@auth/decorators'
-import {
-  Controller,
-  Delete,
-  Get,
-  HttpException,
-  Param,
-  Put,
-  Query,
-} from '@nestjs/common'
+import { Controller, Delete, Get, HttpException, Param, Put, Query } from '@nestjs/common'
 import { ApiExcludeController, ApiOAuth2 } from '@nestjs/swagger'
 import { Uri } from '@views/uri'
 

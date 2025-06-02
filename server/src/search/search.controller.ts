@@ -1,11 +1,5 @@
 import { AuthToken, Private, User } from '@auth/decorators'
-import {
-  Controller,
-  Get,
-  HttpException,
-  Param,
-  Query,
-} from '@nestjs/common'
+import { Controller, Get, HttpException, Param, Query } from '@nestjs/common'
 import { ApiOAuth2 } from '@nestjs/swagger'
 
 import { SearchService } from './search.service'

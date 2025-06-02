@@ -1,5 +1,5 @@
 import { Context, PlayerStatus, Uri } from '../views/index'
-import { imageUrl,Mapper } from './mapper'
+import { imageUrl, Mapper } from './mapper'
 
 export const SpotifyStatusMapper: Mapper<PlayerStatus> = (value: any) => {
   const result = new PlayerStatus()

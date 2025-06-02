@@ -1,7 +1,4 @@
-import {
-  PlayableItem,
-  PlaybackQueue,
-} from '../views/index'
+import { PlayableItem, PlaybackQueue } from '../views/index'
 import { Mapper } from './mapper'
 import { PlayableItemMapper } from './playableitem-mapper'
 
