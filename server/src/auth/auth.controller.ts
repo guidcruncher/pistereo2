@@ -100,5 +100,4 @@ export class AuthController {
     const result = await this.authService.getProfile(token)
     return result
   }
-
 }

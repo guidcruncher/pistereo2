@@ -65,7 +65,7 @@ export class SettingService {
     }
 
     currentFlags[key] = value
-
+    console.log(currentFlags)
     return await this.settingModel.findOneAndUpdate(
       { userId: userId },
       { flags: currentFlags },
