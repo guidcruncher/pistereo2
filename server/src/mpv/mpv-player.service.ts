@@ -1,9 +1,9 @@
+import { MpvStatusMapper } from '@mappers/mpvstatus-mapper'
 import { Logger } from '@nestjs/common'
 import { Injectable } from '@nestjs/common'
-import { EventEmitter2, OnEvent } from '@nestjs/event-emitter'
-import * as util from 'util'
+import { EventEmitter2 } from '@nestjs/event-emitter'
 import * as path from 'path'
-import { MpvStatusMapper } from '@mappers/mpvstatus-mapper'
+import * as util from 'util'
 
 const execFile = util.promisify(require('node:child_process').execFile)
 

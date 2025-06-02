@@ -1,9 +1,6 @@
-import { Channel, Frequency, Mixer } from '@views/index'
 import { Injectable, Logger } from '@nestjs/common'
-import { OnEvent } from '@nestjs/event-emitter'
+import { Channel, Frequency, Mixer } from '@views/index'
 import * as cp from 'child_process'
-import * as fs from 'fs'
-import * as path from 'path'
 
 @Injectable()
 export class MixerService {
@@ -89,7 +86,7 @@ export class MixerService {
         }
         return v
       })
-    let i: number = 0
+    let i = 0
 
     while (i < lines.length) {
       if (lines[i].startsWith('num')) {

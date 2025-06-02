@@ -1,7 +1,6 @@
-import { Mapper, imageUrl } from './mapper'
-import { Uri } from '../views/uri'
-import { Context } from '../views/context'
 import { Show } from '../views/show'
+import { Uri } from '../views/uri'
+import { imageUrl,Mapper } from './mapper'
 
 export const ShowMapper: Mapper<Show> = (value: any) => {
   const result = new Show()

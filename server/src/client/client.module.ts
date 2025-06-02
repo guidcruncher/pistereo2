@@ -1,5 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common'
-import { ClientController } from './client.controller'
+
 import { ClientMiddleware } from './client.middleware'
 
 @Module({

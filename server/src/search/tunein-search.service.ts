@@ -1,7 +1,5 @@
-import { Logger } from '@nestjs/common'
-import { HttpException, Injectable } from '@nestjs/common'
 import { HttpTransportService } from '@core/http-transport.service'
-import { PlayableItem, Uri } from '@views/index'
+import { Injectable } from '@nestjs/common'
 
 @Injectable()
 export class TuneinSearchService {

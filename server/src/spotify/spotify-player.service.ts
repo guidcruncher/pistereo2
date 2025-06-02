@@ -1,17 +1,16 @@
-import { Logger } from '@nestjs/common'
-import { HttpException, Injectable } from '@nestjs/common'
+import { EventBaseService } from '@core/event-base.service'
 import { HttpTransportService } from '@core/http-transport.service'
+import { PlayableItemMapper, PlaybackQueueMapper, SpotifyStatusMapper } from '@mappers/index'
+import { HttpException, Injectable } from '@nestjs/common'
 import {
   DeviceProp,
   PagedListBuilder,
   PlayableItem,
   PlaybackQueue,
   PlayerStatus,
-  Track,
 } from '@views/index'
-import { PlayableItemMapper, PlaybackQueueMapper, SpotifyStatusMapper } from '@mappers/index'
-import { EventBaseService } from '@core/event-base.service'
 import { Uri } from '@views/uri'
+
 import { LibrespotClientService } from './librespot-client.service'
 
 Injectable()
@@ -75,7 +74,7 @@ export class SpotifyPlayerService extends EventBaseService {
       throw new HttpException(`Bad uri source, got ${uri.source}, expected spotify`, 400)
     }
 
-    let url: string = ''
+    let url = ''
     5
     switch (uri.type) {
       case 'album':

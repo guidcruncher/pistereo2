@@ -1,11 +1,10 @@
-import { PagedListBuilder, PlayableItem, Uri } from '@views/index'
-import { Logger } from '@nestjs/common'
-import { HttpException, Injectable } from '@nestjs/common'
-import { UserStreamService } from '@data/userstream.service'
-import { UserStream } from '@schemas/index'
 import { AuthService } from '@auth/auth.service'
+import { UserStreamService } from '@data/userstream.service'
+import { PlayableItemMapper } from '@mappers/index'
+import { HttpException, Injectable } from '@nestjs/common'
+import { Uri } from '@views/index'
+
 import { MpvPlayerService } from '../mpv/mpv-player.service'
-import { PlayableItemMapper, UserStreamMapper } from '@mappers/index'
 
 @Injectable()
 export class UserStreamPlayerService {

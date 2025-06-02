@@ -1,6 +1,7 @@
+import { Public } from '@auth/decorators'
 import { Controller, Get, Header, Query, Res } from '@nestjs/common'
+
 import { MediaInfoService } from './media-info.service'
-import { AuthToken, Private, Public, User } from '@auth/decorators'
 
 @Public()
 @Controller('/api/metadata')

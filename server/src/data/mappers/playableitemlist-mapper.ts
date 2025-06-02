@@ -1,6 +1,6 @@
+import { PagedListBuilder, PlayableItem, PlayableItemList } from '../views/index'
+import { imageUrl,Mapper } from './mapper'
 import { PlayableItemMapper } from './playableitem-mapper'
-import { Mapper, imageUrl } from './mapper'
-import { PagedList, PagedListBuilder, PlayableItem, PlayableItemList } from '../views/index'
 
 export const PlayableItemListMapper: Mapper<PlayableItemList> = (value: any) => {
   const result = new PlayableItemList()

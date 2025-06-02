@@ -1,11 +1,8 @@
-import { Logger } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
-import { InjectConnection } from '@nestjs/mongoose'
-import { Model } from 'mongoose'
-import { Connection } from 'mongoose'
-import { Dependencies, Inject, Injectable } from '@nestjs/common'
-import { Profile } from '@views/index'
 import { Session, User } from '@schemas/index'
+import { Profile } from '@views/index'
+import { Model } from 'mongoose'
 
 @Injectable()
 export class UserService {
@@ -14,7 +11,7 @@ export class UserService {
     @InjectModel(Session.name) private sessionModel: Model<Session>,
   ) {}
 
-  async addSession(token: string, refresh: string, user: Profile, expires: number = 3600) {
+  async addSession(token: string, refresh: string, user: Profile, expires = 3600) {
     const session = new Session()
     const expiresAt = new Date()
     expiresAt.setSeconds(expiresAt.getSeconds() + expires)

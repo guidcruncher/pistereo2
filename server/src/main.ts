@@ -1,11 +1,11 @@
-import { NestFactory } from '@nestjs/core'
-import { ConsoleLogger, Logger } from '@nestjs/common'
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
-import { AppModule } from './app.module'
-import { config } from '@dotenvx/dotenvx'
 import { getScopes } from '@auth/scopes'
+import { config } from '@dotenvx/dotenvx'
+import { ConsoleLogger } from '@nestjs/common'
+import { NestFactory } from '@nestjs/core'
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
+
+import { AppModule } from './app.module'
 import compression = require('compression')
-import helmet from 'helmet'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {

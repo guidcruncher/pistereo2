@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common'
-import { MetadataController } from './metadata.controller'
-import { MediaInfoService } from './media-info.service'
+
 import { MediaInfoController } from './media-info.controller'
+import { MediaInfoService } from './media-info.service'
+import { MetadataController } from './metadata.controller'
 
 @Module({
   controllers: [MetadataController, MediaInfoController],

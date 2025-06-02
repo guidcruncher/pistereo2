@@ -1,15 +1,12 @@
-import { Logger } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
-import { InjectConnection } from '@nestjs/mongoose'
-import { Model } from 'mongoose'
-import { Connection } from 'mongoose'
-import { Dependencies, Inject, Injectable } from '@nestjs/common'
+import { Setting } from '@schemas/index'
 import { Mixer } from '@views/index'
-import { Session, Setting } from '@schemas/index'
+import { Model } from 'mongoose'
 
 @Injectable()
 export class SettingService {
-  constructor(@InjectModel(Setting.name) private settingModel: Model<Setting>) {}
+  constructor(@InjectModel(Setting.name) private settingModel: Model<Setting>) { }
 
   async updateVolume(userId: string, volume: number) {
     return await this.settingModel.findOneAndUpdate(
@@ -36,7 +33,7 @@ export class SettingService {
   }
 
   async getFlags(userId: string) {
-    let res = await this.settingModel.findOne({ userId: userId }).lean().exec()
+    const res = await this.settingModel.findOne({ userId: userId }).lean().exec()
     if (res) {
       return res.flags as Record<string, any>
     }
@@ -45,12 +42,38 @@ export class SettingService {
   }
 
   async setFlags(userId: string, flags: Record<string, any>) {
+    let currentFlags = await this.getFlags(userId)
+    if (currentFlags) {
+      currentFlags = { ...currentFlags, ...flags }
+    } else {
+      currentFlags = flags
+    }
+
     return await this.settingModel.findOneAndUpdate(
       { userId: userId },
-      { flags: flags },
+      { flags: currentFlags },
       {
         upsert: true,
       },
     )
   }
+
+  async setFlag(userId: string, key: string, value: any) {
+    let currentFlags = await this.getFlags(userId)
+    if (!currentFlags) {
+      currentFlags = {} as Record<string, any>
+    }
+
+    currentFlags[key] = value
+
+    return await this.settingModel.findOneAndUpdate(
+      { userId: userId },
+      { flags: currentFlags },
+      {
+        upsert: true,
+      },
+    )
+  }
+
+
 }

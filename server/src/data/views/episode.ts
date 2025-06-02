@@ -1,19 +1,30 @@
-import { Show } from './show'
 import { Context } from './context'
-import { Uri } from './uri'
 import { PlayableItem } from './playableitem'
+import { Show } from './show'
+import { Uri } from './uri'
 
 export class Episode implements PlayableItem {
   show: Show = new Show()
+
   context: Context = new Context()
+
   uri: Uri = new Uri()
-  url: string = ''
-  owner: string = ''
-  name: string = ''
-  subtitle: string = ''
-  description: string = ''
+
+  url = ''
+
+  owner = ''
+
+  name = ''
+
+  subtitle = ''
+
+  description = ''
+
   artists: string[] = [] as string[]
-  imageUrl: string = ''
-  position: number = 0
-  duration: number = 0
+
+  imageUrl = ''
+
+  position = 0
+
+  duration = 0
 }

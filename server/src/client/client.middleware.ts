@@ -1,11 +1,9 @@
-import { Public } from '@auth/decorators'
+import { Injectable, NestMiddleware } from '@nestjs/common'
 import { NextFunction, Request, Response } from 'express'
 import * as fs from 'fs'
 import db from 'mime-db'
 import { MimeType } from 'mime-type'
 import * as path from 'path'
-import { ApiExcludeController, ApiExcludeEndpoint } from '@nestjs/swagger'
-import { Injectable, NestMiddleware } from '@nestjs/common'
 
 @Injectable()
 export class ClientMiddleware implements NestMiddleware {
@@ -24,6 +22,7 @@ export class ClientMiddleware implements NestMiddleware {
 
     return false
   }
+
   use(req: Request, res: Response, next: NextFunction) {
     if (this.isExcluded(req.path.toString().toLowerCase())) {
       next()

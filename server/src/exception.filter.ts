@@ -4,7 +4,6 @@ import {
   ExceptionFilter,
   HttpException,
   HttpStatus,
-  IntrinsicException,
   Logger,
 } from '@nestjs/common'
 

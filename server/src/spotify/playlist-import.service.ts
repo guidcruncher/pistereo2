@@ -1,11 +1,11 @@
-import { Logger } from '@nestjs/common'
-import { Injectable } from '@nestjs/common'
-import { M3uPlaylist, parseM3U } from '@iptv/playlist'
 import { UserStream } from '@data/schemas/index'
 import { UserStreamService } from '@data/userstream.service'
-import * as crypto from 'crypto'
-import { Uri } from '@views/Uri'
+import { M3uPlaylist, parseM3U } from '@iptv/playlist'
+import { Injectable } from '@nestjs/common'
 import { Context } from '@views/index'
+import { Uri } from '@views/Uri'
+import * as crypto from 'crypto'
+
 import { MediaInfoService } from '../metadata/media-info.service'
 
 @Injectable()

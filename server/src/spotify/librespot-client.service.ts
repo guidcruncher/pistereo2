@@ -1,9 +1,10 @@
-import { Logger } from '@nestjs/common'
-import { Injectable, OnModuleDestroy, Scope } from '@nestjs/common'
-import { EventEmitter2, EventEmitterModule } from '@nestjs/event-emitter'
-import { WebSocket } from 'ws'
-import { LibrespotMetadataMapper } from '@mappers/librespotmetadata-mapper'
 import { HistoryService } from '@data/history.service'
+import { LibrespotMetadataMapper } from '@mappers/librespotmetadata-mapper'
+import { Logger } from '@nestjs/common'
+import { Injectable, OnModuleDestroy } from '@nestjs/common'
+import { EventEmitter2 } from '@nestjs/event-emitter'
+import { WebSocket } from 'ws'
+
 import { MpvPlayerService } from '../mpv/mpv-player.service'
 
 @Injectable()

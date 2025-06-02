@@ -1,10 +1,10 @@
-import { Logger } from '@nestjs/common'
-import { Injectable } from '@nestjs/common'
 import { UserStreamService as UserStreamDataService } from '@data/userstream.service'
-import { AuthService } from '../auth/auth.service'
+import { Injectable } from '@nestjs/common'
 import { UserStream } from '@schemas/index'
-import * as crypto from 'crypto'
 import { Uri } from '@views/uri'
+import * as crypto from 'crypto'
+
+import { AuthService } from '../auth/auth.service'
 
 @Injectable()
 export class UserStreamService {

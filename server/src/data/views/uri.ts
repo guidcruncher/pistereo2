@@ -1,8 +1,11 @@
 export class Uri {
-  source: string = ''
-  type: string = ''
-  id: string = ''
-  uri: string = ''
+  source = ''
+
+  type = ''
+
+  id = ''
+
+  uri = ''
 
   toString(): string {
     return `${this.source}:${this.type}:${this.id}`

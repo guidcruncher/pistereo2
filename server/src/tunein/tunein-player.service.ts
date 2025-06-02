@@ -1,7 +1,7 @@
-import { Logger } from '@nestjs/common'
+import { TuneinMapper } from '@mappers/index'
 import { HttpException, Injectable } from '@nestjs/common'
 import { PagedListBuilder, PlayableItem, Uri } from '@views/index'
-import { PlayableItemMapper, TuneinMapper } from '@mappers/index'
+
 import { MpvPlayerService } from '../mpv/mpv-player.service'
 
 @Injectable()

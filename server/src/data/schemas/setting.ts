@@ -1,6 +1,6 @@
-import { Channel, Frequency, Mixer } from '@views/index'
 import { Prop, Schema } from '@nestjs/mongoose'
 import { SchemaFactory } from '@nestjs/mongoose'
+import { Mixer } from '@views/index'
 import { HydratedDocument } from 'mongoose'
 
 @Schema()

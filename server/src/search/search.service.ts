@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common'
+
+import { Pager } from '@/data/views'
+
 import { SpotifyPlayerService } from '../spotify/spotify-player.service'
-import { LibrespotPlayerService } from '../spotify/librespot-player.service'
 import { TuneinPlayerService } from '../tunein/tunein-player.service'
 import { UserStreamPlayerService } from '../userstream/userstream-player.service'
-import { PagedList, PagedListBuilder, Pager, PlayableItem } from '@/data/views'
 
 @Injectable()
 export class SearchService {
@@ -22,7 +23,7 @@ export class SearchService {
     limit: number,
   ) {
     let res: any
-    let pager: Pager = new Pager()
+    const pager: Pager = new Pager()
 
     switch (source) {
       case 'radio':

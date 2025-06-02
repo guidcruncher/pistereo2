@@ -1,23 +1,23 @@
-import { Logger } from '@nestjs/common'
-import { Uri } from '@views/index'
+import { SettingService } from '@data/setting.service'
 import { HttpException, Injectable, Scope } from '@nestjs/common'
+import { EventEmitter2 } from '@nestjs/event-emitter'
+import { History } from '@schemas/history'
+import { Uri } from '@views/index'
+import { PlayableItem, PlayerStatus } from '@views/index'
+import * as fs from 'fs'
+import * as path from 'path'
+
+import { AuthService } from '../auth/auth.service'
+import { HistoryService } from '../data/history.service'
 import { MpvPlayerService } from '../mpv/mpv-player.service'
-import { SpotifyPlayerService } from '../spotify/spotify-player.service'
 import { LibrespotPlayerService } from '../spotify/librespot-player.service'
 import { TuneinPlayerService } from '../tunein/tunein-player.service'
 import { UserStreamPlayerService } from '../userstream/userstream-player.service'
-import { AuthService } from '../auth/auth.service'
-import { HistoryService } from '../data/history.service'
-import { DeviceProp, PlayableItem, PlayerStatus } from '@views/index'
-import { History } from '@schemas/history'
-import { EventEmitter2, EventEmitterModule, OnEvent } from '@nestjs/event-emitter'
-import * as fs from 'fs'
-import * as path from 'path'
-import { SettingService } from '@data/setting.service'
 
 @Injectable({ scope: Scope.DEFAULT })
 export class AudioService {
   private currentTrack: PlayableItem = {} as PlayableItem // Uri = new Uri()
+
   private _deviceId: string
 
   constructor(

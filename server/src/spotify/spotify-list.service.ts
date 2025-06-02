@@ -1,15 +1,14 @@
-import { Logger } from '@nestjs/common'
-import { HttpException, Injectable } from '@nestjs/common'
 import { HttpTransportService } from '@core/http-transport.service'
+import { PlayableItemListMapper, PlayableItemMapper, PlaylistMapper } from '@mappers/index'
+import { Injectable } from '@nestjs/common'
 import {
-  Uri,
   PagedList,
   PagedListBuilder,
   PlayableItem,
   PlayableItemList,
   PlaylistDefinition,
+  Uri,
 } from '@views/index'
-import { PlayableItemListMapper, PlayableItemMapper, PlaylistMapper } from '@mappers/index'
 
 @Injectable()
 export class SpotifyListService {

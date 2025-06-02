@@ -1,12 +1,9 @@
-import { PlayableItemMapper } from './playableitem-mapper'
-import { Mapper } from './mapper'
 import {
-  PagedList,
-  PagedListBuilder,
   PlayableItem,
-  PlayableItemList,
   PlaybackQueue,
 } from '../views/index'
+import { Mapper } from './mapper'
+import { PlayableItemMapper } from './playableitem-mapper'
 
 export const PlaybackQueueMapper: Mapper<PlaybackQueue> = (value: any) => {
   const result = new PlaybackQueue()

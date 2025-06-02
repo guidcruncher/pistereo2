@@ -3,22 +3,25 @@ import {
   Body,
   Controller,
   Get,
-  HttpException,
   Param,
   Post,
+  Put,
   Query,
-  Req,
   Res,
-  Session,
 } from '@nestjs/common'
+import { ApiExcludeEndpoint, ApiOAuth2 } from '@nestjs/swagger'
+
 import { AuthService } from './auth.service'
 import { AuthToken, Private, Public } from './decorators'
-import { ApiExcludeController, ApiExcludeEndpoint, ApiOAuth2 } from '@nestjs/swagger'
+import { SettingService } from '@/data/setting.service'
+
 
 @Public()
 @Controller('/api/auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService,
+    private readonly settingService: SettingService
+  ) { }
 
   @ApiExcludeEndpoint()
   @Get('authorise')
@@ -40,7 +43,7 @@ export class AuthController {
       data.grant_type ?? 'authorization_code',
       data.redirect_uri,
     )
-    const targeturl: string = '/'
+    const targeturl = '/'
     return res.status(200).send(token)
   }
 
@@ -58,7 +61,7 @@ export class AuthController {
       'authorization_code',
       redirectUrl,
     )
-    const targeturl: string = '/'
+    const targeturl = '/'
 
     res.header('Content-Type', 'text/html')
     const html =
@@ -106,4 +109,20 @@ export class AuthController {
     const result = await this.authService.getProfile(token)
     return result
   }
+
+  @Private()
+  @Get("/user/settings")
+  async getSettings(@AuthToken() token, @User() user: any) {
+    const result = await this.settingService.getFlags(user.id)
+    return result/*  */
+  }
+
+  @Private()
+  @Put("/user/setting/:key")
+  async saveSettings(@AuthToken() token, @User() user: any, @Param("key") key:string, @Query("value") value:any) {
+    const result = await this.settingService.setFlag(user.id, key, value)
+    return result/*  */
+  }
+
+
 }

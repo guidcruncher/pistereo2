@@ -1,10 +1,10 @@
 import { User } from '@auth/decorators'
-import { ApiBody, ApiConsumes, ApiOAuth2, ApiOperation, ApiParam } from '@nestjs/swagger'
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req, Res } from '@nestjs/common'
-import { SpotifyListService } from './spotify-list.service'
-import { AuthToken, Private, Public } from '@auth/decorators'
-import { ApiExcludeController, ApiExcludeEndpoint } from '@nestjs/swagger'
+import { AuthToken, Private } from '@auth/decorators'
+import { Body, Controller, Get, Param, Put, Query, Req } from '@nestjs/common'
+import { ApiBody, ApiConsumes, ApiOAuth2, ApiOperation } from '@nestjs/swagger'
+
 import { PlaylistImportService } from './playlist-import.service'
+import { SpotifyListService } from './spotify-list.service'
 import getRawBody = require('raw-body')
 
 @ApiOAuth2(
@@ -26,7 +26,7 @@ export class ListController {
   @ApiConsumes('text/plain')
   @ApiBody({ type: String })
   async importPlaylist(@User() user, @Body() data, @Req() req) {
-    let playlist: string = ''
+    let playlist = ''
 
     if (req.readable) {
       const raw = await getRawBody(req)

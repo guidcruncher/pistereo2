@@ -1,6 +1,6 @@
-import { Logger } from '@nestjs/common'
 import { Inject, Injectable } from '@nestjs/common'
 import { EventEmitter2, EventEmitterReadinessWatcher } from '@nestjs/event-emitter'
+
 import { BaseService } from './base.service'
 
 @Injectable()

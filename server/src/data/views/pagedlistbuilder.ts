@@ -1,5 +1,5 @@
-import { PagedList, Pager } from './index'
 import { Mapper } from '../mappers/mapper'
+import { PagedList, Pager } from './index'
 
 export class PagedListBuilder {
   static fromArray<TOut>(
@@ -45,7 +45,7 @@ export class PagedListBuilder {
     return l
   }
 
-  static fromPagedObject<TOut>(obj: any, mapper: Mapper<TOut>, itemProp: string = '') {
+  static fromPagedObject<TOut>(obj: any, mapper: Mapper<TOut>, itemProp = '') {
     return PagedListBuilder.fromPagedArray<TOut>(
       obj.items,
       obj.offset,
@@ -62,7 +62,7 @@ export class PagedListBuilder {
     limit: number,
     total: number,
     mapper: Mapper<TOut>,
-    itemProp: string = '',
+    itemProp = '',
   ): PagedList<TOut> {
     const l = new PagedList<TOut>()
     l.paging = new Pager()

@@ -1,18 +1,13 @@
+import { AuthToken, Private, User } from '@auth/decorators'
 import {
-  Body,
   Controller,
-  Delete,
   Get,
   HttpException,
   Param,
-  Post,
-  Put,
   Query,
-  Res,
-  Session,
 } from '@nestjs/common'
-import { AuthToken, Private, Public, User } from '@auth/decorators'
-import { ApiExcludeController, ApiExcludeEndpoint, ApiOAuth2 } from '@nestjs/swagger'
+import { ApiOAuth2 } from '@nestjs/swagger'
+
 import { SearchService } from './search.service'
 
 @ApiOAuth2(

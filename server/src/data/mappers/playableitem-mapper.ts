@@ -1,16 +1,15 @@
-import { Mapper, imageUrl } from './mapper'
-import { Uri } from '../views/uri'
-import { Context } from '../views/context'
-import { PlayableItem } from '../views/playableitem'
 import {
   AlbumMapper,
   EpisodeMapper,
-  PlaylistMapper,
   ShowMapper,
   TrackMapper,
   TuneinMapper,
   UserStreamMapper,
 } from '@mappers/index'
+
+import { PlayableItem } from '../views/playableitem'
+import { Uri } from '../views/uri'
+import {Mapper } from './mapper'
 
 export const PlayableItemMapper: Mapper<PlayableItem> = (value: any): PlayableItem => {
   let uri: Uri = {} as Uri

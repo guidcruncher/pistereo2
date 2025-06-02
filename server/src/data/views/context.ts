@@ -1,6 +1,7 @@
 import { Uri } from './uri'
 
 export class Context {
-  type: string = ''
+  type = ''
+
   uri: Uri = new Uri()
 }

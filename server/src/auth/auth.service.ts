@@ -1,13 +1,11 @@
-import { Logger } from '@nestjs/common'
-import { Injectable } from '@nestjs/common'
-import * as crypto from 'crypto'
-import { scopes } from './scopes'
-import { Profile } from '@views/profile'
-import { ProfileMapper } from '@mappers/index'
 import { UserService } from '@data/user.service'
-import * as path from 'path'
-import * as fs from 'fs'
+import { ProfileMapper } from '@mappers/index'
+import { Injectable } from '@nestjs/common'
+import { Profile } from '@views/profile'
+import * as crypto from 'crypto'
 import * as util from 'util'
+
+import { scopes } from './scopes'
 
 const execFile = util.promisify(require('node:child_process').execFile)
 
@@ -22,8 +20,8 @@ export class AuthService {
     return `${process.env.PISTEREO_BASEURL}/api/auth/response`
   }
 
-  public async getProfile(token: string, user: string = ''): Promise<Profile> {
-    let url: string = 'https://api.spotify.com/v1/me'
+  public async getProfile(token: string, user = ''): Promise<Profile> {
+    let url = 'https://api.spotify.com/v1/me'
 
     if (user) {
       url = `https://api.spotify.com/v1/users/${user}`
@@ -99,6 +97,7 @@ export class AuthService {
   }
 
   k
+
   public async getRefreshToken(accessToken: string, refreshToken: string): Promise<any> {
     const url = 'https://accounts.spotify.com/api/token'
 

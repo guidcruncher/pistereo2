@@ -1,9 +1,9 @@
-import { Channel, Frequency, Mixer } from '@views/index'
 import { User } from '@auth/decorators'
+import { AuthToken, Private, Public } from '@auth/decorators'
+import { SettingService } from '@data/setting.service'
 import {
   Body,
   Controller,
-  Delete,
   Get,
   HttpException,
   Param,
@@ -11,20 +11,15 @@ import {
   Put,
   Query,
   Res,
-  Session,
 } from '@nestjs/common'
-import { AuthToken, Private, Public } from '@auth/decorators'
-import { ApiExcludeController, ApiExcludeEndpoint, ApiOAuth2 } from '@nestjs/swagger'
-import { MpvPlayerService } from '../mpv/mpv-player.service'
+import { ApiExcludeEndpoint, ApiOAuth2 } from '@nestjs/swagger'
+import { Mixer } from '@views/index'
+import { Uri } from '@views/index'
+
 import { SpotifyPlayerService } from '../spotify/spotify-player.service'
-import { TuneinPlayerService } from '../tunein/tunein-player.service'
-import { UserStreamPlayerService } from '../userstream/userstream-player.service'
-import { PresetService } from './preset.service'
-import { PlayableItem, Uri } from '@views/index'
 import { AudioService } from './audio.service'
-import { EventEmitter2, EventEmitterModule, OnEvent } from '@nestjs/event-emitter'
 import { MixerService } from './mixer.service'
-import { SettingService } from '@data/setting.service'
+import { PresetService } from './preset.service'
 
 @ApiOAuth2(
   ['user-read-playback-state', 'user-modify-playback-state', 'user-read-recently-played'],
@@ -56,7 +51,7 @@ export class AudioController {
     @User() user: any,
     @Param('device') device: string,
   ) {
-    let setting = await this.settingService.getSetting(user.id)
+    const setting = await this.settingService.getSetting(user.id)
 
     if (!setting) {
       throw new HttpException('No settings available', 404)

@@ -1,10 +1,10 @@
-import { Logger } from '@nestjs/common'
-import { Injectable } from '@nestjs/common'
 import { PresetsService } from '@data/presets.service'
-import { AuthService } from '../auth/auth.service'
+import { Injectable } from '@nestjs/common'
 import { Preset } from '@schemas/index'
+import { PlayableItem } from '@views/index'
 import * as crypto from 'crypto'
-import { PlayableItem, Uri } from '@views/index'
+
+import { AuthService } from '../auth/auth.service'
 
 @Injectable()
 export class PresetService {
