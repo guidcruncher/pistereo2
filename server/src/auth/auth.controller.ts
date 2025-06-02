@@ -101,24 +101,4 @@ export class AuthController {
     return result
   }
 
-  @ApiOAuth2(['user-read-private', 'user-read-email'], 'Api')
-  @Private()
-  @Get('/user/settings')
-  async getSettings(@AuthToken() token, @User() user: any) {
-    const result = await this.settingService.getFlags(user.id)
-    return result
-  }
-
-  @ApiOAuth2(['user-read-private', 'user-read-email'], 'Api')
-  @Private()
-  @Put('/user/setting/:key')
-  async saveSettings(
-    @AuthToken() token,
-    @User() user: any,
-    @Param('key') key: string,
-    @Query('value') value: any,
-  ) {
-    const result = await this.settingService.setFlag(user.id, key, value)
-    return result /*  */
-  }
 }
