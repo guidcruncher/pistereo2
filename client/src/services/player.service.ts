@@ -180,7 +180,7 @@ export class PlayerService extends BaseService {
   }
 
   async getUserSettings() {
-    const response: AxiosResponse<any> = await this.client().get(`/auth/user/settings`)
+    const response: AxiosResponse<any> = await this.client().get(`/api/user/settings`)
 
     return response.data
   }
@@ -189,7 +189,7 @@ export class PlayerService extends BaseService {
     const params = new URLSearchParams()
     params.append('value', value.toString())
     const response: AxiosResponse<any> = await this.client().put(
-      `/auth/user/setting/${key}?${params.toString()}`,
+      `/api/user/setting/${key}?${params.toString()}`,
     )
 
     return response.data

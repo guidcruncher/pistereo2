@@ -5,10 +5,11 @@ import { DataModule } from '../data/data.module'
 import { AuthController } from './auth.controller'
 import { AuthGuard } from './auth.guard'
 import { AuthService } from './auth.service'
+import { SettingsController } from './settings.controller'
 
 @Module({
   imports: [DataModule],
-  controllers: [AuthController],
+  controllers: [AuthController, SettingsController],
   providers: [
     AuthService,
     {

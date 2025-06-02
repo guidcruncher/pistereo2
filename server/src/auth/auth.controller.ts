@@ -101,6 +101,7 @@ export class AuthController {
     return result
   }
 
+  @ApiOAuth2(['user-read-private', 'user-read-email'], 'Api')
   @Private()
   @Get('/user/settings')
   async getSettings(@AuthToken() token, @User() user: any) {
@@ -108,6 +109,7 @@ export class AuthController {
     return result
   }
 
+  @ApiOAuth2(['user-read-private', 'user-read-email'], 'Api')
   @Private()
   @Put('/user/setting/:key')
   async saveSettings(
