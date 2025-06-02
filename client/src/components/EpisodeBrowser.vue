@@ -11,7 +11,7 @@ export default {
       type: String,
       required: true,
     },
-    showTitle: {type: String},
+    showTitle: { type: String },
   },
   data() {
     return {

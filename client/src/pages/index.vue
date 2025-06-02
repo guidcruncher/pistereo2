@@ -22,18 +22,12 @@
           <Presets />
         </div>
       </div>
-
-      <div class="pa-2">
-        <div>
-          <Mixer />
-        </div>
-      </div>
-    </v-tabs-window-item>
-    <v-tabs-window-item value="myplaylists">
-      <PlaylistsView />
     </v-tabs-window-item>
     <v-tabs-window-item value="queue">
       <QueueView />
+    </v-tabs-window-item>
+    <v-tabs-window-item value="myplaylists">
+      <PlaylistsView />
     </v-tabs-window-item>
     <v-tabs-window-item value="savedalbums">
       <AlbumListsView />
@@ -47,7 +41,13 @@
     <v-tabs-window-item value="savedepisodes">
       <EpisodeListsView />
     </v-tabs-window-item>
-    <v-tabs-window-item value="radio"> Radio </v-tabs-window-item>
+    <v-tabs-window-item value="radio">
+      <div class="pa-2">
+        <div>
+          <Mixer />
+        </div>
+      </div>
+    </v-tabs-window-item>
     <v-tabs-window-item value="search">
       <SearchControl />
     </v-tabs-window-item>

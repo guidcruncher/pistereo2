@@ -4,5 +4,5 @@ docker buildx build -f ./dockerfiles/Dockerfile-bullseye -t guidcruncher/pistere
 
 # docker buildx build -f ./dockerfiles/Dockerfile-alpine -t guidcruncher/pistereo2:alpine-latest --pull --push .
 
-docker buildx build -f ./dockerfiles/Dockerfile-mediaserver -t guidcruncher/pistereo2:mediaserver --pull --push .
+# docker buildx build -f ./dockerfiles/Dockerfile-mediaserver -t guidcruncher/pistereo2:mediaserver --pull --push .
 
