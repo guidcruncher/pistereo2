@@ -2,7 +2,7 @@ import { User } from '@auth/decorators'
 import { AuthToken, Private, Public } from '@auth/decorators'
 import { SettingService } from '@data/setting.service'
 import { Body, Controller, Get, HttpException, Param, Post, Put, Query, Res } from '@nestjs/common'
-import { ApiExcludeEndpoint, ApiOAuth2 } from '@nestjs/swagger'
+import { ApiBody, ApiExcludeEndpoint, ApiOAuth2 } from '@nestjs/swagger'
 import { Mixer } from '@views/index'
 import { Uri } from '@views/index'
 
@@ -147,6 +147,7 @@ export class AudioController {
   }
 
   @Post('/tts/:language')
+  @ApiBody({type: Object})
   async textToSpeech(
     @AuthToken() token,
     @User() user: any,
