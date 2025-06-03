@@ -164,10 +164,10 @@ export class MpvPlayerService {
   }
 
   public async playlist(urls: string[]) {
-    const playlistFile = path.join(process.env.PISTEREO_CACHE as string, 'temp.m3u')
+    const playListFile = path.join(process.env.PISTEREO_CACHE as string, 'temp.m3u')
 
     if (fs.existsSync(playListFile)) {
-      fs.unlinkSync(playLisetFile)
+      fs.unlinkSync(playListFile)
     }
 
     let m3u: string[] = [] as string[]
@@ -177,9 +177,9 @@ export class MpvPlayerService {
     })
 
     if (fs.existsSync(playListFile)) {
-      fs.unlinkSync(playLisetFile)
+      fs.unlinkSync(playListFile)
     }
-    fs.writeFileSynx(playListFile, m3u.join('\n'), 'utfu')
+    fs.writeFileSync(playListFile, m3u.join('\n'), 'utf8')
 
     await this.play(playListFile)
   }

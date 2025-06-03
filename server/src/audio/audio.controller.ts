@@ -25,7 +25,7 @@ export class AudioController {
     private readonly spotifyPlayerService: SpotifyPlayerService,
     private readonly mixerService: MixerService,
     private readonly settingService: SettingService,
-    privte  readonly ttsServuce: TtsService
+    private readonly ttsService: TtsService,
   ) {}
 
   @ApiExcludeEndpoint()
@@ -46,7 +46,7 @@ export class AudioController {
     const setting = await this.settingService.getSetting(user.id)
 
     if (!setting) {
-/      throw new HttpException('No settings available', 404)
+      throw new HttpException('No settings available', 404)
     }
 
     await this.audioService.changeVolume(user, token, setting.volume ?? 50)
@@ -146,17 +146,19 @@ export class AudioController {
     return await this.mixerService.updateMixer(device, mixer)
   }
 
-@post("/tts/:language")
-async textToSpeech(
-@AuthToken() token, @User() user: any, @Body() data: any, @Param("language") language: string)
-{
-let text = (data.text ??"").trim()
+  @Post('/tts/:language')
+  async textToSpeech(
+    @AuthToken() token,
+    @User() user: any,
+    @Body() data: any,
+    @Param('language') language: string,
+  ) {
+    let text = (data.text ?? '').trim()
 
-if (this.text == "") { throw new HttpException("No text specified", 400)}
+    if (text == '') {
+      throw new HttpException('No text specified', 400)
+    }
 
-await this.ttsService.say(text, language, false)
+    await this.ttsService.say(text, language, false)
+  }
 }
-
-
-]
-
