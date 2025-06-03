@@ -10,6 +10,7 @@ import { SpotifyPlayerService } from '../spotify/spotify-player.service'
 import { AudioService } from './audio.service'
 import { MixerService } from './mixer.service'
 import { PresetService } from './preset.service'
+import { TtsService } from './tts.service'
 
 @ApiOAuth2(
   ['user-read-playback-state', 'user-modify-playback-state', 'user-read-recently-played'],
@@ -24,6 +25,7 @@ export class AudioController {
     private readonly spotifyPlayerService: SpotifyPlayerService,
     private readonly mixerService: MixerService,
     private readonly settingService: SettingService,
+    privte  readonly ttsServuce: TtsService
   ) {}
 
   @ApiExcludeEndpoint()
@@ -44,7 +46,7 @@ export class AudioController {
     const setting = await this.settingService.getSetting(user.id)
 
     if (!setting) {
-      throw new HttpException('No settings available', 404)
+/      throw new HttpException('No settings available', 404)
     }
 
     await this.audioService.changeVolume(user, token, setting.volume ?? 50)
@@ -143,4 +145,18 @@ export class AudioController {
     await this.settingService.updateMixer(user.id, mixer)
     return await this.mixerService.updateMixer(device, mixer)
   }
+
+@post("/tts/:language")
+async textToSpeech(
+@AuthToken() token, @User() user: any, @Body() data: any, @Param("language") language: string)
+{
+let text = (data.text ??"").trim()
+
+if (this.text == "") { throw new HttpException("No text specified", 400)}
+
+await this.ttsService.say(text, language, false)
 }
+
+
+]
+

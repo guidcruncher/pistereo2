@@ -13,6 +13,7 @@ import { MixerService } from './mixer.service'
 import { PresetService } from './preset.service'
 import { UserStreamService } from './user-stream.service'
 import { WebsocketsController } from './websockets.controller'
+import { TtsService } from './tts.service'
 
 @Module({
   imports: [
@@ -24,7 +25,7 @@ import { WebsocketsController } from './websockets.controller'
     MpvModule,
     UserstreamModule,
   ],
-  providers: [AudioService, PresetService, UserStreamService, MixerService],
+  providers: [AudioService, PresetService, UserStreamService, MixerService, TtsService],
   controllers: [AudioController, WebsocketsController],
 })
 export class AudioModule {}

@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import * as path from 'path'
 import * as util from 'util'
+import * as fs from 'fs'
 
 const execFile = util.promisify(require('node:child_process').execFile)
 
@@ -160,5 +161,26 @@ export class MpvPlayerService {
   public async play(url: string) {
     const state: any = await this.getStatus()
     return await this.sendCommand('loadfile', [url, 'replace'])
+  }
+
+  public async playlist(urls: string[]) {
+    const playlistFile = path.join(process.env.PISTEREO_CACHE as string, 'temp.m3u')
+
+    if (fs.existsSync(playListFile)) {
+      fs.unlinkSync(playLisetFile)
+    }
+
+    let m3u: string[] = [] as string[]
+    m3u.push('#EXTM3U')
+    urls.forEach((url) => {
+      m3u.push(url)
+    })
+
+    if (fs.existsSync(playListFile)) {
+      fs.unlinkSync(playLisetFile)
+    }
+    fs.writeFileSynx(playListFile, m3u.join('\n'), 'utfu')
+
+    await this.play(playListFile)
   }
 }
