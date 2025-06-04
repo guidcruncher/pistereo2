@@ -30,7 +30,7 @@ export class AudioService {
     private readonly authService: AuthService,
     private readonly historyService: HistoryService,
     private readonly settingService: SettingService,
-  ) {}
+  ) { }
 
   private async ensureDeviceId(token: string) {
     const filename = path.join(process.env.PISTEREO_CONFIG as string, 'librespot', 'state.json')
@@ -80,7 +80,7 @@ export class AudioService {
       if (status.device.active && status.device.playing) {
         return status
       }
-    } catch (err) {}
+    } catch (err) { }
     const lastPlayed: History = await this.historyService.getLastPlayed(user.id)
 
     if (lastPlayed) {
@@ -151,11 +151,11 @@ export class AudioService {
   async changeVolume(user: any, token, volume: number) {
     try {
       await this.spotifyPlayer.setVolume(token, await this.ensureDeviceId(token), volume)
-    } catch {}
+    } catch { }
 
     try {
       await this.mpvPlayer.setVolume(volume)
-    } catch {}
+    } catch { }
 
     return await this.getVolume(token)
   }
@@ -281,4 +281,9 @@ export class AudioService {
 
     throw new HttpException(`Unsupported Uri source ${this.currentTrack.uri.source}`, 400)
   }
+
+  public async playFanfare(resumePreviousTrackAtEnd: boolean) {
+    return await this.mpvPlayer.playFanfare(resumePreviousTrackAtEnd)
+  }
+
 }

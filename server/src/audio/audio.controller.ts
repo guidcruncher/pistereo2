@@ -146,6 +146,11 @@ export class AudioController {
     return await this.mixerService.updateMixer(device, mixer)
   }
 
+  @Get('/fanfare')
+  async getFanfare(@AuthToken() token: string) {
+    return await this.audioService.playFanfare(true)
+  } 
+
   @Post('/tts/:language')
   @ApiBody({ type: Object })
   async textToSpeech(

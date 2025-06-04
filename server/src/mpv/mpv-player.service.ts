@@ -178,6 +178,11 @@ export class MpvPlayerService {
     return ''
   }
 
+  public async playFanfare(resumePreviousTrackAtEnd: boolean) {
+    const urls: string[] = ["/streams/FranzSchubert-DieForelle.mp3"]
+    return await this.playlist(urls, resumePreviousTrackAtEnd)
+  }
+
   public async playlist(urls: string[], resumePreviousTrackAtEnd: boolean) {
     const playListFile = path.join(process.env.PISTEREO_CACHE as string, 'temp.m3u')
     const currentPlayingUrl = await this.getCurrentPlayingUrl()
