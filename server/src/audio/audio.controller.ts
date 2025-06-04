@@ -26,7 +26,7 @@ export class AudioController {
     private readonly mixerService: MixerService,
     private readonly settingService: SettingService,
     private readonly ttsService: TtsService,
-  ) { }
+  ) {}
 
   @ApiExcludeEndpoint()
   @Public()
@@ -86,15 +86,24 @@ export class AudioController {
   }
 
   @Put('/playfile')
-  async playFile(@User() user: any, @AuthToken() token: string, @Query('file') filename: string, @Query("resume") resume: boolean=true) {
+  async playFile(
+    @User() user: any,
+    @AuthToken() token: string,
+    @Query('file') filename: string,
+    @Query('resume') resume: boolean = true,
+  ) {
     return await this.audioService.playFiles([filename], resume)
   }
 
   @Put('/playfiles')
-  async playFiles(@User() user: any, @AuthToken() token: string, @Body() data: any, @Query("resume") resume: boolean=true) {
+  async playFiles(
+    @User() user: any,
+    @AuthToken() token: string,
+    @Body() data: any,
+    @Query('resume') resume: boolean = true,
+  ) {
     return await this.audioService.playFiles(data.filenames, resume)
   }
-
 
   @Put('/volume')
   async changeVolume(
@@ -161,8 +170,6 @@ export class AudioController {
   async getFanfare(@AuthToken() token: string) {
     return await this.audioService.playFanfare(true)
   }
-
-
 
   @Post('/tts/:language')
   @ApiBody({ type: Object })

@@ -4,12 +4,14 @@ import { EventEmitter2 } from '@nestjs/event-emitter'
 import { fromEvent, map, Observable } from 'rxjs'
 
 import { LibrespotClientService } from '../spotify/librespot-client.service'
+import { MpvClientService } from '../mpv/mpv-client.service'
 
 @Public()
 @Controller('/ws')
 export class WebsocketsController {
   constructor(
     private readonly librespotClientService: LibrespotClientService,
+    private readonly mpvClientService: MpvClientService,
     private readonly eventEmitter: EventEmitter2,
   ) {}
 

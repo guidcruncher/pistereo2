@@ -18,7 +18,7 @@ const errorCodes: Record<string, number> = {
 export class MpvPlayerService {
   private readonly logger = new Logger(MpvPlayerService.name, { timestamp: true })
 
-  constructor(private readonly eventEmitter: EventEmitter2) { }
+  constructor(private readonly eventEmitter: EventEmitter2) {}
 
   public async getMetaData() {
     const idleProp = await this.sendCommand('get_property', ['core-idle'])
@@ -179,7 +179,7 @@ export class MpvPlayerService {
   }
 
   public async playFanfare(resumePreviousTrackAtEnd: boolean) {
-    return await this.playFiles(["/streams/FranzSchubert-DieForelle.mp3"], resumePreviousTrackAtEnd)
+    return await this.playFiles(['/streams/FranzSchubert-DieForelle.mp3'], resumePreviousTrackAtEnd)
   }
 
   public async playFiles(files: string[], resumePreviousTrackAtEnd: boolean) {
@@ -201,7 +201,7 @@ export class MpvPlayerService {
       m3u.push(url)
     })
 
-    if (resumePreviousTrackAtEnd && currentPlayingUrl != "") {
+    if (resumePreviousTrackAtEnd && currentPlayingUrl != '') {
       m3u.push(currentPlayingUrl)
     }
 
