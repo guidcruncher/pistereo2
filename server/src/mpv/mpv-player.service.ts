@@ -179,7 +179,11 @@ export class MpvPlayerService {
   }
 
   public async playFanfare(resumePreviousTrackAtEnd: boolean) {
-    const urls: string[] = ["/streams/FranzSchubert-DieForelle.mp3"]
+    return await this.playFiles(["/streams/FranzSchubert-DieForelle.mp3"], resumePreviousTrackAtEnd)
+  }
+
+  public async playFiles(files: string[], resumePreviousTrackAtEnd: boolean) {
+    const urls: string[] = files
     return await this.playlist(urls, resumePreviousTrackAtEnd)
   }
 

@@ -286,4 +286,8 @@ export class AudioService {
     return await this.mpvPlayer.playFanfare(resumePreviousTrackAtEnd)
   }
 
+  public async playFiles(filenames: string[], resumePreviousTrackAtEnd: boolean) {
+    return await this.mpvPlayer.playFiles(filenames, resumePreviousTrackAtEnd)
+  }
+
 }
