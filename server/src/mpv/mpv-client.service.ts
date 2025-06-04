@@ -26,11 +26,11 @@ export class MpvClientService {
     this.socket.setEncoding('utf-8')
 
     this.socket.on('error', (error) => {
-      log.error('Error in Streamer socket', error)
+      this.logger.error('Error in Streamer socket', error)
     })
 
     this.socket.on('close', (state) => {
-      log.warn('Streamer socket closed', state)
+      this.logger.warn('Streamer socket closed', state)
     })
 
     this.socket.on('data', (data) => {
@@ -38,7 +38,7 @@ export class MpvClientService {
       try {
         json = JSON.parse(data.toString())
       } catch (err) {
-        this.log.error('Malformed MPV event ', data.toString())
+        this.logger.error('Malformed MPV event ', data.toString())
         json = {}
       }
 
@@ -47,17 +47,18 @@ export class MpvClientService {
           case 'metadata-update':
             let data: any = await this.mpvPlayer.getMetaData()
             if (Object.keys(data).length > 0) {
+              this.logger.verbose(`Emitting MPV event ${json.event}`)
               this.eventEmitter.emit('player', { type: 'metadata-update', data: data })
             }
             break
           default:
-            this.log.verbose(`Skipping emitting MPV event ${json.event}`)
+            this.logger.verbose(`Skipping emitting MPV event ${json.event}`)
         }
       }
     })
 
     this.socket.connect({ path: address }, () => {
-      log.debug('Socket connection to MPV open')
+      this.logger.debug('Socket connection to MPV open')
     })
   }
 }
