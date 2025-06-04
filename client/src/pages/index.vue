@@ -1,13 +1,14 @@
 <template>
   <v-tabs v-model="currentTab" align-tabs="title">
-    <v-tab text="Now Playing" value="nowplaying"></v-tab>
+    <v-tab text="Playing" value="nowplaying"></v-tab>
     <v-tab text="Queue" value="queue"></v-tab>
-    <v-tab text="My Playlists" value="myplaylists"></v-tab>
-    <v-tab text="Saved Tracks" value="savedtracks"></v-tab>
-    <v-tab text="Saved Podcasts" value="savedpodcasts"></v-tab>
-    <v-tab text="Saved Episodes" value="savedepisodes"></v-tab>
-    <v-tab text="Radio" value="radio"></v-tab>
+    <v-tab text="Playlists" value="myplaylists"></v-tab>
+    <v-tab text="Albums" value="savedalbums"></v-tab>
+    <v-tab text="Tracks" value="savedtracks"></v-tab>
+    <v-tab text="Podcasts" value="savedpodcasts"></v-tab>
+    <v-tab text="Episodes" value="savedepisodes"></v-tab>
     <v-tab text="Search" value="search"></v-tab>
+    <v-tab text="Control" value="radio"></v-tab>
   </v-tabs>
   <v-tabs-window v-model="currentTab">
     <v-tabs-window-item value="nowplaying">

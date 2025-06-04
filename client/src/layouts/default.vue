@@ -20,8 +20,8 @@ export default {
   data() {
     return {}
   },
-  mounted() {},
-  beforeUnmount() {},
+  mounted() { },
+  beforeUnmount() { },
   methods: {
     showTab(tab) {
       const userStore = useUserStore()
@@ -54,11 +54,8 @@ export default {
 
       <v-spacer />
 
-      <v-btn
-        :prepend-icon="theme === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'"
-        slim
-        @click="onThemeChooserClick"
-      />
+      <v-btn :prepend-icon="theme === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'" slim
+        @click="onThemeChooserClick" />
 
       <template #append>
         <v-menu>
@@ -76,49 +73,40 @@ export default {
     <v-navigation-drawer v-model="drawer" :permanent="pinned" :temporary="!pinned">
       <v-list-item title="PiStereo2" subtitle="Your music jukebox!"></v-list-item>
       <v-divider></v-divider>
-      <v-list-item link title="Now Playing" @click="showTab('nowplaying')"
-        ><template v-slot:prepend>
+      <v-list-item link title="Playing" @click="showTab('nowplaying')"><template v-slot:prepend>
           <v-icon icon="mdi-play"></v-icon>
         </template>
       </v-list-item>
-      <v-list-item link title="Playing Queue" @click="showTab('queue')"
-        ><template v-slot:prepend>
+      <v-list-item link title="Queue" @click="showTab('queue')"><template v-slot:prepend>
           <v-icon icon="mdi-human-queue"></v-icon>
         </template>
       </v-list-item>
-      <v-list-item link title="My Playlists" @click="showTab('myplaylists')"
-        ><template v-slot:prepend>
+      <v-list-item link title="Playlists" @click="showTab('myplaylists')"><template v-slot:prepend>
           <v-icon icon="mdi-playlist-play"></v-icon>
         </template>
       </v-list-item>
-      <v-list-item link title="Saved Albums" @click="showTab('savedalbums')"
-        ><template v-slot:prepend>
-          <v-icon icon="mdi-album"></v-icon>
+      <v-list-item link title="Albums" @click="showTab('savedalbums')"><template v-slot:prepend>
+          <v-icon icon="mdi-playlist-play"></v-icon>
         </template>
       </v-list-item>
-      <v-list-item link title="Saved Tracks" @click="showTab('savedtracks')"
-        ><template v-slot:prepend>
+      <v-list-item link title="Tracks" @click="showTab('savedtracks')"><template v-slot:prepend>
           <v-icon icon="mdi-music"></v-icon>
         </template>
       </v-list-item>
-      <v-list-item link title="Saved Podcasts" @click="showTab('savedpodcasts')"
-        ><template v-slot:prepend>
+      <v-list-item link title="Podcasts" @click="showTab('savedpodcasts')"><template v-slot:prepend>
           <v-icon icon="mdi-podcast"></v-icon>
         </template>
       </v-list-item>
-      <v-list-item link title="Saved Episodes" @click="showTab('savedepisodes')"
-        ><template v-slot:prepend>
+      <v-list-item link title="Episodes" @click="showTab('savedepisodes')"><template v-slot:prepend>
           <v-icon icon="mdi-surround-sound"></v-icon>
         </template>
       </v-list-item>
-      <v-list-item link title="Radio" @click="showTab('radio')"
-        ><template v-slot:prepend>
-          <v-icon icon="mdi-radio"></v-icon>
+      <v-list-item link title="Search" @click="showTab('search')"><template v-slot:prepend>
+          <v-icon icon="mdi-magnify"></v-icon>
         </template>
       </v-list-item>
-      <v-list-item link title="Search" @click="showTab('search')"
-        ><template v-slot:prepend>
-          <v-icon icon="mdi-magnify"></v-icon>
+      <v-list-item link title="Control" @click="showTab('radio')"><template v-slot:prepend>
+          <v-icon icon="mdi-radio"></v-icon>
         </template>
       </v-list-item>
     </v-navigation-drawer>
