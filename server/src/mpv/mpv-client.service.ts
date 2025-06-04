@@ -33,7 +33,7 @@ export class MpvClientService {
       this.logger.warn('Streamer socket closed', state)
     })
 
-    this.socket.on('data', (data) => {
+    this.socket.on('data', async (data) => {
       let json: any
       try {
         json = JSON.parse(data.toString())
