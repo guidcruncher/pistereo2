@@ -47,10 +47,10 @@ export class LibrespotClientService implements OnModuleDestroy {
 
     switch (payload.type) {
       case 'paused':
-        this.eventEmitter.emit('player', { type: 'stateChanged', paused: true })
+        this.eventEmitter.emit('player', { type: 'stateChanged', paused: true, source: 'spotify' })
         break
       case 'playing':
-        this.eventEmitter.emit('player', { type: 'stateChanged', paused: false })
+        this.eventEmitter.emit('player', { type: 'stateChanged', paused: false, source: 'spotify' })
         break
       case 'will_play':
       case 'active':
@@ -60,7 +60,7 @@ export class LibrespotClientService implements OnModuleDestroy {
         const mapped = LibrespotMetadataMapper(payload.data)
         await this.historyService.addAnonHistory(mapped)
         await this.historyService.addLastPlayed(mapped, 'remote')
-        this.eventEmitter.emit('player', { type: 'trackChanged', track: mapped })
+        this.eventEmitter.emit('player', { type: 'trackChanged', track: mapped, source: 'spotify' })
         break
       case 'inactive':
       case 'not_playing':

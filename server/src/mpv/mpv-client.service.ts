@@ -48,7 +48,7 @@ export class MpvClientService {
             let data: any = await this.mpvPlayer.getMetaData()
             if (Object.keys(data).length > 0) {
               this.logger.verbose(`Emitting MPV event ${json.event}`)
-              this.eventEmitter.emit('player', { type: 'metadata-update', data: data })
+              this.eventEmitter.emit('player', { type: 'metadata-update', data: data, source: 'mpv' })
             }
             break
           default:
