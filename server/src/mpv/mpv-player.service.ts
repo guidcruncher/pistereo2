@@ -18,7 +18,7 @@ const errorCodes: Record<string, number> = {
 export class MpvPlayerService {
   private readonly logger = new Logger(MpvPlayerService.name, { timestamp: true })
 
-  constructor(private readonly eventEmitter: EventEmitter2) {}
+  constructor(private readonly eventEmitter: EventEmitter2) { }
 
   public async getMetaData() {
     const idleProp = await this.sendCommand('get_property', ['core-idle'])
@@ -163,8 +163,24 @@ export class MpvPlayerService {
     return await this.sendCommand('loadfile', [url, 'replace'])
   }
 
-  public async playlist(urls: string[]) {
+  private async getCurrentPlayingUrl() {
+    const idleProp = await this.sendCommand('get_property', ['core-idle'])
+
+    if (idleProp && idleProp.statusCode == 200) {
+      if (!idleProp.data) {
+        const pathProp = await this.sendCommand('get_property', ['path'])
+        if (pathProp && pathProp.statusCode == 200) {
+          return pathProp.data
+        }
+      }
+    }
+
+    return ''
+  }
+
+  public async playlist(urls: string[], resumePreviousTrackAtEnd: boolean) {
     const playListFile = path.join(process.env.PISTEREO_CACHE as string, 'temp.m3u')
+    const currentPlayingUrl = await this.getCurrentPlayingUrl()
 
     if (fs.existsSync(playListFile)) {
       fs.unlinkSync(playListFile)
@@ -175,6 +191,10 @@ export class MpvPlayerService {
     urls.forEach((url) => {
       m3u.push(url)
     })
+
+    if (resumePreviousTrackAtEnd && currentPlayingUrl != "") {
+      m3u.push(currentPlayingUrl)
+    }
 
     if (fs.existsSync(playListFile)) {
       fs.unlinkSync(playListFile)

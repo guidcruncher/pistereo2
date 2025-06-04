@@ -5,7 +5,7 @@ import { MpvPlayerService } from '../mpv/mpv-player.service'
 
 @Injectable()
 export class TtsService {
-  constructor(private readonly mpvService: MpvPlayerService) {}
+  constructor(private readonly mpvService: MpvPlayerService) { }
 
   async say(text: string, lang: string, slow: boolean) {
     const results = googleTTS.getAllAudioUrls(text, {
@@ -18,7 +18,7 @@ export class TtsService {
     return await this.mpvService.playlist(
       results.map((a) => {
         return a.url
-      }),
+      }), true
     )
   }
 }
