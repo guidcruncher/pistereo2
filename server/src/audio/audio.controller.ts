@@ -147,14 +147,14 @@ export class AudioController {
   }
 
   @Post('/tts/:language')
-  @ApiBody({type: Object})
+  @ApiBody({ type: Object })
   async textToSpeech(
     @AuthToken() token,
     @User() user: any,
     @Body() data: any,
     @Param('language') language: string,
   ) {
-    let text = (data.text ?? '').trim()
+    const text = (data.text ?? '').trim()
 
     if (text == '') {
       throw new HttpException('No text specified', 400)

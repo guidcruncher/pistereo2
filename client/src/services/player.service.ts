@@ -38,7 +38,7 @@ export class PlayerService extends BaseService {
   }
 
   private uriString(uri: any) {
-    let res = `${uri.source}:${uri.type}:${uri.id}`
+    const res = `${uri.source}:${uri.type}:${uri.id}`
     return res
   }
 

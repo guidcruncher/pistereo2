@@ -1,10 +1,11 @@
 import { User } from '@auth/decorators'
-import { Body, Controller, Get, Param, Post, Put, Query, Res } from '@nestjs/common'
+import { Body, Controller, Get, Param, Post, Query, Res } from '@nestjs/common'
 import { ApiExcludeEndpoint, ApiOAuth2 } from '@nestjs/swagger'
+
+import { SettingService } from '@/data/setting.service'
 
 import { AuthService } from './auth.service'
 import { AuthToken, Private, Public } from './decorators'
-import { SettingService } from '@/data/setting.service'
 
 @Public()
 @Controller('/api/auth')

@@ -2,9 +2,9 @@ import { MpvStatusMapper } from '@mappers/mpvstatus-mapper'
 import { Logger } from '@nestjs/common'
 import { Injectable } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
+import * as fs from 'fs'
 import * as path from 'path'
 import * as util from 'util'
-import * as fs from 'fs'
 
 const execFile = util.promisify(require('node:child_process').execFile)
 
@@ -170,7 +170,7 @@ export class MpvPlayerService {
       fs.unlinkSync(playListFile)
     }
 
-    let m3u: string[] = [] as string[]
+    const m3u: string[] = [] as string[]
     m3u.push('#EXTM3U')
     urls.forEach((url) => {
       m3u.push(url)

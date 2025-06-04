@@ -11,9 +11,9 @@ import { AudioController } from './audio.controller'
 import { AudioService } from './audio.service'
 import { MixerService } from './mixer.service'
 import { PresetService } from './preset.service'
+import { TtsService } from './tts.service'
 import { UserStreamService } from './user-stream.service'
 import { WebsocketsController } from './websockets.controller'
-import { TtsService } from './tts.service'
 
 @Module({
   imports: [

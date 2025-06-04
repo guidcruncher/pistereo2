@@ -1,10 +1,11 @@
 import { User } from '@auth/decorators'
-import { Body, Controller, Get, Param, Post, Put, Query, Res } from '@nestjs/common'
-import { ApiExcludeEndpoint, ApiQuery, ApiOAuth2 } from '@nestjs/swagger'
+import { Controller, Get, Param, Put, Query } from '@nestjs/common'
+import { ApiOAuth2, ApiQuery } from '@nestjs/swagger'
+
+import { SettingService } from '@/data/setting.service'
 
 import { AuthService } from './auth.service'
-import { AuthToken, Private, Public } from './decorators'
-import { SettingService } from '@/data/setting.service'
+import { AuthToken, Private } from './decorators'
 
 @ApiOAuth2(['user-read-private', 'user-read-email'], 'Api')
 @Private()

@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import * as googleTTS from 'google-tts-api'
+
 import { MpvPlayerService } from '../mpv/mpv-player.service'
-import * as fs from 'fs'
-import * as path from 'path'
 
 @Injectable()
 export class TtsService {
