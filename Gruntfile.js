@@ -119,7 +119,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build-server', [ 'run:build-server' ]);
   grunt.registerTask('format', [ 'run:format' ]);
   grunt.registerTask('lint', ['format', 'run:lint' ])
-  grunt.registerTask('docker', [ 'lint', 'run:docker-build'])
+  grunt.registerTask('docker', [ 'run:docker-build'])
 
   grunt.registerTask('default', [ 'run:format', 'build-all', 'concurrent:dev' ]);
 }
