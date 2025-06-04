@@ -37,7 +37,7 @@ module.exports = function (grunt) {
       },
       "docker-build": {
         "cmd": 'bash',
-        "args": [ '-c', './dockerscripts/build.sh' ]
+        "args": [ '-c', './dockerfiles/build.sh' ]
       }
     },
     "copy": {
