@@ -4,7 +4,6 @@ import { Injectable } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import { Logger } from '@nestjs/common'
 import { MpvPlayerService } from './mpv-player.service'
-import * as _ from 'lodash/core'
 
 @Injectable()
 export class MpvClientService {
@@ -49,7 +48,7 @@ export class MpvClientService {
           case 'metadata-update':
             let data: any = await this.mpvPlayer.getMetaData()
             if (Object.keys(data).length > 0) {
-              if (_.isEqual(data, MpvClientService.previousMetaData) {
+              if (JSON.stringify(data) === JSON.stringify(MpvClientService.previousMetaData)) {
                 // ignore
               } else {
                 this.eventEmitter.emit('player', { type: 'metadataUpdate', data: data, source: 'mpv' })
