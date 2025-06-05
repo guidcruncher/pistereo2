@@ -46,6 +46,15 @@ export class MpvClientService {
 
       if (json.event) {
         switch (json.event) {
+          case 'end-file':
+            if (json.reason === 'eof') {
+              this.eventEmitter.emit('player', {
+                type: 'endFile',
+                data: json,
+                source: 'mpv',
+              })
+            }
+            break
           case 'metadata-update':
             let seconds =
               (new Date().getTime() - MpvClientService.lastMetaDataEmitted.getTime()) / 1000
