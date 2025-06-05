@@ -5,6 +5,6 @@ import { MpvClientService } from './mpv-client.service'
 
 @Module({
   providers: [MpvPlayerService, MpvClientService],
-  exports: [MpvPlayerService, MpvClientService ],
+  exports: [MpvPlayerService, MpvClientService],
 })
 export class MpvModule {}

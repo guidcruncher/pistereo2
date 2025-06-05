@@ -10,6 +10,7 @@ export class MpvClientService {
   private socket: net.Socket
   private readonly logger: Logger = new Logger(MpvClientService.name, { timestamp: true })
   private static previousMetaData: any = {}
+  private static lastMetaDataEmitted = new Date('2020-01-01T00:00:00')
 
   constructor(
     private readonly eventEmitter: EventEmitter2,
@@ -46,15 +47,27 @@ export class MpvClientService {
       if (json.event) {
         switch (json.event) {
           case 'metadata-update':
-            let data: any = await this.mpvPlayer.getMetaData()
-            if (Object.keys(data).length > 0) {
-              if (JSON.stringify(data) === JSON.stringify(MpvClientService.previousMetaData)) {
-                // ignore
-              } else {
-                this.eventEmitter.emit('player', { type: 'metadataUpdate', data: data, source: 'mpv' })
-                MpvClientService.previousMetaData = data
+            let seconds =
+              (new Date().getTime() - MpvClientService.lastMetaDataEmitted.getTime()) / 1000
+
+            if (seconds > 30) {
+              let data: any = await this.mpvPlayer.getMetaData()
+              if (Object.keys(data).length > 0) {
+                if (JSON.stringify(data) === JSON.stringify(MpvClientService.previousMetaData)) {
+                  // ignore
+                  MpvClientService.lastMetaDataEmitted = new Date()
+                } else {
+                  this.eventEmitter.emit('player', {
+                    type: 'metadataUpdate',
+                    data: data,
+                    source: 'mpv',
+                  })
+                  MpvClientService.previousMetaData = data
+                  MpvClientService.lastMetaDataEmitted = new Date()
+                }
               }
             }
+
             break
           default:
             this.logger.verbose(`Skipping emitting MPV event ${json.event}`)
