@@ -7,8 +7,12 @@ export const usePlayerStore = defineStore('player', {
     currentDevice: {} as any,
     currentTrack: {} as any,
     playing: true,
+    metaData: {} as any,
   }),
   actions: {
+    setMetaData(metadata) {
+      this.metaData = metadata
+    },
     setPlayingState(playingstate) {
       this.playing = playingstate
     },

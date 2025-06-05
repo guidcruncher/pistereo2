@@ -9,9 +9,15 @@ import { useVolumeStore } from '@/stores/volume'
 
 const volumeStore = useVolumeStore()
 const playerStore = usePlayerStore()
-const { currentTrack, playing } = storeToRefs(playerStore)
+const { currentTrack, playing, metaData } = storeToRefs(playerStore)
 const playerEventSource = useEventSource('player', (type, payload) => {
   switch (type) {
+    case 'metadataUpdate':
+      if (payload.data) {
+         playerStore.setMetaData(payload.data)
+
+      }
+      break
     case 'trackChanged':
       if (payload.track) {
         const playerService = new PlayerService()
@@ -248,5 +254,6 @@ export default {
       </div>
     </div>
   </v-card>
+{{metaData}}
 </template>
 <style></style>
