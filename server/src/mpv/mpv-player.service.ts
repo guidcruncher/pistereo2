@@ -22,7 +22,7 @@ export class MpvPlayerService {
 
   public async isPlaylist() {
     const playlistCount = await this.sendCommand('get_property', ['playlist-count'])
-    return (parseInt(playlistCont.data) > 1)
+    return (parseInt(playlistCount.data) > 1)
   }
 
   public async getMetaData() {
