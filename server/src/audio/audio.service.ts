@@ -1,22 +1,23 @@
-import { Logger } from '@nestjs/common'
-import { Uri } from '@views/index'
+import { SettingService } from '@data/setting.service'
 import { HttpException, Injectable, Scope } from '@nestjs/common'
+import { EventEmitter2 } from '@nestjs/event-emitter'
+import { History } from '@schemas/history'
+import { Uri } from '@views/index'
+import { PlayableItem, PlayerStatus } from '@views/index'
+import * as fs from 'fs'
+import * as path from 'path'
+
+import { AuthService } from '../auth/auth.service'
+import { HistoryService } from '../data/history.service'
 import { MpvPlayerService } from '../mpv/mpv-player.service'
-import { SpotifyPlayerService } from '../spotify/spotify-player.service'
 import { LibrespotPlayerService } from '../spotify/librespot-player.service'
 import { TuneinPlayerService } from '../tunein/tunein-player.service'
 import { UserStreamPlayerService } from '../userstream/userstream-player.service'
-import { AuthService } from '../auth/auth.service'
-import { HistoryService } from '../data/history.service'
-import { PlayerStatus, PlayableItem, DeviceProp } from '@views/index'
-import { History } from '@schemas/history'
-import { OnEvent, EventEmitter2, EventEmitterModule } from '@nestjs/event-emitter'
-import * as fs from 'fs'
-import * as path from 'path'
 
 @Injectable({ scope: Scope.DEFAULT })
 export class AudioService {
   private currentTrack: PlayableItem = {} as PlayableItem // Uri = new Uri()
+
   private _deviceId: string
 
   constructor(
@@ -28,13 +29,14 @@ export class AudioService {
     private readonly userStreamPlayer: UserStreamPlayerService,
     private readonly authService: AuthService,
     private readonly historyService: HistoryService,
+    private readonly settingService: SettingService,
   ) {}
 
   private async ensureDeviceId(token: string) {
-    let filename = path.join(process.env.PISTEREO_CONFIG as string, 'librespot', 'state.json')
+    const filename = path.join(process.env.PISTEREO_CONFIG as string, 'librespot', 'state.json')
 
     if (fs.existsSync(filename)) {
-      let obj = JSON.parse(fs.readFileSync(filename, 'utf8'))
+      const obj = JSON.parse(fs.readFileSync(filename, 'utf8'))
       this._deviceId = obj.device_id
     }
 
@@ -44,14 +46,14 @@ export class AudioService {
   async startLastPlayed(token: string, user: any) {
     let nothingPlaying = false
     try {
-      let status = await this.getStatus(user, token)
+      const status = await this.getStatus(user, token)
       nothingPlaying = status.device ? !status.device.playing : false
     } catch (err) {
       nothingPlaying = true
     }
 
     if (nothingPlaying) {
-      let lastPlayed = await this.historyService.getLastPlayed(user.id)
+      const lastPlayed = await this.historyService.getLastPlayed(user.id)
       if (lastPlayed) {
         await this.playMedia(user, token, lastPlayed.uri.toString())
         return true
@@ -79,7 +81,7 @@ export class AudioService {
         return status
       }
     } catch (err) {}
-    let lastPlayed: History = await this.historyService.getLastPlayed(user.id)
+    const lastPlayed: History = await this.historyService.getLastPlayed(user.id)
 
     if (lastPlayed) {
       switch (lastPlayed.uri.source) {
@@ -114,8 +116,8 @@ export class AudioService {
   }
 
   async playMedia(user: any, token: string, uri: string) {
-    let uriParts = Uri.fromUriString(uri)
-    let deviceid: string = await this.ensureDeviceId(token)
+    const uriParts = Uri.fromUriString(uri)
+    const deviceid: string = await this.ensureDeviceId(token)
     let track: PlayableItem
 
     await this.mpvPlayer.stop()
@@ -147,14 +149,21 @@ export class AudioService {
   }
 
   async changeVolume(user: any, token, volume: number) {
-    await this.spotifyPlayer.setVolume(token, await this.ensureDeviceId(token), volume)
-    await this.mpvPlayer.setVolume(volume)
+    try {
+      await this.spotifyPlayer.setVolume(token, await this.ensureDeviceId(token), volume)
+    } catch {}
+
+    try {
+      await this.mpvPlayer.setVolume(volume)
+    } catch {}
+
     return await this.getVolume(token)
   }
 
   async getStatus(user: any, token: string) {
     let status: any = new PlayerStatus()
     status = await this.determineStatus(token, user)
+    status.device.volume = (await this.getVolume(token)).volume
     if (status.track) {
       this.currentTrack = status.track
 
@@ -167,7 +176,7 @@ export class AudioService {
   }
 
   async getTrackDetail(token: string, uri: string) {
-    let uriParts: Uri = Uri.fromUriString(uri)
+    const uriParts: Uri = Uri.fromUriString(uri)
 
     switch (uriParts.source) {
       case 'spotify':
@@ -182,7 +191,11 @@ export class AudioService {
   }
 
   async getVolume(token: string) {
-    return { volume: await this.mpvPlayer.getVolume() }
+    try {
+      return { volume: await this.mpvPlayer.getVolume() }
+    } catch {
+      return { volume: await this.spotifyPlayer.getVolume(token) }
+    }
   }
 
   async togglePlayback(user: any, token: string) {
@@ -192,7 +205,7 @@ export class AudioService {
 
     switch (this.currentTrack.uri.source) {
       case 'spotify':
-        let status = await this.spotifyPlayer.getStatus(token)
+        const status = await this.spotifyPlayer.getStatus(token)
         if (status) {
           if (status.device.playing) {
             return await this.spotifyPlayer.playerCommand(
@@ -226,22 +239,22 @@ export class AudioService {
   }
 
   async nextTrack(user: any, token: string) {
-    if (this.currentUri() == '') {
-      throw new HttpException('Nothing playing', 400)
-    }
+    const state = await this.getStatus(user, token)
 
-    switch (this.currentTrack.uri.source) {
-      case 'spotify':
-        return await this.spotifyPlayer.playerCommand(
-          token,
-          await this.ensureDeviceId(token),
-          'next',
-        )
-        break
-      case 'tunein':
-      case 'user':
-        return {}
-        break
+    if (state && state.track) {
+      switch (state.track.uri.source) {
+        case 'spotify':
+          return await this.spotifyPlayer.playerCommand(
+            token,
+            await this.ensureDeviceId(token),
+            'next',
+          )
+          break
+        case 'tunein':
+        case 'user':
+          return {}
+          break
+      }
     }
 
     throw new HttpException(`Unsupported Uri source ${this.currentTrack.uri.source}`, 400)
@@ -267,5 +280,13 @@ export class AudioService {
     }
 
     throw new HttpException(`Unsupported Uri source ${this.currentTrack.uri.source}`, 400)
+  }
+
+  public async playFanfare(resumePreviousTrackAtEnd: boolean) {
+    return await this.mpvPlayer.playFanfare(resumePreviousTrackAtEnd)
+  }
+
+  public async playFiles(filenames: string[], resumePreviousTrackAtEnd: boolean) {
+    return await this.mpvPlayer.playFiles(filenames, resumePreviousTrackAtEnd)
   }
 }

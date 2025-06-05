@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { on, emit, off } from '@/composables/useeventbus'
 import { PlayerService } from '@/services/player.service'
 import { type PlayableItem } from '@/dto/playableitem'
 import { storeToRefs } from 'pinia'
@@ -8,16 +9,23 @@ import { useVolumeStore } from '@/stores/volume'
 
 const volumeStore = useVolumeStore()
 const playerStore = usePlayerStore()
-const { currentTrack, playing } = storeToRefs(playerStore)
+const { currentTrack, playing, metaData } = storeToRefs(playerStore)
 const playerEventSource = useEventSource('player', (type, payload) => {
   switch (type) {
+    case 'metadataUpdate':
+      if (payload.data) {
+        playerStore.setMetaData(payload.data)
+      }
+      break
     case 'trackChanged':
+      playerStore.setMetaData({})
       if (payload.track) {
         const playerService = new PlayerService()
         playerService
           .getMetaData(payload.track.uri)
           .then((track) => {
             playerStore.updatePlaying(track)
+            emit('track_changed')
           })
           .catch((err) => {
             console.error(err)
@@ -32,7 +40,6 @@ const playerEventSource = useEventSource('player', (type, payload) => {
 </script>
 <script lang="ts">
 import { ref } from 'vue'
-import { on, emit, off } from '@/composables/useeventbus'
 
 export default {
   name: 'Player',
@@ -141,7 +148,7 @@ export default {
 }
 </script>
 <template>
-  <v-card>
+  <v-card v-intersect="updateDisplay">
     <div class="pa-5">
       <div>
         <div class="center">
@@ -164,6 +171,7 @@ export default {
             <h4>{{ currentTrack.description }}</h4>
             <h5>{{ currentTrack.subtitle }}</h5>
           </div>
+          <div v-if="metaData['icy-title']">Now playing {{ metaData['icy-title'] }}</div>
           <div>
             <h4 v-if="currentTrack.owner">{{ currentTrack.owner.name }}</h4>
             <h5 v-if="currentTrack.artists">{{ currentTrack.artists.join(', ') }}</h5>

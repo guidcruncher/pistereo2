@@ -1,10 +1,10 @@
-import { Logger } from '@nestjs/common'
-import { Injectable } from '@nestjs/common'
 import { PresetsService } from '@data/presets.service'
-import { AuthService } from '../auth/auth.service'
+import { Injectable } from '@nestjs/common'
 import { Preset } from '@schemas/index'
+import { PlayableItem } from '@views/index'
 import * as crypto from 'crypto'
-import { PlayableItem, Uri } from '@views/index'
+
+import { AuthService } from '../auth/auth.service'
 
 @Injectable()
 export class PresetService {
@@ -22,7 +22,7 @@ export class PresetService {
   }
 
   async savePreset(token: string, user: any, preset: Preset) {
-    let item: Preset = preset
+    const item: Preset = preset
     if (item.presetid === '') {
       item.presetid = crypto.randomUUID()
     }
@@ -33,7 +33,7 @@ export class PresetService {
   }
 
   async addPreset(token: string, user: any, data: PlayableItem) {
-    let item = new Preset()
+    const item = new Preset()
     item.context = data.context
     item.uri = data.uri
     item.url = data.url

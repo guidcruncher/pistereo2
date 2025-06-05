@@ -4,6 +4,8 @@ ln -sf /usr/share/zoneinfo/$TZ /etc/localtime
 echo $TZ > /etc/timezone
 
 cd /app
+cp /streams-base/* /streams/
+
 
 if [ -f "/config/configuration.env" ]; then
    cat /config/configuration.env >  ./server/.env

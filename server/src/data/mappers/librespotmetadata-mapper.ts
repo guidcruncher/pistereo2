@@ -1,24 +1,24 @@
-import { imageUrl, Mapper } from './mapper'
-import { Uri } from '../views/uri'
-import { Context } from '../views/context'
-import { PlayableItem } from '../views/playableitem'
 import {
   AlbumMapper,
-  TrackMapper,
-  ShowMapper,
   EpisodeMapper,
+  ShowMapper,
+  TrackMapper,
   TuneinMapper,
   UserStreamMapper,
 } from '@mappers/index'
 
+import { PlayableItem } from '../views/playableitem'
+import { Uri } from '../views/uri'
+import { Mapper } from './mapper'
+
 export const LibrespotMetadataMapper: Mapper<PlayableItem> = (data: any): PlayableItem => {
-  let parts: string[] = data.uri.split(':')
-  let uri = new Uri()
+  const parts: string[] = data.uri.split(':')
+  const uri = new Uri()
   uri.source = parts[0]
   uri.type = parts[1]
   uri.id = parts[2]
 
-  let value = {
+  const value = {
     uri: uri,
     name: data.name,
     artists: data.artist_names.map((a) => {

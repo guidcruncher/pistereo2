@@ -1,10 +1,10 @@
-import { Logger } from '@nestjs/common'
-import { HttpException, Injectable } from '@nestjs/common'
-import { HttpTransportService } from '@core/http-transport.service'
-import { PlayableItem, PlaybackQueue, PlayerStatus, Track, DeviceProp } from '@views/index'
-import { PlayableItemMapper, PlaybackQueueMapper, LibrespotStatusMapper } from '@mappers/index'
 import { EventBaseService } from '@core/event-base.service'
+import { HttpTransportService } from '@core/http-transport.service'
+import { LibrespotStatusMapper, PlayableItemMapper, PlaybackQueueMapper } from '@mappers/index'
+import { HttpException, Injectable } from '@nestjs/common'
+import { DeviceProp, PlayableItem, PlaybackQueue, PlayerStatus } from '@views/index'
 import { Uri } from '@views/uri'
+
 import { LibrespotClientService } from './librespot-client.service'
 
 Injectable()
@@ -29,12 +29,12 @@ export class LibrespotPlayerService extends EventBaseService {
   }
 
   async currentPlaying(token: string) {
-    let trs = new HttpTransportService()
+    const trs = new HttpTransportService()
     const result = await trs.request('GET', 'http://127.0.0.1:3678/status', {
       Authorization: `Bearer ${token}`,
     })
 
-    let track: PlayableItem = {} as PlayableItem
+    const track: PlayableItem = {} as PlayableItem
 
     if (result.status == 204) {
       return track
@@ -44,7 +44,7 @@ export class LibrespotPlayerService extends EventBaseService {
   }
 
   async getStatus(token: string): Promise<PlayerStatus> {
-    let trs = new HttpTransportService()
+    const trs = new HttpTransportService()
     const result = await trs.request('GET', 'http://127.0.0.1:3678/status', {
       Authorization: `Bearer ${token}`,
     })
@@ -64,7 +64,7 @@ export class LibrespotPlayerService extends EventBaseService {
       throw new HttpException(`Bad uri source, got ${uri.source}, expected spotify`, 400)
     }
 
-    let url: string = ''
+    let url = ''
     5
     switch (uri.type) {
       case 'album':
@@ -87,7 +87,7 @@ export class LibrespotPlayerService extends EventBaseService {
         break
     }
 
-    let result = await this.transport.request('GET', url, { Authorization: `Bearer ${token}` })
+    const result = await this.transport.request('GET', url, { Authorization: `Bearer ${token}` })
     if (uri.type == 'playlist') {
       return PlayableItemMapper(result.value.tracks.items[0].track)
     }
@@ -103,7 +103,7 @@ export class LibrespotPlayerService extends EventBaseService {
     let request: any = {} as any
     request = { uri: uri.toString(), paused: false }
 
-    let result = await this.transport.request(
+    const result = await this.transport.request(
       'POST',
       'http://127.0.0.1:3678/player/play',
       { Authorization: `Bearer ${token}` },
@@ -111,7 +111,7 @@ export class LibrespotPlayerService extends EventBaseService {
     )
 
     if (result.status == 204) {
-      let status = await this.getMetaData(token, uri)
+      const status = await this.getMetaData(token, uri)
       if (status) {
         return status
       }
@@ -134,9 +134,9 @@ export class LibrespotPlayerService extends EventBaseService {
   }
 
   private async getNextTrackUri(token: string) {
-    let currentQueue: PlaybackQueue = await this.getPlaybackQueue(token)
+    const currentQueue: PlaybackQueue = await this.getPlaybackQueue(token)
     if (currentQueue && currentQueue.queue.length > 0) {
-      let uri: Uri = currentQueue.queue[0].uri
+      const uri: Uri = currentQueue.queue[0].uri
       return uri.toString()
     }
 
@@ -179,7 +179,7 @@ export class LibrespotPlayerService extends EventBaseService {
     }
 
     if (result) {
-      let status = await this.getStatus(token)
+      const status = await this.getStatus(token)
       if (status) {
         return status.track
       }
@@ -189,7 +189,7 @@ export class LibrespotPlayerService extends EventBaseService {
   }
 
   async getVolume(token: string) {
-    let status = await this.getStatus(token)
+    const status = await this.getStatus(token)
     if (status) {
       if (status.device) {
         return status.device.volume
@@ -200,7 +200,7 @@ export class LibrespotPlayerService extends EventBaseService {
   }
 
   async setVolume(token: string, device_id: string, value: number) {
-    let status: any = await this.getStatus(token)
+    const status: any = await this.getStatus(token)
     let result: any = {} as any
 
     if (status) {
@@ -278,7 +278,7 @@ export class LibrespotPlayerService extends EventBaseService {
   }
 
   async connect(token: string, name: string): Promise<DeviceProp> {
-    let device = await this.getDeviceId(token, name)
+    const device = await this.getDeviceId(token, name)
 
     const result = await this.transport.request(
       'PUT',

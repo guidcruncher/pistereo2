@@ -1,7 +1,7 @@
 import { Prop, Schema } from '@nestjs/mongoose'
 import { SchemaFactory } from '@nestjs/mongoose'
-import { HydratedDocument } from 'mongoose'
 import { Profile } from '@views/profile'
+import { HydratedDocument } from 'mongoose'
 
 @Schema()
 export class Session {

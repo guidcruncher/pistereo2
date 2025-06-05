@@ -1,5 +1,5 @@
-import { Uri } from './uri'
 import { Context } from './context'
+import { Uri } from './uri'
 
 export interface PlayableItem {
   context: Context

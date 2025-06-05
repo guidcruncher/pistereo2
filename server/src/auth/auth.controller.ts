@@ -1,24 +1,19 @@
 import { User } from '@auth/decorators'
-import {
-  HttpException,
-  Param,
-  Req,
-  Body,
-  Controller,
-  Get,
-  Post,
-  Query,
-  Res,
-  Session,
-} from '@nestjs/common'
+import { Body, Controller, Get, Param, Post, Query, Res } from '@nestjs/common'
+import { ApiExcludeEndpoint, ApiOAuth2 } from '@nestjs/swagger'
+
+import { SettingService } from '@/data/setting.service'
+
 import { AuthService } from './auth.service'
-import { Public, Private, AuthToken } from './decorators'
-import { ApiOAuth2, ApiExcludeController, ApiExcludeEndpoint } from '@nestjs/swagger'
+import { AuthToken, Private, Public } from './decorators'
 
 @Public()
 @Controller('/api/auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly settingService: SettingService,
+  ) {}
 
   @ApiExcludeEndpoint()
   @Get('authorise')
@@ -40,7 +35,7 @@ export class AuthController {
       data.grant_type ?? 'authorization_code',
       data.redirect_uri,
     )
-    const targeturl: string = '/'
+    const targeturl = '/'
     return res.status(200).send(token)
   }
 
@@ -58,7 +53,7 @@ export class AuthController {
       'authorization_code',
       redirectUrl,
     )
-    const targeturl: string = '/'
+    const targeturl = '/'
 
     res.header('Content-Type', 'text/html')
     const html =
@@ -87,7 +82,7 @@ export class AuthController {
   @Post('refresh')
   @Private()
   async tokenRefresh(@User() user: any, @AuthToken() token: string, @Body() data: any) {
-    let result = await this.authService.getRefreshToken(token, data.refresh_token)
+    const result = await this.authService.getRefreshToken(token, data.refresh_token)
     return result
   }
 
@@ -95,7 +90,7 @@ export class AuthController {
   @Get('user/:user')
   @Private()
   async getProfile(@AuthToken() token, @Param('user') user: string) {
-    let result = await this.authService.getProfile(token, user)
+    const result = await this.authService.getProfile(token, user)
     return result
   }
 
@@ -103,7 +98,7 @@ export class AuthController {
   @Get('user')
   @Private()
   async getMyProfile(@AuthToken() token) {
-    let result = await this.authService.getProfile(token)
+    const result = await this.authService.getProfile(token)
     return result
   }
 }

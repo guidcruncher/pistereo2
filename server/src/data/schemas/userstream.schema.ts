@@ -1,9 +1,9 @@
 import { Prop, Schema } from '@nestjs/mongoose'
 import { SchemaFactory } from '@nestjs/mongoose'
-import { HydratedDocument } from 'mongoose'
-import { Uri } from '@views/uri'
 import { Context } from '@views/context'
 import { PlayableItem } from '@views/playableitem'
+import { Uri } from '@views/uri'
+import { HydratedDocument } from 'mongoose'
 
 @Schema()
 export class UserStream implements PlayableItem {
@@ -43,3 +43,4 @@ export class UserStream implements PlayableItem {
 
 export type UserStreamDocument = HydratedDocument<UserStream>
 export const UserStreamSchema = SchemaFactory.createForClass(UserStream)
+UserStreamSchema.index({ name: 'text' })

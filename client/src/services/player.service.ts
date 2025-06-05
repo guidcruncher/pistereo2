@@ -20,6 +20,11 @@ export class PlayerService extends BaseService {
     return response.data
   }
 
+  async listQueue(offset: number, limit: number) {
+    const response: AxiosResponse<any> = await this.client().get('/queue')
+    return response.data
+  }
+
   async addPreset(uri: Uri) {
     const params = new URLSearchParams()
     params.append('uri', this.uriString(uri))
@@ -33,12 +38,17 @@ export class PlayerService extends BaseService {
   }
 
   private uriString(uri: any) {
-    let res = `${uri.source}:${uri.type}:${uri.id}`
+    const res = `${uri.source}:${uri.type}:${uri.id}`
     return res
   }
 
   async getMixer(device: string) {
     const response: AxiosResponse<any> = await this.client().get(`/mixer/${device}`)
+    return response.data
+  }
+
+  async restoreSettings(device: string) {
+    const response: AxiosResponse<any> = await this.client().get(`/restore/${device}`)
     return response.data
   }
 
@@ -134,12 +144,52 @@ export class PlayerService extends BaseService {
     return response.data
   }
 
+  async listShowEpisodes(uri: Uri, offset: number, limit: number) {
+    const params = new URLSearchParams()
+    params.append('uri', uri.uri)
+    params.append('offset', offset.toString())
+    params.append('limit', limit.toString())
+    const response: AxiosResponse<any> = await this.client().get(
+      `/list/spotify/show/episodes?${params.toString()}`,
+    )
+
+    return response.data
+  }
+
   async listSavedTracks(offset: number, limit: number) {
     const params = new URLSearchParams()
     params.append('offset', offset.toString())
     params.append('limit', limit.toString())
     const response: AxiosResponse<any> = await this.client().get(
       `/list/spotify/tracks?${params.toString()}`,
+    )
+
+    return response.data
+  }
+
+  async search(type: string, query: string, offset: number, limit: number) {
+    const params = new URLSearchParams()
+    params.append('query', query)
+    params.append('offset', offset.toString())
+    params.append('limit', limit.toString())
+    const response: AxiosResponse<any> = await this.client().get(
+      `/search/${type.toLowerCase()}?${params.toString()}`,
+    )
+
+    return response.data
+  }
+
+  async getUserSettings() {
+    const response: AxiosResponse<any> = await this.client().get(`/user/settings`)
+
+    return response.data
+  }
+
+  async saveUserSetting(key: string, value: any) {
+    const params = new URLSearchParams()
+    params.append('value', value.toString())
+    const response: AxiosResponse<any> = await this.client().put(
+      `/user/setting/${key}?${params.toString()}`,
     )
 
     return response.data

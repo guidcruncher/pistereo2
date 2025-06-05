@@ -1,5 +1,6 @@
 import { Logger } from '@nestjs/common'
-import { Inject, HttpException, Injectable } from '@nestjs/common'
+import { HttpException, Injectable } from '@nestjs/common'
+
 import { getUserAgent } from './user-agent'
 
 //export interface IHttpTransportService {
@@ -9,6 +10,7 @@ import { getUserAgent } from './user-agent'
 @Injectable()
 export class HttpTransportService {
   private readonly logger: Logger = new Logger(HttpTransportService.name, { timestamp: true })
+
   private readonly userAgent: string = ''
 
   constructor() {
@@ -48,13 +50,13 @@ export class HttpTransportService {
       })
     }
 
-    let response = await makeRequest()
+    const response = await makeRequest()
 
     if (!response.ok) {
-      let txt: string = ''
-      let resp: string = await response.text()
+      let txt = ''
+      const resp: string = await response.text()
       try {
-        let obj: any = JSON.parse(resp)
+        const obj: any = JSON.parse(resp)
         txt = obj.error.message
       } catch (err) {
         txt = resp

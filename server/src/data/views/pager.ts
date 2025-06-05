@@ -1,8 +1,12 @@
 export class Pager {
   offset: number
+
   limit: number
+
   total: number
+
   page: number
+
   pageCount: number
 
   constructor() {

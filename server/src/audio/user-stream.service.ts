@@ -1,10 +1,10 @@
-import { Logger } from '@nestjs/common'
-import { Injectable } from '@nestjs/common'
 import { UserStreamService as UserStreamDataService } from '@data/userstream.service'
-import { AuthService } from '../auth/auth.service'
+import { Injectable } from '@nestjs/common'
 import { UserStream } from '@schemas/index'
-import * as crypto from 'crypto'
 import { Uri } from '@views/uri'
+import * as crypto from 'crypto'
+
+import { AuthService } from '../auth/auth.service'
 
 @Injectable()
 export class UserStreamService {
@@ -22,7 +22,7 @@ export class UserStreamService {
   }
 
   async saveUserStream(token: string, user: any, userstream: UserStream) {
-    let item: UserStream = userstream
+    const item: UserStream = userstream
     if (userstream.id === '') {
       item.uri = Uri.fromUriString(`user:stream:${crypto.randomUUID().replaceAll('-', '')}`)
       item.id = item.uri.id

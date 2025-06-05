@@ -38,13 +38,14 @@ RUN npm config set fund false
 
 RUN ln -sf /usr/share/zoneinfo/$TZ /etc/localtime
 RUN echo $TZ > /etc/timezone
-RUN mkdir -p /config
+RUN mkdir -p /config /streams /streams-base
 
 WORKDIR /app
 COPY --from=build /src/build .
 COPY --from=build /src/config /config
 COPY --from=build /src/mediaserver/audio/100-equal.conf /etc/alsa/conf.d/100-equal.conf
 COPY --from=build /src/mediaserver/audio/asound.conf /etc/asound.conf
+COPY ./userstream/* /streams-base
 
 ENV PISTEREO_ALSA_DEVICE=equal
 ENV PISTEREO_LIBRESPOT_ALSA_MIXER_DEVICE=
@@ -69,6 +70,7 @@ ENV IN_DOCKER="yes"
 ENV PISTEREO_LIBRESPOT_MODE="zeroconf"
 
 VOLUME /config
+VOLUME /streams
 ENTRYPOINT [ "/bin/bash", "-E", "-c" ]
 CMD ["/app/startcontainer.sh"]
 

@@ -33,7 +33,16 @@ const authStore = useAuthStore()
 app.config.globalProperties.emitter = emitter
 
 if (authStore.tokens.access != '') {
-  app.mount('#app')
+  const playerService = new PlayerService()
+  playerService
+    .restoreSettings('equal')
+    .then((res) => {
+      app.mount('#app')
+    })
+    .catch((err) => {
+      console.error(err)
+      app.mount('#app')
+    })
 } else {
   window.location.href = '/api/auth/authorise'
 }

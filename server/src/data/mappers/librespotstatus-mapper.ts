@@ -1,8 +1,8 @@
-import { imageUrl, Mapper } from './mapper'
-import { Uri, Album, Context, PlayableItem, Track, Device, PlayerStatus } from '../views/index'
+import { PlayableItem, PlayerStatus, Uri } from '../views/index'
+import { Mapper } from './mapper'
 
 export const LibrespotStatusMapper: Mapper<PlayerStatus> = (value: any) => {
-  let result = new PlayerStatus()
+  const result = new PlayerStatus()
 
   if (!value) {
     return result

@@ -14,7 +14,7 @@ export class Uri {
       result = uri as Uri
     } else {
       if (typeof uri === 'string') {
-        let parts = uri.split(':')
+        const parts = uri.split(':')
 
         if (parts.length != 3) {
           throw new Error('Invalid uri structure')

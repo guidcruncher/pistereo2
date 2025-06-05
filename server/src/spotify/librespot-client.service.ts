@@ -1,9 +1,10 @@
-import { Logger } from '@nestjs/common'
-import { Scope, OnModuleDestroy, Injectable } from '@nestjs/common'
-import { EventEmitter2, EventEmitterModule } from '@nestjs/event-emitter'
-import { WebSocket } from 'ws'
-import { LibrespotMetadataMapper } from '@mappers/librespotmetadata-mapper'
 import { HistoryService } from '@data/history.service'
+import { LibrespotMetadataMapper } from '@mappers/librespotmetadata-mapper'
+import { Logger } from '@nestjs/common'
+import { Injectable, OnModuleDestroy } from '@nestjs/common'
+import { EventEmitter2 } from '@nestjs/event-emitter'
+import { WebSocket } from 'ws'
+
 import { MpvPlayerService } from '../mpv/mpv-player.service'
 
 @Injectable()
@@ -42,24 +43,24 @@ export class LibrespotClientService implements OnModuleDestroy {
   }
 
   private async onMessage(namespace: string, payload: any) {
-    this.logger.log('Librespot event fired', payload.type)
+    this.logger.verbose('Librespot event fired', payload.type)
 
     switch (payload.type) {
       case 'paused':
-        this.eventEmitter.emit('player', { type: 'stateChanged', paused: true })
+        this.eventEmitter.emit('player', { type: 'stateChanged', paused: true, source: 'spotify' })
         break
       case 'playing':
-        this.eventEmitter.emit('player', { type: 'stateChanged', paused: false })
+        this.eventEmitter.emit('player', { type: 'stateChanged', paused: false, source: 'spotify' })
         break
       case 'will_play':
       case 'active':
         await this.mpvPlayer.stop()
         break
       case 'metadata':
-        let mapped = LibrespotMetadataMapper(payload.data)
+        const mapped = LibrespotMetadataMapper(payload.data)
         await this.historyService.addAnonHistory(mapped)
         await this.historyService.addLastPlayed(mapped, 'remote')
-        this.eventEmitter.emit('player', { type: 'trackChanged', track: mapped })
+        this.eventEmitter.emit('player', { type: 'trackChanged', track: mapped, source: 'spotify' })
         break
       case 'inactive':
       case 'not_playing':

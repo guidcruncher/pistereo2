@@ -1,16 +1,25 @@
 import { Context } from './context'
-import { Uri } from './uri'
 import { PlayableItem } from './playableitem'
+import { Uri } from './uri'
 
 export class Show implements PlayableItem {
-  publisher: string = ''
+  publisher = ''
+
   context: Context = new Context()
+
   uri: Uri = new Uri()
-  url: string = ''
-  name: string = ''
-  owner: string = ''
-  subtitle: string = ''
-  description: string = ''
+
+  url = ''
+
+  name = ''
+
+  owner = ''
+
+  subtitle = ''
+
+  description = ''
+
   artists: string[] = [] as string[]
-  imageUrl: string = ''
+
+  imageUrl = ''
 }

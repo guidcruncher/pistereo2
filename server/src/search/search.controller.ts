@@ -1,18 +1,7 @@
-import {
-  Param,
-  Body,
-  Controller,
-  Get,
-  Post,
-  Put,
-  Delete,
-  Query,
-  Res,
-  Session,
-  HttpException,
-} from '@nestjs/common'
-import { Public, User, Private, AuthToken } from '@auth/decorators'
-import { ApiOAuth2, ApiExcludeController, ApiExcludeEndpoint } from '@nestjs/swagger'
+import { AuthToken, Private, User } from '@auth/decorators'
+import { Controller, Get, HttpException, Param, Query } from '@nestjs/common'
+import { ApiOAuth2 } from '@nestjs/swagger'
+
 import { SearchService } from './search.service'
 
 @ApiOAuth2(
@@ -24,25 +13,19 @@ import { SearchService } from './search.service'
 export class SearchController {
   constructor(private readonly searchService: SearchService) {}
 
-  @Get('query')
+  @Get('/:source')
   async query(
     @AuthToken() token: string,
     @User() user: any,
+    @Param('source') source: string,
     @Query('query') query: string,
     @Query('offset') offset: number,
     @Query('limit') limit: number,
   ) {
-    return await this.searchService.query(token, user, query, offset, limit)
-  }
+    if (query == '') {
+      throw new HttpException('No query', 400)
+    }
 
-  @Post()
-  async search(
-    @AuthToken() token: string,
-    @User() user: any,
-    @Body() query: any,
-    @Query('offset') offset: number,
-    @Query('limit') limit: number,
-  ) {
-    return await this.searchService.search(token, user, query, offset, limit)
+    return await this.searchService.query(token, user, source.toLowerCase(), query, offset, limit)
   }
 }

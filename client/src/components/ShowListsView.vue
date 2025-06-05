@@ -14,8 +14,11 @@ export default {
     return {
       windowSize: { x: 0, y: 300 },
       items: [] as any,
+      selectedShow: '',
+      selectedShowName: '',
       paging: { offset: 0, limit: 5, total: 0, page: 1, pageCount: 0 },
       ready: false,
+      isBrowseShow: false,
     }
   },
   mounted() {
@@ -31,13 +34,9 @@ export default {
       this.windowSize = { x: window.innerWidth, y: window.innerHeight - 240 }
     },
     loadPlaylist(item) {
-      const playerService = new PlayerService()
-      playerService
-        .play(item.uri)
-        .then((res) => {})
-        .catch((err) => {
-          console.error(err)
-        })
+      this.selectedShow = item.uri.uri
+      this.selectedShowName = item.name
+      this.isBrowseShow = true
     },
     loadData({ done }) {
       const playerService = new PlayerService()
@@ -64,11 +63,11 @@ export default {
 </script>
 <template>
   <v-card>
-    <div class="text-h6">Saved Podcsts and shows</div>
+    <div class="text-h6">Saved Podcasts and shows</div>
     <v-infinite-scroll :height="windowSize.y" v-resize="onResize" :items="items" @load="loadData">
       <template v-for="item in items" :key="item" :value="item">
-        <div class="pa-1" v-ripple @click="loadPlaylist(item)">
-          <div style="float: left">
+        <div class="pa-1" v-ripple>
+          <div style="float: left" @click="loadPlaylist(item)">
             <table border="0" cellpadding="0" cellspacing="0">
               <tbody>
                 <tr>
@@ -88,5 +87,15 @@ export default {
       </template>
     </v-infinite-scroll>
   </v-card>
+
+  <v-dialog v-model="isBrowseShow" transition="dialog-bottom-transition" fullscreen>
+    <v-card>
+      <v-toolbar>
+        <v-btn icon="mdi-close" @click="isBrowseShow = false"></v-btn>
+        <v-toolbar-title>{{ selectedShowName }}</v-toolbar-title>
+      </v-toolbar>
+      <EpisodeBrowser :show="selectedShow" :showTitle="selectedShowName" v-if="isBrowseShow" />
+    </v-card>
+  </v-dialog>
 </template>
 <style></style>

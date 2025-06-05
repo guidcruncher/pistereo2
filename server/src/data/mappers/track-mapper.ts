@@ -1,10 +1,9 @@
-import { imageUrl, Mapper } from './mapper'
-import { Uri } from '../views/uri'
-import { Context } from '../views/context'
 import { Track } from '../views/track'
+import { Uri } from '../views/uri'
+import { imageUrl, Mapper } from './mapper'
 
 export const TrackMapper: Mapper<Track> = (value: any) => {
-  let result = new Track()
+  const result = new Track()
   result.uri = Uri.fromUriString(value.uri)
   result.name = value.name
   result.imageUrl = ''

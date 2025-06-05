@@ -53,7 +53,7 @@ export class BaseService {
         instance.interceptors.response.eject(interceptor)
 
         return instance
-          .post('/api/auth/refresh', { access_token: tokens.access, refresh_token: tokens.refresh })
+          .post('/auth/refresh', { access_token: tokens.access, refresh_token: tokens.refresh })
           .then((response: any) => {
             if (!response.data || !response.data.access_token) {
               authStore.updateTokens({ access: '', refresh: '' })

@@ -1,8 +1,5 @@
-import { Logger } from '@nestjs/common'
-import { Injectable, Scope, OnModuleDestroy } from '@nestjs/common'
-import { EventEmitter2 } from '@nestjs/event-emitter'
+import { Injectable, OnModuleDestroy, Scope } from '@nestjs/common'
 import * as net from 'net'
-import * as util from 'util'
 
 @Injectable({ scope: Scope.DEFAULT })
 export class SocketCommunicatorService implements OnModuleDestroy {

@@ -1,9 +1,9 @@
-import { imageUrl, Mapper } from './mapper'
-import { PlayableItem, Uri, Context } from '../views/index'
 import { UserStream } from '../schemas/index'
+import { PlayableItem } from '../views/index'
+import { Mapper } from './mapper'
 
 export const UserStreamMapper: Mapper<PlayableItem> = (value: UserStream) => {
-  let result: PlayableItem = {} as PlayableItem
+  const result: PlayableItem = {} as PlayableItem
   result.uri = value.uri
   result.name = value.name
   result.subtitle = value.subtitle

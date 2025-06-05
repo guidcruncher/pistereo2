@@ -1,8 +1,11 @@
 export class Uri {
-  source: string = ''
-  type: string = ''
-  id: string = ''
-  uri: string = ''
+  source = ''
+
+  type = ''
+
+  id = ''
+
+  uri = ''
 
   toString(): string {
     return `${this.source}:${this.type}:${this.id}`
@@ -18,7 +21,7 @@ export class Uri {
       result = uri as Uri
     } else {
       if (typeof uri === 'string') {
-        let parts = uri.split(':')
+        const parts = uri.split(':')
 
         if (parts.length != 3) {
           throw new Error('Invalid uri structure')
@@ -29,7 +32,7 @@ export class Uri {
         result.uri = uri
       } else {
         if (uri instanceof Uri) {
-          result = uri as Uri
+          result = uri
         } else {
           throw new Error('Invalid uri type, expected string or Uri.')
         }

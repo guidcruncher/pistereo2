@@ -1,8 +1,8 @@
-import { imageUrl, Mapper } from './mapper'
-import { Uri, Album, Context, Track, Device, PlayerStatus } from '../views/index'
+import { PlayerStatus } from '../views/index'
+import { Mapper } from './mapper'
 
 export const MpvStatusMapper: Mapper<PlayerStatus> = (value: any) => {
-  let result = new PlayerStatus()
+  const result = new PlayerStatus()
 
   if (!value) {
     return result

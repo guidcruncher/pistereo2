@@ -1,22 +1,10 @@
 import { User } from '@auth/decorators'
-import {
-  Param,
-  Body,
-  Controller,
-  Get,
-  HttpException,
-  Post,
-  Put,
-  Delete,
-  Query,
-  Res,
-  Session,
-} from '@nestjs/common'
-import { SpotifyPlayerService } from './spotify-player.service'
-import { LibrespotPlayerService } from '../spotify/librespot-player.service'
-import { Public, Private, AuthToken } from '@auth/decorators'
+import { AuthToken, Private } from '@auth/decorators'
+import { Controller, Delete, Get, HttpException, Param, Put, Query } from '@nestjs/common'
+import { ApiExcludeController, ApiOAuth2 } from '@nestjs/swagger'
 import { Uri } from '@views/uri'
-import { ApiOAuth2, ApiExcludeController, ApiExcludeEndpoint } from '@nestjs/swagger'
+
+import { LibrespotPlayerService } from '../spotify/librespot-player.service'
 
 @ApiExcludeController()
 @ApiOAuth2(
@@ -86,7 +74,7 @@ export class PlayerController {
 
   @Put()
   async connect(@User() user: any, @AuthToken() token: string, @Query('device') device: string) {
-    let name: string = ''
+    let name = ''
 
     switch (device) {
       case 'local':

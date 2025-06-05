@@ -1,16 +1,17 @@
-import { User } from '@auth/decorators'
 import { Public } from '@auth/decorators'
-import { Controller, Logger, MessageEvent, Sse } from '@nestjs/common'
-import { OnEvent, EventEmitter2 } from '@nestjs/event-emitter'
+import { Controller, MessageEvent, Sse } from '@nestjs/common'
+import { EventEmitter2 } from '@nestjs/event-emitter'
 import { fromEvent, map, Observable } from 'rxjs'
-import * as crypto from 'crypto'
+
 import { LibrespotClientService } from '../spotify/librespot-client.service'
+import { MpvClientService } from '../mpv/mpv-client.service'
 
 @Public()
 @Controller('/ws')
 export class WebsocketsController {
   constructor(
     private readonly librespotClientService: LibrespotClientService,
+    private readonly mpvClientService: MpvClientService,
     private readonly eventEmitter: EventEmitter2,
   ) {}
 

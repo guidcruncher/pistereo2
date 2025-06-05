@@ -1,10 +1,8 @@
-import { Logger } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
-import { InjectConnection } from '@nestjs/mongoose'
-import { Model } from 'mongoose'
-import { Connection } from 'mongoose'
-import { Inject, Injectable, Dependencies } from '@nestjs/common'
 import { UserStream } from '@schemas/index'
+import { Model } from 'mongoose'
+
 import { PagedListBuilder } from './views/index'
 
 @Injectable()
@@ -28,7 +26,7 @@ export class UserStreamService {
       .lean()
       .exec()) as UserStream[]
 
-    return res as UserStream[]
+    return res
   }
 
   async getUserStream(id: string, user: string): Promise<any> {

@@ -1,9 +1,10 @@
+import { AuthModule } from '@auth/auth.module'
 import { Module } from '@nestjs/common'
-import { HttpTransportService } from './http-transport.service'
-import { SocketCommunicatorService } from './socket-communicator.service'
+
 import { BaseService } from './base.service'
 import { EventBaseService } from './event-base.service'
-import { AuthModule } from '@auth/auth.module'
+import { HttpTransportService } from './http-transport.service'
+import { SocketCommunicatorService } from './socket-communicator.service'
 import { WebsocketCommunicatorService } from './websocket-communicator.service'
 
 @Module({

@@ -1,7 +1,7 @@
-import { Logger } from '@nestjs/common'
-import { Injectable, HttpException } from '@nestjs/common'
-import { PlayableItem, Uri, PagedListBuilder } from '@views/index'
-import { TuneinMapper, PlayableItemMapper } from '@mappers/index'
+import { TuneinMapper } from '@mappers/index'
+import { HttpException, Injectable } from '@nestjs/common'
+import { PagedListBuilder, PlayableItem, Uri } from '@views/index'
+
 import { MpvPlayerService } from '../mpv/mpv-player.service'
 
 @Injectable()
@@ -9,7 +9,7 @@ export class TuneinPlayerService {
   constructor(private readonly mpvService: MpvPlayerService) {}
 
   public async play(uri: Uri) {
-    let station: any = await this.getStation(uri)
+    const station: any = await this.getStation(uri)
     if (station && station.url != '') {
       await this.mpvService.play(station.url)
       station.uri = uri
@@ -20,7 +20,7 @@ export class TuneinPlayerService {
   }
 
   public async getStatus() {
-    let state = await this.mpvService.getStatus()
+    const state = await this.mpvService.getStatus()
     return state
   }
 
@@ -113,9 +113,9 @@ export class TuneinPlayerService {
       switch (item.ContainerType) {
         case 'Stations':
           item.Children.forEach((c) => {
-            let ch: any = { Item: c }
+            const ch: any = { Item: c }
             ch.Item.url = ''
-            let st = TuneinMapper(ch.Item)
+            const st = TuneinMapper(ch.Item)
             view.push(st)
           })
           break

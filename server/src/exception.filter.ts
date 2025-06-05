@@ -1,11 +1,10 @@
 import {
-  HttpStatus,
-  HttpException,
-  Logger,
-  IntrinsicException,
   ArgumentsHost,
   Catch,
   ExceptionFilter,
+  HttpException,
+  HttpStatus,
+  Logger,
 } from '@nestjs/common'
 
 @Catch()

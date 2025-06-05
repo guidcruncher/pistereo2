@@ -1,17 +1,16 @@
-import { Logger } from '@nestjs/common'
-import { HttpException, Injectable } from '@nestjs/common'
+import { EventBaseService } from '@core/event-base.service'
 import { HttpTransportService } from '@core/http-transport.service'
+import { PlayableItemMapper, PlaybackQueueMapper, SpotifyStatusMapper } from '@mappers/index'
+import { HttpException, Injectable } from '@nestjs/common'
 import {
+  DeviceProp,
   PagedListBuilder,
   PlayableItem,
   PlaybackQueue,
   PlayerStatus,
-  Track,
-  DeviceProp,
 } from '@views/index'
-import { PlayableItemMapper, PlaybackQueueMapper, SpotifyStatusMapper } from '@mappers/index'
-import { EventBaseService } from '@core/event-base.service'
 import { Uri } from '@views/uri'
+
 import { LibrespotClientService } from './librespot-client.service'
 
 Injectable()
@@ -36,7 +35,7 @@ export class SpotifyPlayerService extends EventBaseService {
   }
 
   async currentPlaying(token: string) {
-    let trs = new HttpTransportService()
+    const trs = new HttpTransportService()
     const result = await trs.request(
       'GET',
       'https://api.spotify.com/v1/me/player/currently-playing',
@@ -45,7 +44,7 @@ export class SpotifyPlayerService extends EventBaseService {
       },
     )
 
-    let track: PlayableItem = {} as PlayableItem
+    const track: PlayableItem = {} as PlayableItem
 
     if (result.status == 204) {
       return track
@@ -55,7 +54,7 @@ export class SpotifyPlayerService extends EventBaseService {
   }
 
   async getStatus(token: string): Promise<PlayerStatus> {
-    let trs = new HttpTransportService()
+    const trs = new HttpTransportService()
     const result = await trs.request('GET', 'https://api.spotify.com/v1/me/player', {
       Authorization: `Bearer ${token}`,
     })
@@ -75,7 +74,7 @@ export class SpotifyPlayerService extends EventBaseService {
       throw new HttpException(`Bad uri source, got ${uri.source}, expected spotify`, 400)
     }
 
-    let url: string = ''
+    let url = ''
     5
     switch (uri.type) {
       case 'album':
@@ -98,7 +97,7 @@ export class SpotifyPlayerService extends EventBaseService {
         break
     }
 
-    let result = await this.transport.request('GET', url, { Authorization: `Bearer ${token}` })
+    const result = await this.transport.request('GET', url, { Authorization: `Bearer ${token}` })
     if (uri.type == 'playlist') {
       return PlayableItemMapper(result.value.tracks.items[0].track)
     }
@@ -125,7 +124,7 @@ export class SpotifyPlayerService extends EventBaseService {
         break
     }
 
-    let result = await this.transport.request(
+    const result = await this.transport.request(
       'PUT',
       'https://api.spotify.com/v1/me/player/play' + this.getQueryString(device_id),
       { Authorization: `Bearer ${token}` },
@@ -133,7 +132,7 @@ export class SpotifyPlayerService extends EventBaseService {
     )
 
     if (result.status == 204) {
-      let status = await this.getMetaData(token, uri)
+      const status = await this.getMetaData(token, uri)
       if (status) {
         return status
       }
@@ -191,7 +190,7 @@ export class SpotifyPlayerService extends EventBaseService {
     }
 
     if (result) {
-      let status = await this.getStatus(token)
+      const status = await this.getStatus(token)
       if (status) {
         return status.track
       }
@@ -201,7 +200,7 @@ export class SpotifyPlayerService extends EventBaseService {
   }
 
   async getVolume(token: string) {
-    let status = await this.getStatus(token)
+    const status = await this.getStatus(token)
     if (status) {
       if (status.device) {
         return status.device.volume
@@ -281,7 +280,7 @@ export class SpotifyPlayerService extends EventBaseService {
   }
 
   async connect(token: string, name: string): Promise<DeviceProp> {
-    let device = await this.getDeviceId(token, name)
+    const device = await this.getDeviceId(token, name)
 
     const result = await this.transport.request(
       'PUT',
@@ -294,18 +293,11 @@ export class SpotifyPlayerService extends EventBaseService {
     return device
   }
 
-  async search(
-    token: string,
-    user: any,
-    types: string[],
-    q: string,
-    offset: number,
-    limit: number,
-  ) {
+  async search(token: string, user: any, type: string, q: string, offset: number, limit: number) {
     const params = new URLSearchParams()
     params.append('q', q)
     params.append('market', user.country)
-    params.append('type', types.join(','))
+    params.append('type', type.toLowerCase())
     params.append('offset', offset.toString())
     params.append('limit', limit.toString())
 
@@ -315,10 +307,12 @@ export class SpotifyPlayerService extends EventBaseService {
       { Authorization: `Bearer ${token}` },
     )
 
-    if (types.length == 1) {
-      let key = types[0] + 's'
-      return PagedListBuilder.fromPagedObject<PlayableItem>(result.value[key], PlayableItemMapper)
+    const key = type.toLowerCase() + 's'
+
+    if (!result.value[key]) {
+      throw new HttpException(`Property "${key}" missing on results`, 500)
     }
-    return result.value
+
+    return PagedListBuilder.fromPagedObject<PlayableItem>(result.value[key], PlayableItemMapper)
   }
 }

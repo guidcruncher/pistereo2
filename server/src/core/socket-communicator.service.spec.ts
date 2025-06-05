@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing'
+
 import { SocketCommunicatorService } from './socket-communicator.service'
 
 describe('SocketCommunicatorService', () => {

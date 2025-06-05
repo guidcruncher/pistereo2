@@ -1,19 +1,30 @@
 import { Album } from './album'
 import { Context } from './context'
-import { Uri } from './uri'
 import { PlayableItem } from './playableitem'
+import { Uri } from './uri'
 
 export class Track implements PlayableItem {
   album: Album = new Album()
+
   context: Context = new Context()
+
   uri: Uri = new Uri()
-  url: string = ''
-  name: string = ''
-  subtitle: string = ''
-  owner: string = ''
-  description: string = ''
+
+  url = ''
+
+  name = ''
+
+  subtitle = ''
+
+  owner = ''
+
+  description = ''
+
   artists: string[] = [] as string[]
-  imageUrl: string = ''
-  position: number = 0
-  duration: number = 0
+
+  imageUrl = ''
+
+  position = 0
+
+  duration = 0
 }

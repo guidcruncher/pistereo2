@@ -1,29 +1,16 @@
-import { Channel, Mixer, Frequency } from '@views/index'
 import { User } from '@auth/decorators'
-import {
-  Param,
-  Body,
-  Controller,
-  Get,
-  Post,
-  Put,
-  Delete,
-  Query,
-  Res,
-  Session,
-  HttpException,
-} from '@nestjs/common'
-import { Public, Private, AuthToken } from '@auth/decorators'
-import { ApiOAuth2, ApiExcludeController, ApiExcludeEndpoint } from '@nestjs/swagger'
-import { MpvPlayerService } from '../mpv/mpv-player.service'
+import { AuthToken, Private, Public } from '@auth/decorators'
+import { SettingService } from '@data/setting.service'
+import { Body, Controller, Get, HttpException, Param, Post, Put, Query, Res } from '@nestjs/common'
+import { ApiBody, ApiExcludeEndpoint, ApiOAuth2 } from '@nestjs/swagger'
+import { Mixer } from '@views/index'
+import { Uri } from '@views/index'
+
 import { SpotifyPlayerService } from '../spotify/spotify-player.service'
-import { TuneinPlayerService } from '../tunein/tunein-player.service'
-import { UserStreamPlayerService } from '../userstream/userstream-player.service'
-import { PresetService } from './preset.service'
-import { PlayableItem, Uri } from '@views/index'
 import { AudioService } from './audio.service'
-import { OnEvent, EventEmitter2, EventEmitterModule } from '@nestjs/event-emitter'
 import { MixerService } from './mixer.service'
+import { PresetService } from './preset.service'
+import { TtsService } from './tts.service'
 
 @ApiOAuth2(
   ['user-read-playback-state', 'user-modify-playback-state', 'user-read-recently-played'],
@@ -37,6 +24,8 @@ export class AudioController {
     private readonly presetService: PresetService,
     private readonly spotifyPlayerService: SpotifyPlayerService,
     private readonly mixerService: MixerService,
+    private readonly settingService: SettingService,
+    private readonly ttsService: TtsService,
   ) {}
 
   @ApiExcludeEndpoint()
@@ -48,14 +37,40 @@ export class AudioController {
     return res.send(await data.bytes())
   }
 
+  @Get('/restore/:device')
+  async restoreSettings(
+    @AuthToken() token: string,
+    @User() user: any,
+    @Param('device') device: string,
+  ) {
+    const setting = await this.settingService.getSetting(user.id)
+
+    if (!setting) {
+      throw new HttpException('No settings available', 404)
+    }
+
+    await this.audioService.changeVolume(user, token, setting.volume ?? 50)
+
+    if (setting.mixer) {
+      await this.mixerService.updateMixer(device, setting.mixer)
+    }
+
+    return {}
+  }
+
   @Get('/presets')
   async getPresets(@User() user: any, @AuthToken() token: string) {
     return await this.presetService.getPresets(token, user)
   }
 
+  @Get('/queue')
+  async getPlaybackQueue(@User() user: any, @AuthToken() token: string) {
+    return await this.spotifyPlayerService.getPlaybackQueue(token)
+  }
+
   @Put('/presets')
   async addPresets(@User() user: any, @AuthToken() token: string, @Query('uri') uri: string) {
-    let metadata = await this.audioService.getTrackDetail(token, uri)
+    const metadata = await this.audioService.getTrackDetail(token, uri)
     metadata.uri = Uri.fromUriString(uri)
     return await this.presetService.addPreset(token, user, metadata)
   }
@@ -70,12 +85,33 @@ export class AudioController {
     return await this.audioService.playMedia(user, token, uri)
   }
 
+  @Put('/playfile')
+  async playFile(
+    @User() user: any,
+    @AuthToken() token: string,
+    @Query('file') filename: string,
+    @Query('resume') resume: boolean = true,
+  ) {
+    return await this.audioService.playFiles([filename], resume)
+  }
+
+  @Put('/playfiles')
+  async playFiles(
+    @User() user: any,
+    @AuthToken() token: string,
+    @Body() data: any,
+    @Query('resume') resume: boolean = true,
+  ) {
+    return await this.audioService.playFiles(data.filenames, resume)
+  }
+
   @Put('/volume')
   async changeVolume(
     @User() user: any,
     @AuthToken() token: string,
     @Query('volume') volume: number,
   ) {
+    await this.settingService.updateVolume(user.id, volume)
     return await this.audioService.changeVolume(user, token, volume)
   }
 
@@ -120,7 +156,35 @@ export class AudioController {
   }
 
   @Post('/mixer/:device')
-  async updateMixer(@AuthToken() token, @Param('device') device: string, @Body() mixer: Mixer) {
+  async updateMixer(
+    @AuthToken() token,
+    @User() user: any,
+    @Param('device') device: string,
+    @Body() mixer: Mixer,
+  ) {
+    await this.settingService.updateMixer(user.id, mixer)
     return await this.mixerService.updateMixer(device, mixer)
+  }
+
+  @Get('/fanfare')
+  async getFanfare(@AuthToken() token: string) {
+    return await this.audioService.playFanfare(true)
+  }
+
+  @Post('/tts/:language')
+  @ApiBody({ type: Object })
+  async textToSpeech(
+    @AuthToken() token,
+    @User() user: any,
+    @Body() data: any,
+    @Param('language') language: string,
+  ) {
+    const text = (data.text ?? '').trim()
+
+    if (text == '') {
+      throw new HttpException('No text specified', 400)
+    }
+
+    await this.ttsService.say(text, language, false)
   }
 }

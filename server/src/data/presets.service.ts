@@ -1,19 +1,16 @@
-import { Logger } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
-import { InjectConnection } from '@nestjs/mongoose'
-import { Model } from 'mongoose'
-import { Connection } from 'mongoose'
-import { Inject, Injectable, Dependencies } from '@nestjs/common'
-import { PlayableItem } from '@views/index'
 import { Preset } from '@schemas/index'
+import { PlayableItem } from '@views/index'
 import * as crypto from 'crypto'
+import { Model } from 'mongoose'
 
 @Injectable()
 export class PresetsService {
   constructor(@InjectModel(Preset.name) private presetModel: Model<Preset>) {}
 
   async savePreset(item: Preset, user: string): Promise<any> {
-    let preset: Preset = item as Preset
+    const preset: Preset = item
     preset.userId = user
     return await this.presetModel.findOneAndUpdate(
       { $and: [{ id: preset.id }, { userId: preset.userId }] },
@@ -25,7 +22,7 @@ export class PresetsService {
   }
 
   async addPreset(item: PlayableItem, user: string): Promise<any> {
-    let preset: Preset = item as Preset
+    const preset: Preset = item as Preset
     preset.userId = user
     preset.id = crypto.randomUUID()
 

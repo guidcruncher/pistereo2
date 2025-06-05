@@ -1,20 +1,28 @@
 import { Context } from './context'
-import { Uri } from './uri'
 import { PlayableItem } from './playableitem'
+import { Uri } from './uri'
 
 export class Album implements PlayableItem {
   context: Context = new Context()
+
   uri: Uri = new Uri()
-  url: string = ''
-  name: string = ''
-  subtitle: string = ''
-  description: string = ''
+
+  url = ''
+
+  name = ''
+
+  subtitle = ''
+
+  description = ''
+
   artists: string[] = [] as string[]
-  imageUrl: string = ''
-  owner: string = ''
+
+  imageUrl = ''
+
+  owner = ''
 
   static create(uri: string, name: string, artists: string[], images: any[]) {
-    let alb = new Album()
+    const alb = new Album()
     alb.uri = Uri.fromUriString(uri)
     alb.name = name
     alb.artists = artists

@@ -1,9 +1,10 @@
+import { MpvStatusMapper } from '@mappers/mpvstatus-mapper'
 import { Logger } from '@nestjs/common'
 import { Injectable } from '@nestjs/common'
-import { EventEmitter2, OnEvent } from '@nestjs/event-emitter'
-import * as util from 'util'
+import { EventEmitter2 } from '@nestjs/event-emitter'
+import * as fs from 'fs'
 import * as path from 'path'
-import { MpvStatusMapper } from '@mappers/mpvstatus-mapper'
+import * as util from 'util'
 
 const execFile = util.promisify(require('node:child_process').execFile)
 
@@ -15,6 +16,8 @@ const errorCodes: Record<string, number> = {
 
 @Injectable()
 export class MpvPlayerService {
+  private readonly logger = new Logger(MpvPlayerService.name, { timestamp: true })
+
   constructor(private readonly eventEmitter: EventEmitter2) {}
 
   public async getMetaData() {
@@ -48,18 +51,28 @@ export class MpvPlayerService {
           }
         }
 
+        this.logger.verbose(`sendCommand: ${cmdArgs.join(' ')}`)
+
         execFile('sh', cmdArgs)
           .then((result) => {
             try {
               const json: any = JSON.parse(result.stdout)
               if (json.error) {
-                json.statusCode = errorCodes[json.error] ?? 500
-                json.command = jsonCmd
-                resolve(json)
+                if (json.error != 'success') {
+                  this.logger.warn('sendCommand Error ', json)
+                  json.statusCode = errorCodes[json.error] ?? 500
+                  json.command = jsonCmd
+                  resolve(json)
+                } else {
+                  json.statusCode = errorCodes[json.error] ?? 500
+                  json.command = jsonCmd
+                  resolve(json)
+                }
               } else {
                 resolve(json)
               }
             } catch (err) {
+              this.logger.warn('sendCommand Error ', err)
               resolve({
                 statusCode: 500,
                 command: jsonCmd,
@@ -131,11 +144,11 @@ export class MpvPlayerService {
 
   public async togglePlayback() {
     await this.sendCommand('cycle', ['pause'])
-    let prop = await this.sendCommand('get_property', ['pause'])
+    const prop = await this.sendCommand('get_property', ['pause'])
     if (!prop) {
       return false
     }
-    let playing = !prop.data
+    const playing = !prop.data
     if (!playing) {
       this.eventEmitter.emit('player', { type: 'paused', playing: false })
     } else {
@@ -148,5 +161,55 @@ export class MpvPlayerService {
   public async play(url: string) {
     const state: any = await this.getStatus()
     return await this.sendCommand('loadfile', [url, 'replace'])
+  }
+
+  private async getCurrentPlayingUrl() {
+    const idleProp = await this.sendCommand('get_property', ['core-idle'])
+
+    if (idleProp && idleProp.statusCode == 200) {
+      if (!idleProp.data) {
+        const pathProp = await this.sendCommand('get_property', ['path'])
+        if (pathProp && pathProp.statusCode == 200) {
+          return pathProp.data
+        }
+      }
+    }
+
+    return ''
+  }
+
+  public async playFanfare(resumePreviousTrackAtEnd: boolean) {
+    return await this.playFiles(['/streams/FranzSchubert-DieForelle.mp3'], resumePreviousTrackAtEnd)
+  }
+
+  public async playFiles(files: string[], resumePreviousTrackAtEnd: boolean) {
+    const urls: string[] = files
+    return await this.playlist(urls, resumePreviousTrackAtEnd)
+  }
+
+  public async playlist(urls: string[], resumePreviousTrackAtEnd: boolean) {
+    const playListFile = path.join(process.env.PISTEREO_CACHE as string, 'temp.m3u')
+    const currentPlayingUrl = await this.getCurrentPlayingUrl()
+
+    if (fs.existsSync(playListFile)) {
+      fs.unlinkSync(playListFile)
+    }
+
+    const m3u: string[] = [] as string[]
+    m3u.push('#EXTM3U')
+    urls.forEach((url) => {
+      m3u.push(url)
+    })
+
+    if (resumePreviousTrackAtEnd && currentPlayingUrl != '') {
+      m3u.push(currentPlayingUrl)
+    }
+
+    if (fs.existsSync(playListFile)) {
+      fs.unlinkSync(playListFile)
+    }
+    fs.writeFileSync(playListFile, m3u.join('\n'), 'utf8')
+
+    await this.play(playListFile)
   }
 }

@@ -1,10 +1,10 @@
 import { User } from '@auth/decorators'
-import { ApiBody, ApiConsumes, ApiOAuth2, ApiOperation, ApiParam } from '@nestjs/swagger'
-import { Param, Body, Controller, Get, Post, Put, Delete, Query, Res, Req } from '@nestjs/common'
-import { SpotifyListService } from './spotify-list.service'
-import { Public, Private, AuthToken } from '@auth/decorators'
-import { ApiExcludeController, ApiExcludeEndpoint } from '@nestjs/swagger'
+import { AuthToken, Private } from '@auth/decorators'
+import { Body, Controller, Get, Param, Put, Query, Req } from '@nestjs/common'
+import { ApiBody, ApiConsumes, ApiOAuth2, ApiOperation } from '@nestjs/swagger'
+
 import { PlaylistImportService } from './playlist-import.service'
+import { SpotifyListService } from './spotify-list.service'
 import getRawBody = require('raw-body')
 
 @ApiOAuth2(
@@ -26,7 +26,7 @@ export class ListController {
   @ApiConsumes('text/plain')
   @ApiBody({ type: String })
   async importPlaylist(@User() user, @Body() data, @Req() req) {
-    let playlist: string = ''
+    let playlist = ''
 
     if (req.readable) {
       const raw = await getRawBody(req)
@@ -87,6 +87,17 @@ export class ListController {
     @Query('limit') limit: number,
   ) {
     return await this.listService.getSavedShows(token, offset, limit)
+  }
+
+  @Get('spotify/show/episodes')
+  async getShowEpisodes(
+    @User() user: any,
+    @AuthToken() token: string,
+    @Query('uri') uri: string,
+    @Query('offset') offset: number,
+    @Query('limit') limit: number,
+  ) {
+    return await this.listService.getShowEpisodes(token, user, uri, offset, limit)
   }
 
   @Get('spotify/tracks')
