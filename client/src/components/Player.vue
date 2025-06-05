@@ -19,7 +19,8 @@ const playerEventSource = useEventSource('player', (type, payload) => {
       }
       break
     case 'trackChanged':
-      if (payload.track) {
+     playerStore.setMetaData({})
+     if (payload.track) {
         const playerService = new PlayerService()
         playerService
           .getMetaData(payload.track.uri)
@@ -171,6 +172,7 @@ export default {
             <h4>{{ currentTrack.description }}</h4>
             <h5>{{ currentTrack.subtitle }}</h5>
           </div>
+          <div v-if="metaData['icy-title']">Now playing {{metaData['icy-title']}}</div>
           <div>
             <h4 v-if="currentTrack.owner">{{ currentTrack.owner.name }}</h4>
             <h5 v-if="currentTrack.artists">{{ currentTrack.artists.join(', ') }}</h5>
@@ -254,6 +256,5 @@ export default {
       </div>
     </div>
   </v-card>
-{{metaData}}
 </template>
 <style></style>
