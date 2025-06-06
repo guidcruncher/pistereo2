@@ -1,5 +1,5 @@
 # Base container
-FROM node:bullseye-slim AS base
+FROM --platform=linux/arm64 node:bullseye-slim AS base
 ARG DEBIAN_FRONTEND=noninteractive
 ENV NODE_ENV=production
 ARG TARGETARCH
