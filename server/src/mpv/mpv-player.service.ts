@@ -184,7 +184,7 @@ export class MpvPlayerService {
   }
 
   public async playFanfare(resumePreviousTrackAtEnd: boolean) {
-    return await this.playFiles(['/streams/FranzSchubert-DieForelle.mp3'], resumePreviousTrackAtEnd)
+    return await this.playFiles(['FranzSchubert-DieForelle.mp3'], resumePreviousTrackAtEnd)
   }
 
   public async playFiles(files: string[], resumePreviousTrackAtEnd: boolean) {
@@ -203,7 +203,7 @@ export class MpvPlayerService {
     const m3u: string[] = [] as string[]
     m3u.push('#EXTM3U')
     urls.forEach((url) => {
-      m3u.push(url)
+      m3u.push(path.join("/streams/", url))
     })
 
     if (resumePreviousTrackAtEnd && currentPlayingUrl != '') {

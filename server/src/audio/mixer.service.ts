@@ -18,6 +18,16 @@ export class MixerService {
     }
   }
 
+  async resetMixer(device: string, level: number) {
+    let mixer = await this.getMixer(device)
+    for (let i = 0; i < mixer.frequencies.length; i++) {
+      const f: Frequency = mixer.frequencies[i]
+      f.channels.forEach((ch)=>{ch.value=level})
+      await this.cset(device, f.numid, f.channels)
+    }
+   return await this.getMixer(device)
+  }
+
   private async cset(device: string, numid: number, values: Channel[]) {
     return await this.amixer([
       '-D',

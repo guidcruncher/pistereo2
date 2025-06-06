@@ -160,6 +160,13 @@ export class AudioController {
     return await this.mixerService.getMixer(device)
   }
 
+  @Post('/mixer/:device/reset')
+  async resetMixer(@AuthToken() token, @User() user: any, @Param("device") device: string) {
+    let mixer=await this.mixerService.resetMixer(device, parseInt(process.env.PISTEREO_EQ_RESET as string))
+    await this.settingService.updateMixer(user.id, mixer)
+    return mixer
+  }
+
   @Post('/mixer/:device')
   async updateMixer(
     @AuthToken() token,
