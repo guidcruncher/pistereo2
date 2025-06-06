@@ -1,4 +1,5 @@
 #!/bin/bash
+pm2 link kv17v06555e5fft ioy5vykidakic2w
 
 ln -sf /usr/share/zoneinfo/$TZ /etc/localtime 
 echo $TZ > /etc/timezone
