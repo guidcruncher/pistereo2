@@ -68,6 +68,11 @@ export class AudioController {
     return await this.spotifyPlayerService.getPlaybackQueue(token)
   }
 
+  @Get('/nowplaying')
+  async getNowPlaying(@AuthToken() token: string) {
+    return await this.audioService.getNowPlaying()
+  }
+
   @Put('/presets')
   async addPresets(@User() user: any, @AuthToken() token: string, @Query('uri') uri: string) {
     const metadata = await this.audioService.getTrackDetail(token, uri)

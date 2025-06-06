@@ -24,6 +24,9 @@ const playerEventSource = useEventSource('player', (type, payload) => {
         playerService
           .getMetaData(payload.track.uri)
           .then((track) => {
+            playerService.getNowPlaying().then((data) => {
+              playerStore.setMetaData(data)
+            })
             playerStore.updatePlaying(track)
             emit('track_changed')
           })
