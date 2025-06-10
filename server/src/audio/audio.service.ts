@@ -44,7 +44,7 @@ export class AudioService {
   }
 
   async getNowPlaying() {
-    let data: any = await this.mpvPlayer.getMetaData()
+    const data: any = await this.mpvPlayer.getMetaData()
     if (Object.keys(data).length > 0) {
       return data
     }

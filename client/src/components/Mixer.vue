@@ -73,8 +73,7 @@ export default {
 
       this.saveMixer()
     },
-    resetAll() {
-    },
+    resetAll() {},
     setAll(level) {
       this.mixer.frequencies.forEach((f) => {
         f.channels.forEach((c) => {

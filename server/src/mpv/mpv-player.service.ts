@@ -203,7 +203,7 @@ export class MpvPlayerService {
     const m3u: string[] = [] as string[]
     m3u.push('#EXTM3U')
     urls.forEach((url) => {
-      m3u.push(path.join("/streams/", url))
+      m3u.push(path.join('/streams/', url))
     })
 
     if (resumePreviousTrackAtEnd && currentPlayingUrl != '') {

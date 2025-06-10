@@ -43,7 +43,12 @@ export default {
         v-slot="{ isSelected, toggle }"
       >
         <div class="pa-1">
-          <ScaledImage :src="item.imageUrl" size="sm" @click="play(item)" v-bind:responsive="false" />
+          <ScaledImage
+            :src="item.imageUrl"
+            size="sm"
+            @click="play(item)"
+            v-bind:responsive="false"
+          />
         </div>
       </v-slide-group-item>
     </v-slide-group>

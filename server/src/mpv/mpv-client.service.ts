@@ -1,15 +1,19 @@
-import * as path from 'path'
-import * as net from 'net'
 import { Injectable } from '@nestjs/common'
-import { EventEmitter2 } from '@nestjs/event-emitter'
 import { Logger } from '@nestjs/common'
+import { EventEmitter2 } from '@nestjs/event-emitter'
+import * as net from 'net'
+import * as path from 'path'
+
 import { MpvPlayerService } from './mpv-player.service'
 
 @Injectable()
 export class MpvClientService {
   private socket: net.Socket
+
   private readonly logger: Logger = new Logger(MpvClientService.name, { timestamp: true })
+
   private static previousMetaData: any = {}
+
   private static lastMetaDataEmitted = new Date('2020-01-01T00:00:00')
 
   constructor(
@@ -20,7 +24,7 @@ export class MpvClientService {
   }
 
   private open() {
-    let address: string =
+    const address: string =
       (process.env.PISTEREO_MPV_SOCKET as string) ??
       path.join(process.cwd(), '../pistereo-config/mpv/socket')
 
@@ -56,11 +60,11 @@ export class MpvClientService {
             }
             break
           case 'metadata-update':
-            let seconds =
+            const seconds =
               (new Date().getTime() - MpvClientService.lastMetaDataEmitted.getTime()) / 1000
 
             if (seconds > 30) {
-              let data: any = await this.mpvPlayer.getMetaData()
+              const data: any = await this.mpvPlayer.getMetaData()
               if (Object.keys(data).length > 0) {
                 if (JSON.stringify(data) === JSON.stringify(MpvClientService.previousMetaData)) {
                   // ignore
