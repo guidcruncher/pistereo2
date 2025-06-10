@@ -10,6 +10,18 @@ export class PlayerService extends BaseService {
     super('/api')
   }
 
+  async speak(lang: string, text: string) {
+    const response: AxiosResponse<any> = await this.client().post(`/tts/${lang}`, { text: text })
+    return response.data
+  }
+
+  async playLocalFile(filename: string) {
+    const params = new URLSearchParams()
+    params.append('file', filename)
+    const response: AxiosResponse<any> = await this.client().put(`/playfile?${params.toString()}`)
+    return response.data
+  }
+
   async getStatus() {
     const response: AxiosResponse<any> = await this.client().get('')
     return response.data
