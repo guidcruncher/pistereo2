@@ -1,6 +1,7 @@
 #!/bin/bash
 arch="$(uname -m)"
-if [ == "aarch64" ]; then
+
+if [ "$arch" == "aarch64" ]; then
 docker buildx build -f ./dockerfiles/Dockerfile-bullseye -t guidcruncher/pistereo2:bullseye-latest -t guidcruncher/pistereo2:latest --pull --push .
 
 # docker buildx build -f ./dockerfiles/Dockerfile-alpine -t guidcruncher/pistereo2:alpine-latest --pull --push .
