@@ -17,7 +17,11 @@ export default {
 }
 </script>
 <template>
-  <v-text-field v-model="text" label="Speak" @keyup.enter="speak()"></v-text-field>
-  <v-btn icon="mdi-magnify" @click="speak()" :disabled="text == ''"></v-btn>
+  <v-row>
+    <v-col cols="10">
+      <v-text-field v-model="text" label="Speak" @keyup.enter="speak()"></v-text-field> </v-col
+    ><v-col cols="2">
+      <v-btn icon="mdi-chat" @click="speak()" :disabled="text == ''"></v-btn> </v-col
+  ></v-row>
 </template>
 <style></style>
