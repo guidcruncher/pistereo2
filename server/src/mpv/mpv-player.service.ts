@@ -147,6 +147,20 @@ export class MpvPlayerService {
     return await this.sendCommand('stop', [])
   }
 
+  public async restartPlayback() {
+    const prop = await this.sendCommand('set_property', ['pause', false])
+    if (!prop) {
+      return false
+    }
+    const playing = !prop.data
+    if (!playing) {
+      this.eventEmitter.emit('player', { type: 'paused', playing: false })
+    } else {
+      this.eventEmitter.emit('player', { type: 'playing', playing: true })
+    }
+    return !prop.data
+  }
+
   public async togglePlayback() {
     await this.sendCommand('cycle', ['pause'])
     const prop = await this.sendCommand('get_property', ['pause'])
@@ -219,5 +233,6 @@ export class MpvPlayerService {
     fs.writeFileSync(playListFile, m3u.join('\n'), 'utf8')
 
     await this.play(playListFile)
+    await this.restartPlayback()
   }
 }
