@@ -1,5 +1,5 @@
 # Base container
-FROM node:bullseye-slim AS base
+FROM --platform=linux/arm64 node:bullseye-slim AS base
 ARG DEBIAN_FRONTEND=noninteractive
 ENV NODE_ENV=production
 ARG TARGETARCH
@@ -78,6 +78,7 @@ ENV PISTEREO_SPOTIFY_USERNAME=
 ENV PISTEREO_SPOTIFY_ACCESS_TOKEN=
 ENV IN_DOCKER="yes"
 ENV PISTEREO_LIBRESPOT_MODE="zeroconf"
+ENV PISTEREO_EQ_RESET=60
 
 VOLUME /config
 VOLUME /streams

@@ -3,8 +3,8 @@ import { Controller, MessageEvent, Sse } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import { fromEvent, map, Observable } from 'rxjs'
 
-import { LibrespotClientService } from '../spotify/librespot-client.service'
 import { MpvClientService } from '../mpv/mpv-client.service'
+import { LibrespotClientService } from '../spotify/librespot-client.service'
 
 @Public()
 @Controller('/ws')

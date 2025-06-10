@@ -42,6 +42,11 @@ export class PlayerService extends BaseService {
     return res
   }
 
+  async getNowPlaying() {
+    const response: AxiosResponse<any> = await this.client().get(`/nowplaying`)
+    return response.data
+  }
+
   async getMixer(device: string) {
     const response: AxiosResponse<any> = await this.client().get(`/mixer/${device}`)
     return response.data

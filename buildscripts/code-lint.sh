@@ -7,7 +7,7 @@ if [ ! -d "node_modules" ]; then
   npm i --prefer-offline --no-audit --progress=false
 fi
 
-npm run lint
+npm run lint 
 
 cd ../client
 
@@ -16,4 +16,4 @@ if [ ! -d "node_modules" ]; then
   npm i --prefer-offline --no-audit --progress=false
 fi
 
-npm run lint
+npm run lint 

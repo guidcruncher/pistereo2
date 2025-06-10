@@ -68,6 +68,11 @@ export class AudioController {
     return await this.spotifyPlayerService.getPlaybackQueue(token)
   }
 
+  @Get('/nowplaying')
+  async getNowPlaying(@AuthToken() token: string) {
+    return await this.audioService.getNowPlaying()
+  }
+
   @Put('/presets')
   async addPresets(@User() user: any, @AuthToken() token: string, @Query('uri') uri: string) {
     const metadata = await this.audioService.getTrackDetail(token, uri)
@@ -90,7 +95,7 @@ export class AudioController {
     @User() user: any,
     @AuthToken() token: string,
     @Query('file') filename: string,
-    @Query('resume') resume: boolean = true,
+    @Query('resume') resume = true,
   ) {
     return await this.audioService.playFiles([filename], resume)
   }
@@ -100,7 +105,7 @@ export class AudioController {
     @User() user: any,
     @AuthToken() token: string,
     @Body() data: any,
-    @Query('resume') resume: boolean = true,
+    @Query('resume') resume = true,
   ) {
     return await this.audioService.playFiles(data.filenames, resume)
   }
@@ -153,6 +158,16 @@ export class AudioController {
   @Get('/mixer/:device')
   async getMixer(@AuthToken() token, @Param('device') device: string) {
     return await this.mixerService.getMixer(device)
+  }
+
+  @Post('/mixer/:device/reset')
+  async resetMixer(@AuthToken() token, @User() user: any, @Param('device') device: string) {
+    const mixer = await this.mixerService.resetMixer(
+      device,
+      parseInt(process.env.PISTEREO_EQ_RESET as string),
+    )
+    await this.settingService.updateMixer(user.id, mixer)
+    return mixer
   }
 
   @Post('/mixer/:device')

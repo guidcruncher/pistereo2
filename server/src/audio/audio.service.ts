@@ -43,6 +43,14 @@ export class AudioService {
     return this._deviceId
   }
 
+  async getNowPlaying() {
+    const data: any = await this.mpvPlayer.getMetaData()
+    if (Object.keys(data).length > 0) {
+      return data
+    }
+    return {}
+  }
+
   async startLastPlayed(token: string, user: any) {
     let nothingPlaying = false
     try {

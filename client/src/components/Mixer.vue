@@ -73,6 +73,7 @@ export default {
 
       this.saveMixer()
     },
+    resetAll() {},
     setAll(level) {
       this.mixer.frequencies.forEach((f) => {
         f.channels.forEach((c) => {
@@ -140,7 +141,7 @@ export default {
       </v-slide-group>
     </v-card-text>
     <v-card-actions>
-      <v-btn @click="setAll(50)">Reset</v-btn>
+      <v-btn @click="resetAll()">Reset</v-btn>
 
       <v-switch
         v-model="mixerStore.locked"
