@@ -1,4 +1,11 @@
 #!/bin/bash
+# Pulseaudio
+rm -rf /var/run/pulse /var/lib/pulse /root/.config/pulse
+
+# Start pulseaudio as system wide daemon; for debugging it helps to start in non-daemon mode
+pulseaudio -D --verbose --exit-idle-time=-1 --system --disallow-exit
+
+
 pm2 link kv17v06555e5fft ioy5vykidakic2w
 
 ln -sf /usr/share/zoneinfo/$TZ /etc/localtime 
