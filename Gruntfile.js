@@ -23,10 +23,6 @@ module.exports = function (grunt) {
         "cmd": 'bash',
         "args": [ '-c', './buildscripts/build-server.sh' ]
       },
-      "build-mediaserver": {
-        "cmd": 'bash',
-        "args": [ '-c', './buildscripts/build-mediaserver.sh' ]
-      },
       "lint": {
         "cmd": 'bash',
         "args": ['-c', './buildscripts/code-lint.sh' ]
@@ -39,13 +35,6 @@ module.exports = function (grunt) {
         "cmd": 'bash',
         "args": [ '-c', './dockerfiles/build.sh' ]
       }
-    },
-    "copy": {
-      "mediaserver": {
-        "files": [
-          {"expand": true, "src": [ './mediaserver/librespot/**', './mediaserver/mpv/**' ], "dest": './build/mediaserver/' }
-        ]
-      },
     },
     "watch": {
       "client": {
@@ -112,8 +101,7 @@ module.exports = function (grunt) {
 
   // Task workflows.
 
-  grunt.registerTask('build-mediaserver', [ 'run:clean-build', 'copy:mediaserver', 'run:build-mediaserver' ]);
-  grunt.registerTask('build-all', [ 'run:clean-build',  'run:build-client', 'run:build-server', 'copy:mediaserver', 'run:build-mediaserver' ]);
+  grunt.registerTask('build-all', [ 'run:clean-build',  'run:build-client', 'run:build-server' ]);
   grunt.registerTask('start', [ 'concurrent:dev' ]);
   grunt.registerTask('build-client', [ 'run:build-client' ]);
   grunt.registerTask('build-server', [ 'run:build-server' ]);
