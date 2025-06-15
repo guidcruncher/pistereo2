@@ -3,7 +3,7 @@ import { AuthToken, Private, Public } from '@auth/decorators'
 import { SettingService } from '@data/setting.service'
 import { Body, Controller, Get, HttpException, Param, Post, Put, Query, Res } from '@nestjs/common'
 import { ApiBody, ApiExcludeEndpoint, ApiOAuth2 } from '@nestjs/swagger'
-import { Mixer } from '@views/index'
+import { Frequency, Mixer } from '@views/index'
 import { Uri } from '@views/index'
 
 import { SpotifyPlayerService } from '../spotify/spotify-player.service'
@@ -177,6 +177,20 @@ export class AudioController {
     @Param('device') device: string,
     @Body() mixer: Mixer,
   ) {
+    await this.settingService.updateMixer(user.id, mixer)
+    return await this.mixerService.updateMixer(device, mixer)
+  }
+
+  @Post('/mixer/:device/channel/:index')
+  async updateMixerChannel(
+    @AuthToken() token,
+    @User() user: any,
+    @Param('device') device: string,
+    @Param('index') index: number,
+    @Body() item: Frequency,
+  ) {
+    let mixer = await this.mixerService.getMixer(device)
+    mixer[index] = item
     await this.settingService.updateMixer(user.id, mixer)
     return await this.mixerService.updateMixer(device, mixer)
   }
