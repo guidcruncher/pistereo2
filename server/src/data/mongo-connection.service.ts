@@ -44,6 +44,7 @@ export class MongoConnectionService {
       { name: 'Session', schema: schemas.SessionSchema },
       { name: 'User', schema: schemas.UserSchema },
       { name: 'Setting', schema: schemas.SettingSchema },
+      { name: 'MediaServer', schema: schemas.MediaServerSchema },
     ])
   }
 }

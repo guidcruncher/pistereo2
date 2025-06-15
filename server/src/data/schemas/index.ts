@@ -1,3 +1,4 @@
+export * from './device.schema'
 export * from './history.schema'
 export * from './lastplayed.schema'
 export * from './preset.schema'
