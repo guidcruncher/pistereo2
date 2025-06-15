@@ -6,6 +6,7 @@ import { PresetsService } from './presets.service'
 import { SettingService } from './setting.service'
 import { UserService } from './user.service'
 import { UserStreamService } from './userstream.service'
+import { MediaServerService } from './media-server.service'
 
 @Module({
   imports: [MongoConnectionService.setup(), MongoConnectionService.getSchemas()],
@@ -16,6 +17,7 @@ import { UserStreamService } from './userstream.service'
     HistoryService,
     UserService,
     SettingService,
+    MediaServerService,
   ],
   exports: [PresetsService, UserStreamService, HistoryService, UserService, SettingService],
   controllers: [],

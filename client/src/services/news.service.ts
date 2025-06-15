@@ -4,7 +4,7 @@ import { useAuthStore } from '@/stores/auth'
 export class NewsService {
   client(options: any = {}) {
     const authStore = useAuthStore()
-    const apiKey= 'b56708f3531c418f8e7729139922aadb'
+    const apiKey = 'b56708f3531c418f8e7729139922aadb'
 
     const client = axios.create({
       baseURL: 'https://newsapi.org/v2',
