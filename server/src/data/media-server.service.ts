@@ -6,7 +6,7 @@ import { Model } from 'mongoose'
 
 @Injectable()
 export class MediaServerService {
-  constructor(@InjectModel(MediaServer.name) private deviceodel: Model<MediaServer>) {}
+  constructor(@InjectModel(MediaServer.name) private deviceModel: Model<MediaServer>) {}
 
   async saveDevice(item: MediaServer) {
     return await this.deviceModel.findOneAndUpdate({ id: item.id }, item, { upsert: true })
