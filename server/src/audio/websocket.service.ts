@@ -1,19 +1,17 @@
-import { Injectable } from '@nestjs/common'
+import { OnModuleInit, Injectable, OnApplicationBootstrap } from '@nestjs/common'
 import { Socket, io } from 'socket.io-client'
 import { MediaServerService } from './data/media-server.service'
 import { MediaServer } from '@schemas/index'
 import { WebSocket } from 'ws'
 
 @Injectable()
-export class WebsocketService {
+export class WebsocketService implements OnApplicationBootstrap {
   private socket: WebSocket
 
   constructor(
     private readonly deviceService: MediaServerService,
     private readonly eventEmitter: EventEmitter2,
-  ) {
-    this.initialise()
-  }
+  ) {}
 
   private async initialise() {
     let device = await this.deviceService.getActive()
@@ -35,6 +33,10 @@ export class WebsocketService {
         await this.onMessage(json)
       } catch (err) {}
     })
+  }
+
+  private onApplicationBootstrap() {
+    this.initialise()
   }
 
   private async onMessage(payload: any) {
