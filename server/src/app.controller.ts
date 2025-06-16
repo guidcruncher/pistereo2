@@ -1,14 +1,15 @@
 import { Get, Delete, Query, Put, Body, Post } from '@nestjs/common'
 import { Public } from '@auth/decorators'
 import { Controller, MessageEvent, Sse } from '@nestjs/common'
-
+import { EventEmitter2 } from '@nestjs/event-emitter'
 import { MediaServerService } from './data/media-server.service'
 import { MediaServer } from '@schemas/index'
 
 @Public()
 @Controller('/api/discovery')
 export class AppController {
-  constructor(private readonly deviceService: MediaServerService) {}
+  constructor(private readonly deviceService: MediaServerService,
+               private readonly eventEmitter: EventEmitter2,) {}
 
   @Post('/register')
   async register(@Body() data: any) {
@@ -24,7 +25,14 @@ export class AppController {
     device.id = data.id
     device.lastHeartbeat = new Date()
     device.expiresAt = new Date(new Date().setDate(new Date().getDate() + 1))
-    return await this.deviceService.saveDevice(device)
+    let res = await this.deviceService.saveDevice(device)
+
+    this.eventEmitter.emit('ensuresocket', {
+      type: 'register',
+      device: data,
+    })
+
+    return res
   }
 
   @Get('/heartbeat')
