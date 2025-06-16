@@ -23,7 +23,7 @@ export class MediaServerService {
   }
 
   async delete(id: string) {
-    const item = await this.deviceModel.findOne({ id: id }).remove()
+    const item = await this.deviceModel.deleteOne({ id: id })
     return item
   }
 }
