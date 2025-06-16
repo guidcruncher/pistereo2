@@ -197,7 +197,7 @@ export class LibrespotPlayerService extends EventBaseService {
   }
 
   async setVolume(token: string, device_id: string, value: number) {
-    return await this.deviceService.mediaServerOp('PUT', `/player/volume?volume=${valu}`, {})
+    return await this.deviceService.mediaServerOp('PUT', `/player/volume?volume=${value}`, {})
     const status: any = await this.getStatus(token)
     let result: any = {} as any
 
