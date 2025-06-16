@@ -26,4 +26,35 @@ export class MediaServerService {
     const item = await this.deviceModel.deleteOne({ id: id })
     return item
   }
+
+  async mediaServerOp(method: string, url: string, body: any = {}) {
+    let devices = await this.getActive()
+
+    if (!devices) {
+      return 0
+    }
+
+    for (var i = 0; i < devices.length; i++) {
+      try {
+        let apiUrl = devices[i].apiUrl + url
+        let res: any = {}
+
+        if (body && ['PUT', 'POST'].includes(method.toUpperCase())) {
+          res = await fetch(apiUrl, {
+            method: method.toUpperCase(),
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+          })
+        } else {
+          res = await fetch(apiUrl, {
+            method: method.toUpperCase(),
+          })
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    }
+
+    return devices.length
+  }
 }
