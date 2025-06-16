@@ -6,12 +6,17 @@ import { DeviceProp, PlayableItem, PlaybackQueue, PlayerStatus } from '@views/in
 import { Uri } from '@views/uri'
 
 import { LibrespotClientService } from './librespot-client.service'
+import { MediaServerService } from '../data/media-server.service'
+import { MediaServer } from '@schemas/index'
 
 Injectable()
 export class LibrespotPlayerService extends EventBaseService {
   private readonly transport: HttpTransportService = new HttpTransportService()
 
-  constructor(private readonly librespotClient: LibrespotClientService) {
+  constructor(
+    private readonly librespotClient: LibrespotClientService,
+    private readonly deviceService: MediaServerService,
+  ) {
     super()
   }
 
@@ -96,6 +101,7 @@ export class LibrespotPlayerService extends EventBaseService {
   }
 
   async play(token: string, device_id: string, uri: Uri): Promise<PlayableItem> {
+    return await this.deviceService.mediaServerGet('PUT', `/player/play`, { uri: uri })
     if (uri.source != 'spotify') {
       throw new HttpException(`Bad uri source, got ${uri.source}, expected spotify`, 400)
     }
@@ -121,6 +127,7 @@ export class LibrespotPlayerService extends EventBaseService {
   }
 
   async stop(token: string, device_id: string) {
+    return await this.deviceService.mediaServerGet('PUT', `/player/stop`, { url: url })
     try {
       return await this.transport.request(
         'POST',
@@ -149,32 +156,21 @@ export class LibrespotPlayerService extends EventBaseService {
     switch (command) {
       case 'play':
       case 'resume':
-        result = await this.transport.request(
-          'POST',
-          'http://127.0.0.1:3678/player/resume',
-          { Authorization: `Bearer ${token}` },
-          {},
-        )
+        result = await this.deviceService.mediaServerGet('PUT', `/player/resume`, {})
         break
       case 'previous':
-        result = await this.transport.request(
-          'POST',
-          'http://127.0.0.1:3678/player/prev',
-          { Authorization: `Bearer ${token}` },
-          {},
-        )
+        result = await this.deviceService.mediaServerGet('PUT', `/player/previous`, {})
         break
       case 'next':
-        result = await this.transport.request(
-          'POST',
-          'http://127.0.0.1:3678/player/next',
-          { Authorization: `Bearer ${token}` },
-          { uri: await this.getNextTrackUri(token) },
-        )
+        result = await this.deviceService.mediaServerGet('PUT', `/player/next`, {
+          uri: await this.getNextTrackUri(token),
+        })
         break
       case 'stop':
+        result = await this.deviceService.mediaServerGet('PUT', `/player/stop`, {})
+        break
       case 'pause':
-        result = await this.stop(token, device_id)
+        result = await this.deviceService.mediaServerGet('PUT', `/player/pause`, {})
         break
     }
 
@@ -189,6 +185,7 @@ export class LibrespotPlayerService extends EventBaseService {
   }
 
   async getVolume(token: string) {
+    return await this.deviceService.mediaServerGet('GET', `/player/volume`, {})
     const status = await this.getStatus(token)
     if (status) {
       if (status.device) {
@@ -200,6 +197,7 @@ export class LibrespotPlayerService extends EventBaseService {
   }
 
   async setVolume(token: string, device_id: string, value: number) {
+    return await this.deviceService.mediaServerOp('PUT', `/player/volume?volume=${valu}`, {})
     const status: any = await this.getStatus(token)
     let result: any = {} as any
 

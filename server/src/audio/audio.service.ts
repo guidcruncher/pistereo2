@@ -13,8 +13,6 @@ import { MpvPlayerService } from '../mpv/mpv-player.service'
 import { LibrespotPlayerService } from '../spotify/librespot-player.service'
 import { TuneinPlayerService } from '../tunein/tunein-player.service'
 import { UserStreamPlayerService } from '../userstream/userstream-player.service'
-import { MediaServerService } from './data/media-server.service'
-import { MediaServer } from '@schemas/index'
 
 @Injectable({ scope: Scope.DEFAULT })
 export class AudioService {
@@ -25,7 +23,6 @@ export class AudioService {
   constructor(
     private readonly eventEmitter: EventEmitter2,
     private readonly mpvPlayer: MpvPlayerService,
-    private readonly deviceService: MediaServerService,
     //    private readonly spotifyPlayer: SpotifyPlayerService,
     private readonly spotifyPlayer: LibrespotPlayerService,
     private readonly tuneinPlayer: TuneinPlayerService,

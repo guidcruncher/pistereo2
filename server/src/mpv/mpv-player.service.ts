@@ -5,6 +5,8 @@ import { EventEmitter2 } from '@nestjs/event-emitter'
 import * as fs from 'fs'
 import * as path from 'path'
 import * as util from 'util'
+import { MediaServerService } from '../data/media-server.service'
+import { MediaServer } from '@schemas/index'
 
 const execFile = util.promisify(require('node:child_process').execFile)
 
@@ -18,7 +20,10 @@ const errorCodes: Record<string, number> = {
 export class MpvPlayerService {
   private readonly logger = new Logger(MpvPlayerService.name, { timestamp: true })
 
-  constructor(private readonly eventEmitter: EventEmitter2) {}
+  constructor(
+    private readonly eventEmitter: EventEmitter2,
+    private readonly deviceService: MediaServerService,
+  ) {}
 
   public async isPlaylist() {
     const playlistCount = await this.sendCommand('get_property', ['playlist-count'])
@@ -95,6 +100,7 @@ export class MpvPlayerService {
   }
 
   public async getStatus() {
+    return await this.deviceService.mediaServerGet('GET', `/player/status`, {})
     const result: any = {
       playing: false,
       active: false,
@@ -131,10 +137,11 @@ export class MpvPlayerService {
   }
 
   public async setVolume(level: number) {
-    return await this.sendCommand('set_property', ['volume', `${level}`])
+    return await this.deviceService.mediaServerOp('PUT', `/player/volume?volume=${level}`, {})
   }
 
   public async getVolume() {
+    return await this.deviceService.mediaServerGet('GET', `/player/volume`, {})
     const volProp = await this.sendCommand('get_property', ['volume'])
     if (volProp && volProp.statusCode == 200) {
       return volProp.data
@@ -144,10 +151,12 @@ export class MpvPlayerService {
 
   public async stop() {
     this.eventEmitter.emit('player', { type: 'paused', playing: false })
+    return await this.deviceService.mediaServerGet('PUT', `/player/stop`, {})
     return await this.sendCommand('stop', [])
   }
 
   public async restartPlayback() {
+    return await this.deviceService.mediaServerGet('PUT', `/player/resume`, {})
     const prop = await this.sendCommand('set_property', ['pause', false])
     if (!prop) {
       return false
@@ -178,8 +187,7 @@ export class MpvPlayerService {
   }
 
   public async play(url: string) {
-    const state: any = await this.getStatus()
-    return await this.sendCommand('loadfile', [url, 'replace'])
+    return await this.deviceService.mediaServerGet('PUT', `/player/play`, { url: url })
   }
 
   private async getCurrentPlayingUrl() {
@@ -195,10 +203,6 @@ export class MpvPlayerService {
     }
 
     return ''
-  }
-
-  public async playFanfare(resumePreviousTrackAtEnd: boolean) {
-    return await this.playFiles(['FranzSchubert-DieForelle.mp3'], resumePreviousTrackAtEnd)
   }
 
   public async playFiles(files: string[], resumePreviousTrackAtEnd: boolean) {
