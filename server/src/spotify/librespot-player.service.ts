@@ -127,7 +127,7 @@ export class LibrespotPlayerService extends EventBaseService {
   }
 
   async stop(token: string, device_id: string) {
-    return await this.deviceService.mediaServerGet('PUT', `/player/stop`, { url: url })
+    return await this.deviceService.mediaServerGet('PUT', `/player/stop`, {})
     try {
       return await this.transport.request(
         'POST',
