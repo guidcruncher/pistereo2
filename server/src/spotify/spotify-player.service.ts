@@ -11,12 +11,11 @@ import {
 } from '@views/index'
 import { Uri } from '@views/uri'
 
-
 Injectable()
 export class SpotifyPlayerService extends EventBaseService {
   private readonly transport: HttpTransportService = new HttpTransportService()
 
-  constructor(private readonly librespotClient: LibrespotClientService) {
+  constructor() {
     super()
   }
 

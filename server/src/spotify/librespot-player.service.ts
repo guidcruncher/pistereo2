@@ -12,10 +12,7 @@ Injectable()
 export class LibrespotPlayerService extends EventBaseService {
   private readonly transport: HttpTransportService = new HttpTransportService()
 
-  constructor(
-    private readonly librespotClient: LibrespotClientService,
-    private readonly deviceService: MediaServerService,
-  ) {
+  constructor(private readonly deviceService: MediaServerService) {
     super()
   }
 
