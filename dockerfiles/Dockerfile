@@ -22,7 +22,6 @@ RUN mkdir -p build
 
 COPY . .
 RUN <<EOF
- chmod +x ./buildscripts/*.sh
  npm i --no-audit --progress=false
  cd server
  npm i --no-audit --progress=false
