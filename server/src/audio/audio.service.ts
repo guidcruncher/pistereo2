@@ -32,7 +32,6 @@ export class AudioService {
     private readonly settingService: SettingService,
   ) {}
 
-
   async getNowPlaying() {
     const data: any = await this.mpvPlayer.getMetaData()
     if (Object.keys(data).length > 0) {
@@ -116,7 +115,7 @@ export class AudioService {
   async playMedia(user: any, token: string, uri: string) {
     const uriParts = Uri.fromUriString(uri)
     let track: PlayableItem
-    let deviceid=""
+    let deviceid = ''
 
     await this.mpvPlayer.stop()
     await this.spotifyPlayer.stop(token, deviceid)
@@ -148,7 +147,7 @@ export class AudioService {
 
   async changeVolume(user: any, token, volume: number) {
     try {
-      await this.spotifyPlayer.setVolume(token, "", volume)
+      await this.spotifyPlayer.setVolume(token, '', volume)
     } catch {}
 
     try {
@@ -206,15 +205,9 @@ export class AudioService {
         const status = await this.spotifyPlayer.getStatus(token)
         if (status) {
           if (status.device.playing) {
-            return await this.spotifyPlayer.playerCommand(
-              token,"",
-              'pause',
-            )
+            return await this.spotifyPlayer.playerCommand(token, '', 'pause')
           } else {
-            return await this.spotifyPlayer.playerCommand(
-              token,"",
-              'play',
-            )
+            return await this.spotifyPlayer.playerCommand(token, '', 'play')
           }
         }
         break
@@ -229,7 +222,7 @@ export class AudioService {
 
   async stopPlayback(user: any, token: string) {
     this.currentTrack = {} as PlayableItem
-    await this.spotifyPlayer.playerCommand(token, "", 'stop')
+    await this.spotifyPlayer.playerCommand(token, '', 'stop')
     await this.historyService.clearLastPlayed()
     return await this.mpvPlayer.stop()
   }
@@ -240,10 +233,7 @@ export class AudioService {
     if (state && state.track) {
       switch (state.track.uri.source) {
         case 'spotify':
-          return await this.spotifyPlayer.playerCommand(
-            token,"",
-            'next',
-          )
+          return await this.spotifyPlayer.playerCommand(token, '', 'next')
           break
         case 'tunein':
         case 'user':
@@ -262,10 +252,7 @@ export class AudioService {
 
     switch (this.currentTrack.uri.source) {
       case 'spotify':
-        return await this.spotifyPlayer.playerCommand(
-          token,"",
-          'previous',
-        )
+        return await this.spotifyPlayer.playerCommand(token, '', 'previous')
         break
       case 'tunein':
       case 'user':

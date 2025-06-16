@@ -29,7 +29,6 @@ export class MediaServerService {
 
   async mediaServerOp(method: string, url: string, body: any = {}) {
     let devices = await this.getActive()
-
     if (!devices) {
       return 0
     }
