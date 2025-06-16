@@ -5,7 +5,6 @@ import { HttpException, Injectable } from '@nestjs/common'
 import { DeviceProp, PlayableItem, PlaybackQueue, PlayerStatus } from '@views/index'
 import { Uri } from '@views/uri'
 
-import { LibrespotClientService } from './librespot-client.service'
 import { MediaServerService } from '../data/media-server.service'
 import { MediaServer } from '@schemas/index'
 

@@ -11,7 +11,6 @@ import {
 } from '@views/index'
 import { Uri } from '@views/uri'
 
-import { LibrespotClientService } from './librespot-client.service'
 
 Injectable()
 export class SpotifyPlayerService extends EventBaseService {

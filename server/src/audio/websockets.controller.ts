@@ -9,7 +9,7 @@ import { WebsocketService } from './websocket.service'
 export class WebsocketsController {
   constructor(
     private readonly eventEmitter: EventEmitter2,
-    private readonly websocketService: WebSocketService,
+    private readonly websocketService: WebsocketService,
   ) {}
 
   @Sse('/player')

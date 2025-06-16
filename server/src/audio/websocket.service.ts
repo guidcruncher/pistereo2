@@ -1,8 +1,9 @@
 import { OnModuleInit, Injectable, OnApplicationBootstrap } from '@nestjs/common'
 import { Socket, io } from 'socket.io-client'
-import { MediaServerService } from './data/media-server.service'
+import { MediaServerService } from '../data/media-server.service'
 import { MediaServer } from '@schemas/index'
 import { WebSocket } from 'ws'
+import { EventEmitter2 } from '@nestjs/event-emitter'
 
 @Injectable()
 export class WebsocketService implements OnApplicationBootstrap {
@@ -35,7 +36,7 @@ export class WebsocketService implements OnApplicationBootstrap {
     })
   }
 
-  private onApplicationBootstrap() {
+  onApplicationBootstrap() {
     this.initialise()
   }
 
