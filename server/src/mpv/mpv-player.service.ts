@@ -2,19 +2,10 @@ import { MpvStatusMapper } from '@mappers/mpvstatus-mapper'
 import { Logger } from '@nestjs/common'
 import { Injectable } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
-import * as fs from 'fs'
-import * as path from 'path'
-import * as util from 'util'
 import { MediaServerService } from '../data/media-server.service'
 import { MediaServer } from '@schemas/index'
-
-const execFile = util.promisify(require('node:child_process').execFile)
-
-const errorCodes: Record<string, number> = {
-  success: 200,
-  'property not found': 404,
-  'property unavailable': 400,
-}
+import * as fs from 'fs'
+import * as path from 'path'
 
 @Injectable()
 export class MpvPlayerService {
