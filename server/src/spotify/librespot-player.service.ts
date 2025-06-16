@@ -8,7 +8,7 @@ import { Uri } from '@views/uri'
 import { MediaServerService } from '../data/media-server.service'
 import { MediaServer } from '@schemas/index'
 
-Injectable()
+@Injectable()
 export class LibrespotPlayerService extends EventBaseService {
   private readonly transport: HttpTransportService = new HttpTransportService()
 
@@ -97,7 +97,7 @@ export class LibrespotPlayerService extends EventBaseService {
   }
 
   async play(token: string, device_id: string, uri: Uri): Promise<PlayableItem> {
-    return await this.deviceService.mediaServerGet('PUT', `/player/play`, { uri: uri })
+    return await this.mediaServerGet('PUT', `/player/play`, { uri: uri })
     if (uri.source != 'spotify') {
       throw new HttpException(`Bad uri source, got ${uri.source}, expected spotify`, 400)
     }
@@ -123,7 +123,7 @@ export class LibrespotPlayerService extends EventBaseService {
   }
 
   async stop(token: string, device_id: string) {
-    return await this.deviceService.mediaServerGet('PUT', `/player/stop`, {})
+    return await this.mediaServerOp('PUT', `/player/stop`, {})
     try {
       return await this.transport.request(
         'POST',
@@ -152,21 +152,21 @@ export class LibrespotPlayerService extends EventBaseService {
     switch (command) {
       case 'play':
       case 'resume':
-        result = await this.deviceService.mediaServerGet('PUT', `/player/resume`, {})
+        result = await this.mediaServerGet('PUT', `/player/resume`, {})
         break
       case 'previous':
-        result = await this.deviceService.mediaServerGet('PUT', `/player/previous`, {})
+        result = await this.mediaServerGet('PUT', `/player/previous`, {})
         break
       case 'next':
-        result = await this.deviceService.mediaServerGet('PUT', `/player/next`, {
+        result = await this.mediaServerGet('PUT', `/player/next`, {
           uri: await this.getNextTrackUri(token),
         })
         break
       case 'stop':
-        result = await this.deviceService.mediaServerGet('PUT', `/player/stop`, {})
+        result = await this.mediaServerGet('PUT', `/player/stop`, {})
         break
       case 'pause':
-        result = await this.deviceService.mediaServerGet('PUT', `/player/pause`, {})
+        result = await this.mediaServerGet('PUT', `/player/pause`, {})
         break
     }
 
@@ -181,7 +181,7 @@ export class LibrespotPlayerService extends EventBaseService {
   }
 
   async getVolume(token: string) {
-    return await this.deviceService.mediaServerGet('GET', `/player/volume`, {})
+    return await this.mediaServerGet('GET', `/player/volume`, {})
     const status = await this.getStatus(token)
     if (status) {
       if (status.device) {
@@ -193,7 +193,7 @@ export class LibrespotPlayerService extends EventBaseService {
   }
 
   async setVolume(token: string, device_id: string, value: number) {
-    return await this.deviceService.mediaServerOp('PUT', `/player/volume?volume=${value}`, {})
+    return await this.mediaServerOp('PUT', `/player/volume?volume=${value}`, {})
     const status: any = await this.getStatus(token)
     let result: any = {} as any
 
@@ -283,5 +283,67 @@ export class LibrespotPlayerService extends EventBaseService {
 
     this.emit('streamer.disconnect', {})
     return device
+  }
+
+  async mediaServerOp(method: string, url: string, body: any = {}) {
+    let devices = await this.deviceService.getActive()
+    if (!devices) {
+      return 0
+    }
+
+    for (var i = 0; i < devices.length; i++) {
+      try {
+        let apiUrl = devices[i].apiUrl + url
+        let res: any = {}
+
+        if (body && ['PUT', 'POST'].includes(method.toUpperCase())) {
+          res = await fetch(apiUrl, {
+            method: method.toUpperCase(),
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+          })
+        } else {
+          res = await fetch(apiUrl, {
+            method: method.toUpperCase(),
+          })
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    }
+
+    return devices.length
+  }
+
+  async mediaServerGet(method: string, url: string, body: any = {}) {
+    let devices = await this.deviceService.getActive()
+
+    if (!devices) {
+      return 0
+    }
+
+    let res: any = {}
+
+    for (var i = 0; i < devices.length; i++) {
+      try {
+        let apiUrl = devices[i].apiUrl + url
+
+        if (body && ['PUT', 'POST'].includes(method.toUpperCase())) {
+          res = await fetch(apiUrl, {
+            method: method.toUpperCase(),
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+          })
+        } else {
+          res = await fetch(apiUrl, {
+            method: method.toUpperCase(),
+          })
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    }
+
+    return res
   }
 }

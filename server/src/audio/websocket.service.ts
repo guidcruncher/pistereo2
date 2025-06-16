@@ -41,7 +41,6 @@ export class WebsocketService implements OnApplicationBootstrap {
     this.socket.on('message', async (raw) => {
       try {
         let data = Buffer.from(raw).toString('utf8')
-        console.log('PAYLOAD', data)
         const json: any = JSON.parse(data.toString())
         await this.onMessage(json)
       } catch (err) {}
