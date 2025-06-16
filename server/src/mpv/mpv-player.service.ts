@@ -16,17 +16,18 @@ export class MpvPlayerService {
     private readonly deviceService: MediaServerService,
   ) {}
 
-
   public async getMetaData() {
-let res= await this.deviceService.mediaServerGet('GET', `/player/status`, {})
-if (res) {
-if (res.state.metaData) {return res.state.metaData}
-}
+    let res = await this.deviceService.mediaServerGet('GET', `/player/status`, {})
+    if (res) {
+      if (res.state.metaData) {
+        return res.state.metaData
+      }
+    }
     return {}
   }
 
   public async getStatus() {
-    let result= await this.deviceService.mediaServerGet('GET', `/player/status`, {})
+    let result = await this.deviceService.mediaServerGet('GET', `/player/status`, {})
     return MpvStatusMapper(result)
   }
 
@@ -48,7 +49,7 @@ if (res.state.metaData) {return res.state.metaData}
   }
 
   public async togglePlayback() {
-return await this.deviceService.mediaServerGet('PUT', `/player/toggle`, {})
+    return await this.deviceService.mediaServerGet('PUT', `/player/toggle`, {})
   }
 
   public async play(url: string) {
@@ -75,7 +76,6 @@ return await this.deviceService.mediaServerGet('PUT', `/player/toggle`, {})
         m3u.push(path.join('/streams/', url))
       }
     })
-
 
     if (fs.existsSync(playListFile)) {
       fs.unlinkSync(playListFile)
