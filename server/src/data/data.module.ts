@@ -19,7 +19,14 @@ import { MediaServerService } from './media-server.service'
     SettingService,
     MediaServerService,
   ],
-  exports: [PresetsService, UserStreamService, HistoryService, UserService, SettingService],
+  exports: [
+    PresetsService,
+    UserStreamService,
+    HistoryService,
+    UserService,
+    SettingService,
+    MediaServerService,
+  ],
   controllers: [],
 })
 export class DataModule {}

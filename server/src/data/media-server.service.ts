@@ -21,4 +21,9 @@ export class MediaServerService {
     const items = await this.deviceModel.find().lean()
     return items
   }
+
+  async delete(id: string) {
+    const item = await this.deviceModel.findOne({ id: id }).remove()
+    return item
+  }
 }
