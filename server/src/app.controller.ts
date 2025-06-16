@@ -20,7 +20,7 @@ export class AppController {
 
     device.ipAddress = data.ipAddress
     device.apiUrl = data.apiUrl
-    device.hostname = data.hostnake
+    device.hostname = data.hostname
     device.id = data.id
     device.lastHeartbeat = new Date()
     device.expiresAt = new Date(new Date().setDate(new Date().getDate() + 1))
@@ -29,7 +29,7 @@ export class AppController {
 
   @Get('/heartbeat')
   async heartbeat(@Query('id') id: string) {
-    let device:any = await this.deviceService.find(id)
+    let device: any = await this.deviceService.find(id)
     if (device) {
       device.lastHeartbeat = new Date()
       device.expiresAt = new Date(new Date().setDate(new Date().getDate() + 1))
