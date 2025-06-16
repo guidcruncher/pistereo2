@@ -17,7 +17,7 @@ RUN <<EOF
 EOF
 
 FROM base AS build
-WOKDIR /src
+WORKDIR /src
 RUN mkdir -p build
 
 COPY . .
