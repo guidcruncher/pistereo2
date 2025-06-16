@@ -25,114 +25,17 @@ export class MpvPlayerService {
     private readonly deviceService: MediaServerService,
   ) {}
 
-  public async isPlaylist() {
-    const playlistCount = await this.sendCommand('get_property', ['playlist-count'])
-    return parseInt(playlistCount.data) > 1
-  }
 
   public async getMetaData() {
-    const idleProp = await this.sendCommand('get_property', ['core-idle'])
-
-    if (idleProp && idleProp.statusCode == 200 && !idleProp.data) {
-      const metaData = await this.sendCommand('get_property', ['metadata'])
-      if (metaData && metaData.statusCode == 200 && metaData.data) {
-        return metaData.data
-      }
-    }
-
+let res= await this.deviceService.mediaServerGet('GET', `/player/status`, {})
+if (res) {
+if (res.state.metaData) {return res.state.metaData}
+}
     return {}
   }
 
-  private async sendCommand(cmd: string, parameters: any[] = []): Promise<any> {
-    let commandText: any[] = [cmd]
-    commandText = commandText.concat(parameters)
-    const jsonCmd: string = JSON.stringify({ command: commandText })
-    const socket: string =
-      (process.env.PISTEREO_MPV_SOCKET as string) ??
-      path.join(process.cwd(), '../pistereo-config/mpv/socket')
-    const cmdArgs: string[] = ['-c', `echo '${jsonCmd}' | socat - ${socket}`]
-
-    return new Promise((resolve, reject) => {
-      try {
-        if (cmd == 'get_property' && parameters.length > 0) {
-          if (parameters[0] == '') {
-            reject()
-            return
-          }
-        }
-
-        this.logger.verbose(`sendCommand: ${cmdArgs.join(' ')}`)
-
-        execFile('sh', cmdArgs)
-          .then((result) => {
-            try {
-              const json: any = JSON.parse(result.stdout)
-              if (json.error) {
-                if (json.error != 'success') {
-                  this.logger.warn('sendCommand Error ', json)
-                  json.statusCode = errorCodes[json.error] ?? 500
-                  json.command = jsonCmd
-                  resolve(json)
-                } else {
-                  json.statusCode = errorCodes[json.error] ?? 500
-                  json.command = jsonCmd
-                  resolve(json)
-                }
-              } else {
-                resolve(json)
-              }
-            } catch (err) {
-              this.logger.warn('sendCommand Error ', err)
-              resolve({
-                statusCode: 500,
-                command: jsonCmd,
-              })
-            }
-          })
-          .catch((err) => {
-            resolve({ statusCode: 500, command: jsonCmd })
-            //reject(err)
-          })
-      } catch (err) {
-        reject(err)
-      }
-    })
-  }
-
   public async getStatus() {
-    return await this.deviceService.mediaServerGet('GET', `/player/status`, {})
-    const result: any = {
-      playing: false,
-      active: false,
-      url: '',
-      volume: 0,
-      position: 0.0,
-    }
-    const pathProp = await this.sendCommand('get_property', ['path'])
-    const volProp = await this.sendCommand('get_property', ['volume'])
-    const metaData = await this.sendCommand('get_property', ['metadata'])
-    const playbackProp = await this.sendCommand('get_property', ['playback-time'])
-    const idleProp = await this.sendCommand('get_property', ['core-idle'])
-
-    if (playbackProp && playbackProp.statusCode == 200) {
-      result.position = playbackProp.data
-    }
-
-    if (metaData && metaData.statusCode == 200) {
-      result.metadata = metaData.data
-    }
-    if (idleProp && idleProp.statusCode == 200) {
-      result.playing = !idleProp.data
-    }
-
-    if (pathProp && pathProp.statusCode == 200) {
-      result.active = true
-      result.url = pathProp.data
-    }
-    if (volProp && volProp.statusCode == 200) {
-      result.volume = volProp.data
-    }
-
+    let result= await this.deviceService.mediaServerGet('GET', `/player/status`, {})
     return MpvStatusMapper(result)
   }
 
@@ -142,67 +45,23 @@ export class MpvPlayerService {
 
   public async getVolume() {
     return await this.deviceService.mediaServerGet('GET', `/player/volume`, {})
-    const volProp = await this.sendCommand('get_property', ['volume'])
-    if (volProp && volProp.statusCode == 200) {
-      return volProp.data
-    }
-    return 0
   }
 
   public async stop() {
     this.eventEmitter.emit('player', { type: 'paused', playing: false })
     return await this.deviceService.mediaServerGet('PUT', `/player/stop`, {})
-    return await this.sendCommand('stop', [])
   }
 
   public async restartPlayback() {
     return await this.deviceService.mediaServerGet('PUT', `/player/resume`, {})
-    const prop = await this.sendCommand('set_property', ['pause', false])
-    if (!prop) {
-      return false
-    }
-    const playing = !prop.data
-    if (!playing) {
-      this.eventEmitter.emit('player', { type: 'paused', playing: false })
-    } else {
-      this.eventEmitter.emit('player', { type: 'playing', playing: true })
-    }
-    return !prop.data
   }
 
   public async togglePlayback() {
-    await this.sendCommand('cycle', ['pause'])
-    const prop = await this.sendCommand('get_property', ['pause'])
-    if (!prop) {
-      return false
-    }
-    const playing = !prop.data
-    if (!playing) {
-      this.eventEmitter.emit('player', { type: 'paused', playing: false })
-    } else {
-      this.eventEmitter.emit('player', { type: 'playing', playing: true })
-    }
-
-    return !prop.data
+return await this.deviceService.mediaServerGet('PUT', `/player/toggle`, {})
   }
 
   public async play(url: string) {
     return await this.deviceService.mediaServerGet('PUT', `/player/play`, { url: url })
-  }
-
-  private async getCurrentPlayingUrl() {
-    const idleProp = await this.sendCommand('get_property', ['core-idle'])
-
-    if (idleProp && idleProp.statusCode == 200) {
-      if (!idleProp.data) {
-        const pathProp = await this.sendCommand('get_property', ['path'])
-        if (pathProp && pathProp.statusCode == 200) {
-          return pathProp.data
-        }
-      }
-    }
-
-    return ''
   }
 
   public async playFiles(files: string[], resumePreviousTrackAtEnd: boolean) {
@@ -212,7 +71,6 @@ export class MpvPlayerService {
 
   public async playlist(urls: string[], resumePreviousTrackAtEnd: boolean) {
     const playListFile = path.join(process.env.PISTEREO_CACHE as string, 'temp.m3u')
-    const currentPlayingUrl = await this.getCurrentPlayingUrl()
 
     if (fs.existsSync(playListFile)) {
       fs.unlinkSync(playListFile)
@@ -227,9 +85,6 @@ export class MpvPlayerService {
       }
     })
 
-    if (resumePreviousTrackAtEnd && currentPlayingUrl != '') {
-      m3u.push(currentPlayingUrl)
-    }
 
     if (fs.existsSync(playListFile)) {
       fs.unlinkSync(playListFile)
