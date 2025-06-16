@@ -8,8 +8,10 @@ import { MediaServer } from '@schemas/index'
 @Public()
 @Controller('/api/discovery')
 export class AppController {
-  constructor(private readonly deviceService: MediaServerService,
-               private readonly eventEmitter: EventEmitter2,) {}
+  constructor(
+    private readonly deviceService: MediaServerService,
+    private readonly eventEmitter: EventEmitter2,
+  ) {}
 
   @Post('/register')
   async register(@Body() data: any) {

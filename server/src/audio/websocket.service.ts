@@ -3,7 +3,7 @@ import { Socket, io } from 'socket.io-client'
 import { MediaServerService } from '../data/media-server.service'
 import { MediaServer } from '@schemas/index'
 import { WebSocket } from 'ws'
-import { EventEmitter2 } from '@nestjs/event-emitter'
+import { OnEvent, EventEmitter2 } from '@nestjs/event-emitter'
 
 @Injectable()
 export class WebsocketService implements OnApplicationBootstrap {
@@ -19,17 +19,24 @@ export class WebsocketService implements OnApplicationBootstrap {
     let device = await this.deviceService.getActive()
     let ipa = address
 
-    if (!device || device.length <= 0) {
-      return
+    if (ipa == '') {
+      if (!device || device.length <= 0) {
+        return
+      }
+      ipa = device[0].ipAddress
     }
 
-    if (address == '') { ipa = device[0].ipAddress} 
     let path = 'ws://' + ipa + ':4678/'
     this.socket = new WebSocket(path)
 
-    this.socket.on('error', async (error) => {})
+    this.socket.on('error', async (error) => {
+      console.log('Websocket error', error)
+    })
 
-    this.socket.on('connect', () => { this.connected = true})
+    this.socket.on('connect', () => {
+      this.connected = true
+      console.log('Websocket connected')
+    })
 
     this.socket.on('message', async (data) => {
       try {
@@ -46,18 +53,15 @@ export class WebsocketService implements OnApplicationBootstrap {
 
   @OnEvent('ensuresocket')
   async ensuresocket(payload: any) {
-   console.log("Ensuring connection ", payload.device)
+    console.log('Ensuring connection ', payload.device)
 
     if (!this.connected) {
-    this.initialise(payload.device.ipAddress)
+      console.log('Connecting ')
+      this.initialise(payload.device.ipAddress)
     }
   }
 
   private async onMessage(payload: any) {
-    this.eventEmitter.emit('player', {
-      type: 'stateChanged',
-      paused: true,
-      source: 'spotify',
-    })
+    this.eventEmitter.emit(payload.event, payload.payload)
   }
 }
