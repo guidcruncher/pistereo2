@@ -17,7 +17,7 @@ import { TtsService } from './tts.service'
   'Api',
 )
 @Private()
-@Controller('/api')
+@Controller()
 export class AudioController {
   constructor(
     private readonly audioService: AudioService,

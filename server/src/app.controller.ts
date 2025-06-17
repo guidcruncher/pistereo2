@@ -6,7 +6,7 @@ import { MediaServerService } from './data/media-server.service'
 import { MediaServer } from '@schemas/index'
 
 @Public()
-@Controller('/api/discovery')
+@Controller('/discovery')
 export class AppController {
   constructor(
     private readonly deviceService: MediaServerService,

@@ -14,7 +14,7 @@ rm -rf /var/cache/apt/archives /var/lib/apt/lists
 ln -sf /usr/share/zoneinfo/$TZ /etc/localtime
 
 npm config set fund false
-npm i -g @nestjs/cli dotenv-cli --no-audit
+npm i -g @nestjs/cli dotenv-cli forever --no-audit
 echo $TZ > /etc/timezone
 npm cache clean --force
 mkdir -p /cache /config /app/server /app/client

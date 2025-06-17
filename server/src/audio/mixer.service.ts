@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { Channel, Frequency, Mixer } from '@views/index'
 import * as cp from 'child_process'
+import * as fs from 'fs'
 
 @Injectable()
 export class MixerService {
@@ -54,6 +55,8 @@ export class MixerService {
 
   private async amixer(params): Promise<string> {
     return new Promise<string>((resolve, reject) => {
+         if (! fs.existsSync("/usr/bin/amixer")) { resolve(); return}
+
       try {
         let stdout = ''
         let stderr = ''

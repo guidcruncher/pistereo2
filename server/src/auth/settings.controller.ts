@@ -9,7 +9,7 @@ import { AuthToken, Private } from './decorators'
 
 @ApiOAuth2(['user-read-private', 'user-read-email'], 'Api')
 @Private()
-@Controller('/api/user/settings')
+@Controller('/user/settings')
 export class SettingsController {
   constructor(
     private readonly authService: AuthService,
