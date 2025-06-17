@@ -1,3 +1,5 @@
+declare const module: any;
+
 import { getScopes } from '@auth/scopes'
 import { ConsoleLogger } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
@@ -54,6 +56,12 @@ async function bootstrap() {
   })
 
   await app.listen(parseInt(listenAddr))
+
+  if (module.hot) {
+    module.hot.accept();
+    module.hot.dispose(() => app.close());
+  }
+
 }
 
 bootstrap()
