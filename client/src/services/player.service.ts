@@ -23,7 +23,7 @@ export class PlayerService extends BaseService {
   }
 
   async getStatus() {
-    const response: AxiosResponse<any> = await this.client().get('')
+    const response: AxiosResponse<any> = await this.client().get('/status')
     return response.data
   }
 
