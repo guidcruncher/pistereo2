@@ -195,6 +195,43 @@ export class AudioService {
     }
   }
 
+  async pause(user: any, token: string) {
+  if (this.currentUri() == '') {
+      throw new HttpException('Nothing playing', 400)
+    }
+
+    switch (this.currentTrack.uri.source) {
+      case 'spotify':
+            return await this.spotifyPlayer.playerCommand(token, '', 'pause')
+        break
+      case 'tunein':
+      case 'user':
+        return await this.mpvPlayer.pause()
+        break
+    }
+
+    throw new HttpException(`Unsupported Uri source ${this.currentTrack.uri.source}`, 400)
+  }
+
+  async resume(user: any, token: string) {
+  if (this.currentUri() == '') {
+      throw new HttpException('Nothing playing', 400)
+    }
+
+    switch (this.currentTrack.uri.source) {
+      case 'spotify':
+            return await this.spotifyPlayer.playerCommand(token, '', 'resume')
+        break
+      case 'tunein':
+      case 'user':
+        return await this.mpvPlayer.resume()
+        break
+    }
+
+    throw new HttpException(`Unsupported Uri source ${this.currentTrack.uri.source}`, 400)
+  }
+
+
   async togglePlayback(user: any, token: string) {
     if (this.currentUri() == '') {
       throw new HttpException('Nothing playing', 400)

@@ -136,6 +136,19 @@ export class LibrespotPlayerService extends EventBaseService {
     }
   }
 
+ async pause() {
+    return await this.mediaServerOp('PUT', `/player/stop`, {})
+    try {
+      return await this.transport.request(
+        'POST',
+        'http://127.0.0.1:3678/player/pause',
+        {},
+      )
+    } catch (err) {
+      return {}
+    }
+  }
+
   private async getNextTrackUri(token: string) {
     const currentQueue: PlaybackQueue = await this.getPlaybackQueue(token)
     if (currentQueue && currentQueue.queue.length > 0) {

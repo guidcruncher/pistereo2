@@ -85,7 +85,7 @@ export class AudioController {
     return await this.audioService.startLastPlayed(token, user)
   }
 
-  @Put('/play')
+  @Put('play')
   async playMedia(@User() user: any, @AuthToken() token: string, @Query('uri') uri: string) {
     return await this.audioService.playMedia(user, token, uri)
   }
@@ -133,6 +133,16 @@ export class AudioController {
   @Put('/toggleplayback')
   async togglePlayback(@User() user: any, @AuthToken() token: string) {
     return await this.audioService.togglePlayback(user, token)
+  }
+
+  @Put('/pause')
+async pause(@User() user: any, @AuthToken() token: string) {
+    return await this.audioService.pause(user, token)
+  }
+
+   @Put("/resume")
+  async resume(@User() user: any, @AuthToken() token: string) {
+    return await this.audioService.resume(user, token)
   }
 
   @Put('/stop')
