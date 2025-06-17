@@ -120,7 +120,7 @@ export class AudioController {
     return await this.audioService.changeVolume(user, token, volume)
   }
 
-  @Get()
+  @Get('/status')
   async getStatus(@User() user: any, @AuthToken() token: string) {
     return await this.audioService.getStatus(user, token)
   }
