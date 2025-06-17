@@ -1,4 +1,6 @@
 #!/bin/sh
+nginx -c /etc/nginx/nginx.conf
+
 export PISTEREO_CLIENTSECRET=""
 configfilename="$PISTEREO_CONFIG"/configuration.env
 
@@ -12,7 +14,7 @@ fi
 cd /app/server
 
 if [ -f "$configfilename" ]; then
-  dotenv -o -e "$configfilename" -- node ./nain,js
+  dotenv -o -e "$configfilename" -- node ./main.js
 else
-  node ./nain,js
+  node ./main.js
 fi

@@ -6,7 +6,7 @@ ENV TZ=UTC
 
 RUN <<EOF
 apt update
-apt install -y --no-install-recommends tzdata ca-certificates gettext
+apt install -y --no-install-recommends tzdata ca-certificates gettext nginx
 
 apt clean -y > /dev/null
 rm -rf /var/cache/apt/archives /var/lib/apt/lists
@@ -14,12 +14,13 @@ rm -rf /var/cache/apt/archives /var/lib/apt/lists
 ln -sf /usr/share/zoneinfo/$TZ /etc/localtime
 
 npm config set fund false
-npm i -g @nestjs/cli --no-audit
+npm i -g @nestjs/cli dotenv-cli --no-audit
 echo $TZ > /etc/timezone
 npm cache clean --force
 mkdir -p /cache /config /app/server /app/client
 EOF
 
+COPY ./nginx.conf /etc/nginx/nginx.conf
 COPY ./startcontainer.sh /app/startcontainer.sh
 RUN chmod +x /app/startcontainer.sh
 
