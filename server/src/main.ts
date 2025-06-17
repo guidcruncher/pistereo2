@@ -1,5 +1,4 @@
 import { getScopes } from '@auth/scopes'
-import { config } from '@dotenvx/dotenvx'
 import { ConsoleLogger } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
@@ -57,5 +56,4 @@ async function bootstrap() {
   await app.listen(parseInt(listenAddr))
 }
 
-config()
 bootstrap()
