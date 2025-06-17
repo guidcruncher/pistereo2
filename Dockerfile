@@ -6,7 +6,7 @@ ENV TZ=UTC
 
 RUN <<EOF
 apt update
-apt install -y --no-install-recommends tzdata ca-certificates
+apt install -y --no-install-recommends tzdata ca-certificates gettext
 
 apt clean -y > /dev/null
 rm -rf /var/cache/apt/archives /var/lib/apt/lists
