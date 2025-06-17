@@ -20,7 +20,7 @@ npm cache clean --force
 mkdir -p /cache /config /app/server /app/client
 EOF
 
-COPY ./nginx.conf /etc/nginx/nginx.conf
+COPY ./nginx.conf /etc/nginx/sites-enabled/default
 COPY ./startcontainer.sh /app/startcontainer.sh
 RUN chmod +x /app/startcontainer.sh
 
