@@ -31,13 +31,13 @@ ADD ./server/ /server
 
 WORKDIR /client
 RUN <<EOF
-npm i --no-audit
+npm i --no-audit --include=dev
 npm run build
 EOF
 
 WORKDIR /server
 RUN <<EOF
-npm i --no-audit
+npm i --no-audit  --include=dev
 npm run build
 npm prune --production
 cd /build/server
