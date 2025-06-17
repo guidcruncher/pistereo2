@@ -18,7 +18,7 @@ export class MpvPlayerService {
 
   public async getMetaData() {
     let res = await this.deviceService.mediaServerGet('GET', `/player/status`, {})
-    if ((res) && (res.state)) {
+    if (res && res.state) {
       if (res.state.metaData) {
         return res.state.metaData
       }

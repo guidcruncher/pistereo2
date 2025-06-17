@@ -54,26 +54,30 @@ export class MixerService {
 
   private async amixer(params): Promise<string> {
     return new Promise<string>((resolve, reject) => {
-      let stdout = ''
-      let stderr = ''
+      try {
+        let stdout = ''
+        let stderr = ''
 
-      const amixer = cp.spawn('/usr/bin/amixer', params)
+        const amixer = cp.spawn('/usr/bin/amixer', params)
 
-      amixer.stdout.on('data', (data) => {
-        stdout += data.toString()
-      })
+        amixer.stdout.on('data', (data) => {
+          stdout += data.toString()
+        })
 
-      amixer.stderr.on('data', (data) => {
-        stderr += data.toString()
-      })
+        amixer.stderr.on('data', (data) => {
+          stderr += data.toString()
+        })
 
-      amixer.on('close', (code) => {
-        if (code === 0) {
-          resolve(stdout)
-        } else {
-          reject(new Error(stderr))
-        }
-      })
+        amixer.on('close', (code) => {
+          if (code === 0) {
+            resolve(stdout)
+          } else {
+            reject(new Error(stderr))
+          }
+        })
+      } catch (err) {
+        reject(err)
+      }
     })
   }
 

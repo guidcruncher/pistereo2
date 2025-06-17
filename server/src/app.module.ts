@@ -36,10 +36,10 @@ import { AppController } from './app.controller'
   ],
   controllers: [AppController],
   providers: [
-//    {
-//      provide: APP_FILTER,
-//      useClass: AllExceptionFilter,
-//    },
+    //    {
+    //      provide: APP_FILTER,
+    //      useClass: AllExceptionFilter,
+    //    },
     AppService,
   ],
 })
