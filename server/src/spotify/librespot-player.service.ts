@@ -100,36 +100,12 @@ export class LibrespotPlayerService extends EventBaseService {
   async play(token: string, device_id: string, uri: Uri): Promise<PlayableItem> {
     let state = await this.mediaServerGet('PUT', `/player/play`, { uri: uri.uri })
 
-this.logger.debug("Play", JSON.stringify(state))
-
     if (state && state.track) {
       return state.track
     }
 
     return state
 
-    if (uri.source != 'spotify') {
-      throw new HttpException(`Bad uri source, got ${uri.source}, expected spotify`, 400)
-    }
-
-    let request: any = {} as any
-    request = { uri: uri.toString(), paused: false }
-
-    const result = await this.transport.request(
-      'POST',
-      'http://127.0.0.1:3678/player/play',
-      { Authorization: `Bearer ${token}` },
-      request,
-    )
-
-    if (result.status == 204) {
-      const status = await this.getMetaData(token, uri)
-      if (status) {
-        return status
-      }
-    }
-
-    throw new HttpException('Playback error', result.status)
   }
 
   async stop(token: string, device_id: string) {
