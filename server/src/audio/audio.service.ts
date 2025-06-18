@@ -196,13 +196,13 @@ export class AudioService {
   }
 
   async pause(user: any, token: string) {
-  if (this.currentUri() == '') {
+    if (this.currentUri() == '') {
       throw new HttpException('Nothing playing', 400)
     }
 
     switch (this.currentTrack.uri.source) {
       case 'spotify':
-            return await this.spotifyPlayer.playerCommand(token, '', 'pause')
+        return await this.spotifyPlayer.playerCommand(token, '', 'pause')
         break
       case 'tunein':
       case 'user':
@@ -214,13 +214,13 @@ export class AudioService {
   }
 
   async resume(user: any, token: string) {
-  if (this.currentUri() == '') {
+    if (this.currentUri() == '') {
       throw new HttpException('Nothing playing', 400)
     }
 
     switch (this.currentTrack.uri.source) {
       case 'spotify':
-            return await this.spotifyPlayer.playerCommand(token, '', 'resume')
+        return await this.spotifyPlayer.playerCommand(token, '', 'resume')
         break
       case 'tunein':
       case 'user':
@@ -230,7 +230,6 @@ export class AudioService {
 
     throw new HttpException(`Unsupported Uri source ${this.currentTrack.uri.source}`, 400)
   }
-
 
   async togglePlayback(user: any, token: string) {
     if (this.currentUri() == '') {

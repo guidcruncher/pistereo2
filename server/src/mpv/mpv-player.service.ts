@@ -48,7 +48,6 @@ export class MpvPlayerService {
     return await this.deviceService.mediaServerGet('PUT', `/player/resume`, {})
   }
 
-
   public async stop() {
     this.eventEmitter.emit('player', { type: 'paused', playing: false })
     return await this.deviceService.mediaServerGet('PUT', `/player/stop`, {})

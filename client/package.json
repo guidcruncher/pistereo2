@@ -4,7 +4,7 @@
   "type": "module",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite --host --port 8070 --mode ${NODE_ENV:=development}",
+    "dev": "dotenv -e ./configuration.env -- vite --host --port 8070 --mode ${NODE_ENV:=development}",
     "build": "npm run type-check && npm run build-only",
     "preview": "vite preview",
     "build-only-orig": "vite build",

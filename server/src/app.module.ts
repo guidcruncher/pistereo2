@@ -26,7 +26,7 @@ import { AppController } from './app.controller'
     AuthModule,
     CoreModule,
     SpotifyModule,
-//    ClientModule,
+    //    ClientModule,
     TuneinModule,
     MpvModule,
     UserstreamModule,

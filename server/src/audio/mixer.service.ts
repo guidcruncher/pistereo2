@@ -5,7 +5,6 @@ import * as fs from 'fs'
 import { MediaServerService } from '../data/media-server.service'
 import { MediaServer } from '@schemas/index'
 
-
 @Injectable()
 export class MixerService {
   private readonly logger = new Logger(MixerService.name, { timestamp: true })
@@ -13,15 +12,14 @@ export class MixerService {
   constructor(private readonly deviceService: MediaServerService) {}
 
   async getMixer(device: string): Promise<Mixer> {
-    return await this.deviceService.mediaServerGet("GET", "/mixer", {})
+    return await this.deviceService.mediaServerGet('GET', '/mixer', {})
   }
 
   async updateMixer(device: string, mixer: Mixer) {
-     return await this.deviceService.mediaServerGet("PUT", "/mixer", mixer)
+    return await this.deviceService.mediaServerGet('PUT', '/mixer', mixer)
   }
 
   async resetMixer(device: string, level: number) {
-     return await this.deviceService.mediaServerGet("PUT", "/mixer/reset", {})
+    return await this.deviceService.mediaServerGet('PUT', '/mixer/reset', {})
   }
-
 }

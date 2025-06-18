@@ -136,11 +136,11 @@ export class AudioController {
   }
 
   @Put('/pause')
-async pause(@User() user: any, @AuthToken() token: string) {
+  async pause(@User() user: any, @AuthToken() token: string) {
     return await this.audioService.pause(user, token)
   }
 
-   @Put("/resume")
+  @Put('/resume')
   async resume(@User() user: any, @AuthToken() token: string) {
     return await this.audioService.resume(user, token)
   }

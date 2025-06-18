@@ -1,4 +1,4 @@
-import { OnModuleInit, Injectable, OnApplicationBootstrap } from '@nestjs/common'
+import { Logger, OnModuleInit, Injectable, OnApplicationBootstrap } from '@nestjs/common'
 import { Socket, io } from 'socket.io-client'
 import { MediaServerService } from '../data/media-server.service'
 import { MediaServer } from '@schemas/index'
@@ -7,6 +7,10 @@ import { OnEvent, EventEmitter2 } from '@nestjs/event-emitter'
 
 @Injectable()
 export class WebsocketService implements OnApplicationBootstrap {
+  private readonly logger: Logger = new Logger(WebsocketService.name, {
+    timestamp: true,
+  })
+
   private socket: WebSocket
   private connected: boolean = false
 
@@ -30,12 +34,12 @@ export class WebsocketService implements OnApplicationBootstrap {
     this.socket = new WebSocket(path)
 
     this.socket.on('error', async (error) => {
-      console.log('Websocket error', error)
+      this.logger.error('MediaServer Websocket error', error)
     })
 
     this.socket.on('connect', () => {
       this.connected = true
-      console.log('Websocket connected')
+      this.logger.debug('MediaServer Websocket connected')
     })
 
     this.socket.on('message', async (raw) => {
@@ -43,7 +47,10 @@ export class WebsocketService implements OnApplicationBootstrap {
         let data = Buffer.from(raw).toString('utf8')
         const json: any = JSON.parse(data.toString())
         await this.onMessage(json)
-      } catch (err) {}
+      } catch (err) {
+        let d = Buffer.from(raw).toString('utf8')
+        this.logger.error('Error parsing MediaServer message ' + d, err)
+      }
     })
   }
 
@@ -53,15 +60,16 @@ export class WebsocketService implements OnApplicationBootstrap {
 
   @OnEvent('ensuresocket')
   async ensuresocket(payload: any) {
-    console.log('Ensuring connection ', payload.device)
+    this.logger.debug('Ensuring MediaServer connection ', payload.device)
 
     if (!this.connected) {
-      console.log('Connecting ')
+      this.logger.debug('MediaServer Socket connecting to ' + payload.device.ipAddress)
       this.initialise(payload.device.ipAddress)
     }
   }
 
   private async onMessage(payload: any) {
+    this.logger.debug('MediaServer event', JSON.stringify(payload))
     this.eventEmitter.emit(payload.event, payload.payload)
   }
 }
