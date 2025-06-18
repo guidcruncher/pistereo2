@@ -1,5 +1,8 @@
 #!/bin/bash
+
+
 basedir="./build/server"
+cp ./server/configuration.env ./build/server/
 
 if [ "$IN_DOCKER" == "yes" ]; then
   basedir="/app/server"
@@ -21,4 +24,3 @@ fi
 
 cd "$basedir"
 node ./main.js
-

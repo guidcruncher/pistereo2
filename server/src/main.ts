@@ -1,5 +1,6 @@
 declare const module: any
-
+import * as fs from 'fs'
+import { config } from '@dotenvx/dotenvx'
 import { getScopes } from '@auth/scopes'
 import { ConsoleLogger } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
@@ -61,6 +62,10 @@ async function bootstrap() {
     module.hot.accept()
     module.hot.dispose(() => app.close())
   }
+}
+
+if (fs.existsSync('./configuration.emv')) {
+  config({ path: ['./configuration.env'] })
 }
 
 bootstrap()
