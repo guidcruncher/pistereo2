@@ -1,4 +1,4 @@
-eimport { Public } from '@auth/decorators'
+import { Public } from '@auth/decorators'
 import { Logger, Controller, MessageEvent, Sse } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import { fromEvent, map, Observable } from 'rxjs'
