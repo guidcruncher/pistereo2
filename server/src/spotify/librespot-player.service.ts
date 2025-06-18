@@ -45,10 +45,7 @@ export class LibrespotPlayerService extends EventBaseService {
   }
 
   async getStatus(token: string): Promise<PlayerStatus> {
-    const trs = new HttpTransportService()
-    const result = await trs.request('GET', 'http://127.0.0.1:3678/status', {
-      Authorization: `Bearer ${token}`,
-    })
+    const result =  await this.mediaServerGet('GET', `/player/status`, { })
 
     let state = new PlayerStatus()
 
