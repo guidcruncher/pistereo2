@@ -1,5 +1,5 @@
 import { SettingService } from '@data/setting.service'
-import { HttpException, Injectable, Scope } from '@nestjs/common'
+import { Logger, HttpException, Injectable, Scope } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import { History } from '@schemas/history'
 import { Uri } from '@views/index'
@@ -17,6 +17,10 @@ import { UserStreamPlayerService } from '../userstream/userstream-player.service
 @Injectable({ scope: Scope.DEFAULT })
 export class AudioService {
   private currentTrack: PlayableItem = {} as PlayableItem // Uri = new Uri()
+
+ private readonly logger: Logger = new Logger(AudioService.name, {
+    timestamp: true,
+  });
 
   private _deviceId: string
 
@@ -117,13 +121,10 @@ export class AudioService {
     let track: PlayableItem
     let deviceid = ''
 
-    await this.mpvPlayer.stop()
-    await this.spotifyPlayer.stop(token, deviceid)
     await this.historyService.clearLastPlayed()
 
     switch (uriParts.source) {
       case 'spotify':
-        this.mpvPlayer.stop()
         track = await this.spotifyPlayer.play(token, deviceid, uriParts)
         break
       case 'tunein':
@@ -140,6 +141,9 @@ export class AudioService {
         throw new HttpException(`Unsupported Uri source : ${uriParts.source}`, 400)
     }
 
+    this.logger.debug("PlayMedia", JSON.stringify(track))
+
+    track.uri = uriParts
     this.currentTrack = track
     this.saveHistory(track, token, user)
     return track

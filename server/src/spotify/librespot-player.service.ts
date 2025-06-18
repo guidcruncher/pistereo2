@@ -1,7 +1,7 @@
 import { EventBaseService } from '@core/event-base.service'
 import { HttpTransportService } from '@core/http-transport.service'
 import { LibrespotStatusMapper, PlayableItemMapper, PlaybackQueueMapper } from '@mappers/index'
-import { HttpException, Injectable } from '@nestjs/common'
+import { Logger,HttpException, Injectable } from '@nestjs/common'
 import { DeviceProp, PlayableItem, PlaybackQueue, PlayerStatus } from '@views/index'
 import { Uri } from '@views/uri'
 
@@ -11,6 +11,10 @@ import { MediaServer } from '@schemas/index'
 @Injectable()
 export class LibrespotPlayerService extends EventBaseService {
   private readonly transport: HttpTransportService = new HttpTransportService()
+
+  private readonly logger: Logger = new Logger(LibrespotPlayerService.name, {
+    timestamp: true,
+  });
 
   constructor(private readonly deviceService: MediaServerService) {
     super()
@@ -95,6 +99,8 @@ export class LibrespotPlayerService extends EventBaseService {
 
   async play(token: string, device_id: string, uri: Uri): Promise<PlayableItem> {
     let state = await this.mediaServerGet('PUT', `/player/play`, { uri: uri.uri })
+
+this.logger.debug("Play", JSON.stringify(state))
 
     if (state && state.track) {
       return state.track
