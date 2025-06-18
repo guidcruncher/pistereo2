@@ -45,7 +45,7 @@ export class LibrespotPlayerService extends EventBaseService {
   }
 
   async getStatus(token: string): Promise<PlayerStatus> {
-    const result =  await this.mediaServerGet('GET', `/player/status`, { })
+    const result = await this.mediaServerGet('GET', `/player/status`, {})
 
     let state = new PlayerStatus()
 

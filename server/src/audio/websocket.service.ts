@@ -70,6 +70,6 @@ export class WebsocketService implements OnApplicationBootstrap {
 
   private async onMessage(payload: any) {
     this.logger.debug('MediaServer event', JSON.stringify(payload))
-    this.eventEmitter.emit("player", payload.payload)
+    this.eventEmitter.emit('player', payload.payload)
   }
 }
