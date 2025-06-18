@@ -14,6 +14,3 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile-bullseye --tag  guidcruncher/pistereo2:bullseye-latest
-      run: docker build . --file Dockerfile --tag  guidcruncher/pistereo2:latest
