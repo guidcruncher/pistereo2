@@ -37,7 +37,7 @@ const playerEventSource = useEventSource('player', (type, payload) => {
       break
     case 'volumeChanged':
       volumeStore.setVolume(payload.volume)
-break
+      break
     case 'stateChanged':
       playerStore.setPlayingState(!payload.paused)
       break

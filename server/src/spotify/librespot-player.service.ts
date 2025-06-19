@@ -1,7 +1,7 @@
 import { EventBaseService } from '@core/event-base.service'
 import { HttpTransportService } from '@core/http-transport.service'
 import { LibrespotStatusMapper, PlayableItemMapper, PlaybackQueueMapper } from '@mappers/index'
-import { Logger,HttpException, Injectable } from '@nestjs/common'
+import { Logger, HttpException, Injectable } from '@nestjs/common'
 import { DeviceProp, PlayableItem, PlaybackQueue, PlayerStatus } from '@views/index'
 import { Uri } from '@views/uri'
 
@@ -14,7 +14,7 @@ export class LibrespotPlayerService extends EventBaseService {
 
   private readonly logger: Logger = new Logger(LibrespotPlayerService.name, {
     timestamp: true,
-  });
+  })
 
   constructor(private readonly deviceService: MediaServerService) {
     super()
@@ -105,7 +105,6 @@ export class LibrespotPlayerService extends EventBaseService {
     }
 
     return state
-
   }
 
   async stop(token: string, device_id: string) {

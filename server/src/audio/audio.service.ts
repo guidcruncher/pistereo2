@@ -18,9 +18,9 @@ import { UserStreamPlayerService } from '../userstream/userstream-player.service
 export class AudioService {
   private currentTrack: PlayableItem = {} as PlayableItem // Uri = new Uri()
 
- private readonly logger: Logger = new Logger(AudioService.name, {
+  private readonly logger: Logger = new Logger(AudioService.name, {
     timestamp: true,
-  });
+  })
 
   private _deviceId: string
 
@@ -141,7 +141,7 @@ export class AudioService {
         throw new HttpException(`Unsupported Uri source : ${uriParts.source}`, 400)
     }
 
-    this.logger.debug("PlayMedia", JSON.stringify(track))
+    this.logger.debug('PlayMedia', JSON.stringify(track))
 
     track.uri = uriParts
     this.currentTrack = track
