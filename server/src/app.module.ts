@@ -16,6 +16,7 @@ import { SearchModule } from './search/search.module'
 import { SpotifyModule } from './spotify/spotify.module'
 import { TuneinModule } from './tunein/tunein.module'
 import { UserstreamModule } from './userstream/userstream.module'
+import { AppController } from './app.controller'
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { UserstreamModule } from './userstream/userstream.module'
     AuthModule,
     CoreModule,
     SpotifyModule,
-    ClientModule,
+    //    ClientModule,
     TuneinModule,
     MpvModule,
     UserstreamModule,
@@ -33,12 +34,12 @@ import { UserstreamModule } from './userstream/userstream.module'
     MetadataModule,
     SearchModule,
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [
-    {
-      provide: APP_FILTER,
-      useClass: AllExceptionFilter,
-    },
+    //    {
+    //      provide: APP_FILTER,
+    //      useClass: AllExceptionFilter,
+    //    },
     AppService,
   ],
 })

@@ -10,8 +10,20 @@ export class PlayerService extends BaseService {
     super('/api')
   }
 
+  async speak(lang: string, text: string) {
+    const response: AxiosResponse<any> = await this.client().post(`/tts/${lang}`, { text: text })
+    return response.data
+  }
+
+  async playLocalFile(filename: string) {
+    const params = new URLSearchParams()
+    params.append('file', filename)
+    const response: AxiosResponse<any> = await this.client().put(`/playfile?${params.toString()}`)
+    return response.data
+  }
+
   async getStatus() {
-    const response: AxiosResponse<any> = await this.client().get('')
+    const response: AxiosResponse<any> = await this.client().get('/status')
     return response.data
   }
 
@@ -59,6 +71,14 @@ export class PlayerService extends BaseService {
 
   async updateMixer(device: string, settings: any) {
     const response: AxiosResponse<any> = await this.client().post(`/mixer/${device}`, settings)
+    return response.data
+  }
+
+  async updateMixerChannel(device: string, item: any, index: number) {
+    const response: AxiosResponse<any> = await this.client().post(
+      `/mixer/${device}/channel/${index}`,
+      item,
+    )
     return response.data
   }
 

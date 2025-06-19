@@ -23,10 +23,6 @@ module.exports = function (grunt) {
         "cmd": 'bash',
         "args": [ '-c', './buildscripts/build-server.sh' ]
       },
-      "build-mediaserver": {
-        "cmd": 'bash',
-        "args": [ '-c', './buildscripts/build-mediaserver.sh' ]
-      },
       "lint": {
         "cmd": 'bash',
         "args": ['-c', './buildscripts/code-lint.sh' ]
@@ -39,13 +35,6 @@ module.exports = function (grunt) {
         "cmd": 'bash',
         "args": [ '-c', './dockerfiles/build.sh' ]
       }
-    },
-    "copy": {
-      "mediaserver": {
-        "files": [
-          {"expand": true, "src": [ './mediaserver/librespot/**', './mediaserver/mpv/**' ], "dest": './build/mediaserver/' }
-        ]
-      },
     },
     "watch": {
       "client": {
@@ -91,8 +80,8 @@ module.exports = function (grunt) {
           "delay": 1000,
           "legacyWatch": false
         }
-      }
-    },
+      }	
+		    },
     "concurrent": {
       "dev": {
         "tasks": [ 'nodemon:dev', 'watch:client', 'watch:server' ],
@@ -110,10 +99,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-concurrent');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
-  // Task workflows.
-
-  grunt.registerTask('build-mediaserver', [ 'run:clean-build', 'copy:mediaserver', 'run:build-mediaserver' ]);
-  grunt.registerTask('build-all', [ 'run:clean-build',  'run:build-client', 'run:build-server', 'copy:mediaserver', 'run:build-mediaserver' ]);
+  // Taskþu ]);
   grunt.registerTask('start', [ 'concurrent:dev' ]);
   grunt.registerTask('build-client', [ 'run:build-client' ]);
   grunt.registerTask('build-server', [ 'run:build-server' ]);
@@ -121,6 +107,6 @@ module.exports = function (grunt) {
   grunt.registerTask('lint', ['format', 'run:lint' ])
   grunt.registerTask('docker', [ 'run:docker-build'])
 
-  grunt.registerTask('default', [ 'run:format', 'build-all', 'concurrent:dev' ]);
+  grunt.registerTask('default', [ 'run:format', 'build-server', 'build-client', 'concurrent:dev' ]);
 }
 

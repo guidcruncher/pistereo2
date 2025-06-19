@@ -1,26 +1,28 @@
 import { Public } from '@auth/decorators'
-import { Controller, MessageEvent, Sse } from '@nestjs/common'
+import { Logger, Controller, MessageEvent, Sse } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import { fromEvent, map, Observable } from 'rxjs'
-
-import { MpvClientService } from '../mpv/mpv-client.service'
-import { LibrespotClientService } from '../spotify/librespot-client.service'
+import { WebsocketService } from './websocket.service'
 
 @Public()
 @Controller('/ws')
 export class WebsocketsController {
+  private readonly logger: Logger = new Logger(WebsocketsController.name, {
+    timestamp: true,
+  })
+
   constructor(
-    private readonly librespotClientService: LibrespotClientService,
-    private readonly mpvClientService: MpvClientService,
     private readonly eventEmitter: EventEmitter2,
+    private readonly websocketService: WebsocketService,
   ) {}
 
   @Sse('/player')
-  async ssePlayer(payload: any): Promise<Observable<MessageEvent>> {
+  async ssePlayer(): Promise<Observable<MessageEvent>> {
     return fromEvent(this.eventEmitter, 'player').pipe(
-      map((payload) => ({
-        data: JSON.stringify(payload),
-      })),
+      map((payload) => {
+        this.logger.debug('Sending SSE Event ' + JSON.stringify(payload))
+        return { data: JSON.stringify(payload) } as MessageEvent
+      }),
     )
   }
 }

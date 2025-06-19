@@ -1,5 +1,7 @@
-import { getScopes } from '@auth/scopes'
+declare const module: any
+import * as fs from 'fs'
 import { config } from '@dotenvx/dotenvx'
+import { getScopes } from '@auth/scopes'
 import { ConsoleLogger } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
@@ -11,6 +13,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: new ConsoleLogger({
       colors: true,
+      prefix: 'Server',
     }),
   })
 
@@ -21,6 +24,7 @@ async function bootstrap() {
   app.use(compression())
 
   const config = new DocumentBuilder()
+    .setBasePath('/api')
     .setTitle('PiStereo2 API')
     .setDescription('The PiStereo2 API')
     .setVersion('1.0')
@@ -48,14 +52,22 @@ async function bootstrap() {
       initOAuth: {
         clientId: process.env.PISTEREO_CLIENTID as string,
         clientSecret: process.env.PISTEREO_CLIENTSECRET as string,
-      },
+      }, 
       ui: true,
       explorer: true,
     },
   })
 
   await app.listen(parseInt(listenAddr))
+
+  if (module.hot) {
+    module.hot.accept()
+    module.hot.dispose(() => app.close())
+  }
 }
 
-config()
+if (fs.existsSync('./configuration.emv')) {
+  config({ path: ['./configuration.env'] })
+}
+
 bootstrap()

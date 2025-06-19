@@ -1,5 +1,8 @@
 #!/bin/bash
+
+
 basedir="./build/server"
+cp ./server/configuration.env ./build/server/
 
 if [ "$IN_DOCKER" == "yes" ]; then
   basedir="/app/server"
@@ -20,5 +23,4 @@ if [ -f "./media.env" ]; then
 fi
 
 cd "$basedir"
-node ./main.js
-
+dotenv -e ./configuration.env -- node ./main.js

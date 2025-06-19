@@ -1,17 +1,22 @@
 import { EventBaseService } from '@core/event-base.service'
 import { HttpTransportService } from '@core/http-transport.service'
 import { LibrespotStatusMapper, PlayableItemMapper, PlaybackQueueMapper } from '@mappers/index'
-import { HttpException, Injectable } from '@nestjs/common'
+import { Logger, HttpException, Injectable } from '@nestjs/common'
 import { DeviceProp, PlayableItem, PlaybackQueue, PlayerStatus } from '@views/index'
 import { Uri } from '@views/uri'
 
-import { LibrespotClientService } from './librespot-client.service'
+import { MediaServerService } from '../data/media-server.service'
+import { MediaServer } from '@schemas/index'
 
-Injectable()
+@Injectable()
 export class LibrespotPlayerService extends EventBaseService {
   private readonly transport: HttpTransportService = new HttpTransportService()
 
-  constructor(private readonly librespotClient: LibrespotClientService) {
+  private readonly logger: Logger = new Logger(LibrespotPlayerService.name, {
+    timestamp: true,
+  })
+
+  constructor(private readonly deviceService: MediaServerService) {
     super()
   }
 
@@ -44,10 +49,7 @@ export class LibrespotPlayerService extends EventBaseService {
   }
 
   async getStatus(token: string): Promise<PlayerStatus> {
-    const trs = new HttpTransportService()
-    const result = await trs.request('GET', 'http://127.0.0.1:3678/status', {
-      Authorization: `Bearer ${token}`,
-    })
+    const result = await this.mediaServerGet('GET', `/player/status`, {})
 
     let state = new PlayerStatus()
 
@@ -96,31 +98,17 @@ export class LibrespotPlayerService extends EventBaseService {
   }
 
   async play(token: string, device_id: string, uri: Uri): Promise<PlayableItem> {
-    if (uri.source != 'spotify') {
-      throw new HttpException(`Bad uri source, got ${uri.source}, expected spotify`, 400)
+    let state = await this.mediaServerGet('PUT', `/player/play`, { uri: uri.uri })
+
+    if (state && state.track) {
+      return state.track
     }
 
-    let request: any = {} as any
-    request = { uri: uri.toString(), paused: false }
-
-    const result = await this.transport.request(
-      'POST',
-      'http://127.0.0.1:3678/player/play',
-      { Authorization: `Bearer ${token}` },
-      request,
-    )
-
-    if (result.status == 204) {
-      const status = await this.getMetaData(token, uri)
-      if (status) {
-        return status
-      }
-    }
-
-    throw new HttpException('Playback error', result.status)
+    return state
   }
 
   async stop(token: string, device_id: string) {
+    return await this.mediaServerOp('PUT', `/player/stop`, {})
     try {
       return await this.transport.request(
         'POST',
@@ -128,6 +116,15 @@ export class LibrespotPlayerService extends EventBaseService {
         { Authorization: `Bearer ${token}` },
         {},
       )
+    } catch (err) {
+      return {}
+    }
+  }
+
+  async pause() {
+    return await this.mediaServerOp('PUT', `/player/stop`, {})
+    try {
+      return await this.transport.request('POST', 'http://127.0.0.1:3678/player/pause', {})
     } catch (err) {
       return {}
     }
@@ -149,32 +146,21 @@ export class LibrespotPlayerService extends EventBaseService {
     switch (command) {
       case 'play':
       case 'resume':
-        result = await this.transport.request(
-          'POST',
-          'http://127.0.0.1:3678/player/resume',
-          { Authorization: `Bearer ${token}` },
-          {},
-        )
+        result = await this.mediaServerGet('PUT', `/player/resume`, {})
         break
       case 'previous':
-        result = await this.transport.request(
-          'POST',
-          'http://127.0.0.1:3678/player/prev',
-          { Authorization: `Bearer ${token}` },
-          {},
-        )
+        result = await this.mediaServerGet('PUT', `/player/previous`, {})
         break
       case 'next':
-        result = await this.transport.request(
-          'POST',
-          'http://127.0.0.1:3678/player/next',
-          { Authorization: `Bearer ${token}` },
-          { uri: await this.getNextTrackUri(token) },
-        )
+        result = await this.mediaServerGet('PUT', `/player/next`, {
+          uri: await this.getNextTrackUri(token),
+        })
         break
       case 'stop':
+        result = await this.mediaServerGet('PUT', `/player/stop`, {})
+        break
       case 'pause':
-        result = await this.stop(token, device_id)
+        result = await this.mediaServerGet('PUT', `/player/pause`, {})
         break
     }
 
@@ -189,6 +175,7 @@ export class LibrespotPlayerService extends EventBaseService {
   }
 
   async getVolume(token: string) {
+    return await this.mediaServerGet('GET', `/player/volume`, {})
     const status = await this.getStatus(token)
     if (status) {
       if (status.device) {
@@ -200,6 +187,7 @@ export class LibrespotPlayerService extends EventBaseService {
   }
 
   async setVolume(token: string, device_id: string, value: number) {
+    return await this.mediaServerOp('PUT', `/player/volume?volume=${value}`, {})
     const status: any = await this.getStatus(token)
     let result: any = {} as any
 
@@ -289,5 +277,67 @@ export class LibrespotPlayerService extends EventBaseService {
 
     this.emit('streamer.disconnect', {})
     return device
+  }
+
+  async mediaServerOp(method: string, url: string, body: any = {}) {
+    let devices = await this.deviceService.getActive()
+    if (!devices) {
+      return 0
+    }
+
+    for (var i = 0; i < devices.length; i++) {
+      try {
+        let apiUrl = devices[i].apiUrl + url
+        let res: any = {}
+
+        if (body && ['PUT', 'POST'].includes(method.toUpperCase())) {
+          res = await fetch(apiUrl, {
+            method: method.toUpperCase(),
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+          })
+        } else {
+          res = await fetch(apiUrl, {
+            method: method.toUpperCase(),
+          })
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    }
+
+    return devices.length
+  }
+
+  async mediaServerGet(method: string, url: string, body: any = {}) {
+    let devices = await this.deviceService.getActive()
+
+    if (!devices) {
+      return 0
+    }
+
+    let res: any = {}
+
+    for (var i = 0; i < devices.length; i++) {
+      try {
+        let apiUrl = devices[i].apiUrl + url
+
+        if (body && ['PUT', 'POST'].includes(method.toUpperCase())) {
+          res = await fetch(apiUrl, {
+            method: method.toUpperCase(),
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+          })
+        } else {
+          res = await fetch(apiUrl, {
+            method: method.toUpperCase(),
+          })
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    }
+
+    return res
   }
 }

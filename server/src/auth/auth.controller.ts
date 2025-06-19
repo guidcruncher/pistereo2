@@ -8,7 +8,7 @@ import { AuthService } from './auth.service'
 import { AuthToken, Private, Public } from './decorators'
 
 @Public()
-@Controller('/api/auth')
+@Controller('/auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,

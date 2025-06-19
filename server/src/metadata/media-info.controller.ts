@@ -4,7 +4,7 @@ import { Controller, Get, Header, Query, Res } from '@nestjs/common'
 import { MediaInfoService } from './media-info.service'
 
 @Public()
-@Controller('/api/metadata')
+@Controller('/metadata')
 export class MediaInfoController {
   constructor(private readonly metadataService: MediaInfoService) {}
 

@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common'
 
-import { MpvClientService } from './mpv-client.service'
+import { DataModule } from '../data/data.module'
 import { MpvPlayerService } from './mpv-player.service'
 
 @Module({
-  providers: [MpvPlayerService, MpvClientService],
-  exports: [MpvPlayerService, MpvClientService],
+  imports: [DataModule],
+  providers: [MpvPlayerService],
+  exports: [MpvPlayerService],
 })
 export class MpvModule {}

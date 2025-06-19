@@ -9,7 +9,7 @@ import { SearchService } from './search.service'
   'Api',
 )
 @Private()
-@Controller('/api/search')
+@Controller('/search')
 export class SearchController {
   constructor(private readonly searchService: SearchService) {}
 

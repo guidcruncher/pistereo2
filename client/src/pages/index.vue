@@ -47,6 +47,7 @@
         <div>
           <Mixer />
         </div>
+        <div><Speech /></div>
       </div>
     </v-tabs-window-item>
     <v-tabs-window-item value="search">

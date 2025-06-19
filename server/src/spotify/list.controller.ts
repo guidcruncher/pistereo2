@@ -12,7 +12,7 @@ import getRawBody = require('raw-body')
   'Api',
 )
 @Private()
-@Controller('/api/list')
+@Controller('/list')
 export class ListController {
   constructor(
     private readonly listService: SpotifyListService,

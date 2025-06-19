@@ -3,7 +3,7 @@ import { AuthToken, Private, Public } from '@auth/decorators'
 import { SettingService } from '@data/setting.service'
 import { Body, Controller, Get, HttpException, Param, Post, Put, Query, Res } from '@nestjs/common'
 import { ApiBody, ApiExcludeEndpoint, ApiOAuth2 } from '@nestjs/swagger'
-import { Mixer } from '@views/index'
+import { Frequency, Mixer } from '@views/index'
 import { Uri } from '@views/index'
 
 import { SpotifyPlayerService } from '../spotify/spotify-player.service'
@@ -17,7 +17,7 @@ import { TtsService } from './tts.service'
   'Api',
 )
 @Private()
-@Controller('/api')
+@Controller()
 export class AudioController {
   constructor(
     private readonly audioService: AudioService,
@@ -85,7 +85,7 @@ export class AudioController {
     return await this.audioService.startLastPlayed(token, user)
   }
 
-  @Put('/play')
+  @Put('play')
   async playMedia(@User() user: any, @AuthToken() token: string, @Query('uri') uri: string) {
     return await this.audioService.playMedia(user, token, uri)
   }
@@ -120,7 +120,7 @@ export class AudioController {
     return await this.audioService.changeVolume(user, token, volume)
   }
 
-  @Get()
+  @Get('/status')
   async getStatus(@User() user: any, @AuthToken() token: string) {
     return await this.audioService.getStatus(user, token)
   }
@@ -133,6 +133,16 @@ export class AudioController {
   @Put('/toggleplayback')
   async togglePlayback(@User() user: any, @AuthToken() token: string) {
     return await this.audioService.togglePlayback(user, token)
+  }
+
+  @Put('/pause')
+  async pause(@User() user: any, @AuthToken() token: string) {
+    return await this.audioService.pause(user, token)
+  }
+
+  @Put('/resume')
+  async resume(@User() user: any, @AuthToken() token: string) {
+    return await this.audioService.resume(user, token)
   }
 
   @Put('/stop')
@@ -181,9 +191,18 @@ export class AudioController {
     return await this.mixerService.updateMixer(device, mixer)
   }
 
-  @Get('/fanfare')
-  async getFanfare(@AuthToken() token: string) {
-    return await this.audioService.playFanfare(true)
+  @Post('/mixer/:device/channel/:index')
+  async updateMixerChannel(
+    @AuthToken() token,
+    @User() user: any,
+    @Param('device') device: string,
+    @Param('index') index: number,
+    @Body() item: Frequency,
+  ) {
+    let mixer = await this.mixerService.getMixer(device)
+    mixer[index] = item
+    await this.settingService.updateMixer(user.id, mixer)
+    return await this.mixerService.updateMixer(device, mixer)
   }
 
   @Post('/tts/:language')

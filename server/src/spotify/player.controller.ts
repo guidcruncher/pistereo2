@@ -12,7 +12,7 @@ import { LibrespotPlayerService } from '../spotify/librespot-player.service'
   'Api',
 )
 @Private()
-@Controller('/api/spotify/player')
+@Controller('/spotify/player')
 export class PlayerController {
   constructor(
     //   private readonly playerService: SpotifyPlayerService

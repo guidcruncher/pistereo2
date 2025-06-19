@@ -59,19 +59,23 @@ export default {
       const playerService = new PlayerService()
       playerService.updateMixer('equal', this.mixer)
     },
+    saveMixerChannel(item, index) {
+      const playerService = new PlayerService()
+      playerService.updateMixerChannel('equal', item, index)
+    },
     setEqualiser(item, index) {
       const mixerStore = useMixerStore()
       if (mixerStore.draglock) {
         this.setAll(item.value)
+        this.saveMixer()
       } else {
         if (mixerStore.simple) {
           item.channels.forEach((c) => {
             c.value = item.value
           })
         }
+        this.saveMixerChannel(item, index)
       }
-
-      this.saveMixer()
     },
     resetAll() {},
     setAll(level) {
