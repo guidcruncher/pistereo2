@@ -18,6 +18,7 @@ export default {
     playerService
       .getStatus()
       .then((value) => {
+alert(JSON.stringify(value));
         const volumeStore = useVolumeStore()
         volumeStore.setVolume(value.device.volume)
         volumeStore.setLastVolume(value.device.volume)
