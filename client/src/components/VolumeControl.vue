@@ -18,7 +18,7 @@ export default {
     playerService
       .getStatus()
       .then((value) => {
-        if (vslue.device.active) {
+        if (value.device.active) {
           const volumeStore = useVolumeStore()
           volumeStore.setVolume(value.device.volume)
           volumeStore.setLastVolume(value.device.volume)

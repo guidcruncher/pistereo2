@@ -39,7 +39,7 @@ export class WebsocketService implements OnApplicationBootstrap {
 
     this.socket.on('connect', () => {
       this.connected = true
-      this.logger.debug('MediaServer Websocket connected')
+      this.logger.verbose('MediaServer Websocket connected')
     })
 
     this.socket.on('message', async (raw) => {
@@ -60,16 +60,16 @@ export class WebsocketService implements OnApplicationBootstrap {
 
   @OnEvent('ensuresocket')
   async ensuresocket(payload: any) {
-    this.logger.debug('Ensuring MediaServer connection ', payload.device)
+    this.logger.verbose('Ensuring MediaServer connection ', payload.device)
 
     if (!this.connected) {
-      this.logger.debug('MediaServer Socket connecting to ' + payload.device.ipAddress)
+      this.logger.verbose('MediaServer Socket connecting to ' + payload.device.ipAddress)
       this.initialise(payload.device.ipAddress)
     }
   }
 
   private async onMessage(payload: any) {
-    this.logger.debug('MediaServer event', JSON.stringify(payload))
+    this.logger.verbose('MediaServer event', JSON.stringify(payload))
     this.eventEmitter.emit('player', payload.payload)
   }
 }

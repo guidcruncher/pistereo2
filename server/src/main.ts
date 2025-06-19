@@ -24,6 +24,7 @@ async function bootstrap() {
   app.use(compression())
 
   const config = new DocumentBuilder()
+    .setBasePath('/api')
     .setTitle('PiStereo2 API')
     .setDescription('The PiStereo2 API')
     .setVersion('1.0')
@@ -51,7 +52,7 @@ async function bootstrap() {
       initOAuth: {
         clientId: process.env.PISTEREO_CLIENTID as string,
         clientSecret: process.env.PISTEREO_CLIENTSECRET as string,
-      },
+      }, 
       ui: true,
       explorer: true,
     },
