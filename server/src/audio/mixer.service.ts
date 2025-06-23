@@ -12,14 +12,14 @@ export class MixerService {
   constructor(private readonly deviceService: MediaServerService) {}
 
   async getMixer(device: string): Promise<Mixer> {
-    return await this.deviceService.mediaServerRequest('', 'GET', '/mixer', {})
+    return await this.deviceService.mediaServerRequest('', 'GET', '/mixer/equal', {})
   }
 
   async updateMixer(device: string, mixer: Mixer) {
-    return await this.deviceService.mediaServerRequest('', 'PUT', '/mixer', mixer)
+    return await this.deviceService.mediaServerRequest('', 'PUT', '/mixer/equal', mixer)
   }
 
   async resetMixer(device: string, level: number) {
-    return await this.deviceService.mediaServerRequest('', 'PUT', '/mixer/reset', {})
+    return await this.deviceService.mediaServerRequest('', 'PUT', '/mixer//equal/reset', {})
   }
 }
