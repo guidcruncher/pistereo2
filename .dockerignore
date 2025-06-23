@@ -1,0 +1,9 @@
+node_modules/
+*.md
+.restart
+.env
+nodemon.json
+run.sh
+build
+dist
+*.env

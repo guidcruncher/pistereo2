@@ -1,0 +1,10 @@
+<?xml version="1.0" standalone='no'?>
+<!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+<service-group>
+  <name replace-wildcards="yes">%h - PiStereo2 Server </name>
+  <service>
+    <type>_pistereo2._tcp</type>
+    <port>8080</port>
+    <txt-record>md=PiStereo2 Server</txt-record>
+  </service>
+</service-group>

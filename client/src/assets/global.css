@@ -1,0 +1,153 @@
+.applogobig {
+  margin: 0 auto;
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.applogobig img {
+  max-width: 100%;
+  max-height: 100%;
+  mix-blend-mode: multiply;
+}
+
+.centre {
+  text-align: center;
+  margin: 0 auto;
+}
+
+.gradient {
+  padding: 20px;
+  border-radius: 5px;
+  background: #00d4ff;
+  background: radial-gradient(circle,
+      rgba(0, 212, 255, 1) 0%,
+      rgba(2, 0, 36, 1) 100%,
+      rgba(9, 9, 121, 1) 35%);
+}
+
+.scaled-img {
+  overflow: hidden;
+  padding: 1px;
+}
+
+.scaled-img span {
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+
+.scaled-img img {
+  vertical-align: middle;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+@media (max-width: 600px) {
+  .scaled-img-xs {
+    width: 32px;
+    height: 32px;
+  }
+
+  .scaled-img-sm {
+    width: 40px;
+    height: 40px;
+  }
+
+  .scaled-img-md {
+    width: 50px;
+    height: 50px;
+  }
+
+  .scaled-img-lg {
+    width: 75px;
+    height: 75px;
+  }
+
+  .scaled-img-xl {
+    width: 100px;
+    height: 100px;
+  }
+
+  .scaled-img-xxl {
+    width: 150px;
+    height: 150px;
+  }
+
+}
+
+@media (min-width: 600px) {
+  .scaled-img-xs {
+    width: 64px;
+    height: 64px;
+  }
+
+  .scaled-img-sm {
+    width: 80px;
+    height: 80px;
+  }
+
+  .scaled-img-md {
+    width: 100px;
+    height: 100px;
+  }
+
+  .scaled-img-lg {
+    width: 150px;
+    height: 150px;
+  }
+
+  .scaled-img-xl {
+    width: 200px;
+    height: 200px;
+  }
+
+  .scaled-img-xxl {
+    width: 250px;
+    heith: 250px;
+  }
+}
+
+.scaled-img-xs-static {
+  width: 64px;
+  height: 64px;
+}
+
+.scaled-img-sm-static {
+  width: 80px;
+  height: 80px;
+}
+
+.scaled-img-md-static {
+  width: 100px;
+  height: 100px;
+}
+
+.scaled-img-lg-static {
+  width: 150px;
+  height: 150px;
+}
+
+.scaled-img-xl-static {
+  width: 200px;
+  height: 200px;
+}
+
+.scaled-img-xxl-static {
+  width: 250px;
+  height: 250px;
+}
+
+.center {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  width: 100%
+}
+
+.center div {
+  text-align: center;
+}
+
