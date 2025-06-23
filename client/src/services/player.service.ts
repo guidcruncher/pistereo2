@@ -47,6 +47,11 @@ export class PlayerService extends BaseService {
     return response.data
   }
 
+  async getNowPlayingStream() {
+    const response: AxiosResponse<any> = await this.client().get(`/stream/metadata`)
+    return response.data
+  }
+
   async addPreset(uri: Uri) {
     const params = new URLSearchParams()
     params.append('uri', this.uriString(uri))

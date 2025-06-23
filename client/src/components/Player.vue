@@ -28,9 +28,11 @@ const playerEventSource = useEventSource('player', (type, payload) => {
         playerService
           .getMetaData(payload.track.uri)
           .then((track) => {
-            playerService.getNowPlaying().then((data) => {
-              playerStore.setMetaData(data)
-            })
+            if (track.uri.source != 'spotify') {
+              playerService.getNowPlayingStream().then((data) => {
+                playerStore.setMetaData(data)
+              })
+            }
             playerStore.updatePlaying(track)
             emit('track_changed')
           })
@@ -55,12 +57,27 @@ export default {
   name: 'Player',
   props: {},
   data() {
-    return { st: {} }
+    return { st: {}, interval: 0 }
   },
   mounted() {
     this.updateDisplay()
+    this.interval = setInterval(() => {
+      const playerStore = usePlayerStore()
+      if (
+        playerStore.currentTrack &&
+        playerStore.currentTrack.uri &&
+        playerStore.currentTrack.uri.source != 'spotify'
+      ) {
+        let playerService = new PlayerService()
+        playerService.getNowPlayingStream().then((data) => {
+          playerStore.setMetaData(data)
+        })
+      }
+    }, 10000)
   },
-  beforeUnmount() {},
+  beforeUnmount() {
+    clearInterval(this.interval)
+  },
   methods: {
     updateDisplay() {
       const playerService = new PlayerService()
