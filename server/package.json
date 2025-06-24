@@ -36,7 +36,6 @@
     "compression": "^1.8.0",
     "dnssd": "^0.4.1",
     "express-session": "^1.18.1",
-    "google-tts-api": "^2.0.2",
     "helmet": "^8.1.0",
     "htmlparser2": "^10.0.0",
     "mime-type": "^5.0.3",

@@ -1,4 +1,3 @@
-import * as googleTTS from 'google-tts-api'
 import { SettingService } from '@data/setting.service'
 import { Logger, HttpException, Injectable, Scope } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
@@ -311,21 +310,8 @@ export class AudioService {
   }
 
   async say(token: string, text: string, lang: string, slow: boolean) {
-    const results = googleTTS.getAllAudioUrls(text, {
-      lang: lang,
-      slow: slow,
-      host: 'https://translate.google.com',
-      splitPunct: ',.?',
-    })
-
-    let status = await this.spotifyPlayer.getStatus(token)
-    if (status.device.active && status.device.playing) {
-      await this.spotifyPlayer.playerCommand(token, '', 'pause')
-    }
-
-    let res = await this.deviceService.mediaServerRequest(token, 'PUT', `/player/playlist`, {
-      tracks: results.map((r) => {
-        return r.url
+    let res = await this.deviceService.mediaServerRequest(token, 'PUT', `/player/say`, {
+         text: text, lang: lang
       }),
     })
   }
