@@ -74,7 +74,7 @@ export default {
             c.value = item.value
           })
         }
-        this.saveMixerChannel(item, index)
+        this.saveMixer()
       }
     },
     resetAll() {},

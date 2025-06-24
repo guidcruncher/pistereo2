@@ -20,6 +20,6 @@ export class MixerService {
   }
 
   async resetMixer(device: string, level: number) {
-    return await this.deviceService.mediaServerRequest('', 'PUT', '/mixer//equal/reset', {})
+    return await this.deviceService.mediaServerRequest('', 'PUT', '/mixer/equal/reset', {})
   }
 }
