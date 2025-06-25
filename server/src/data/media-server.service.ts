@@ -1,4 +1,4 @@
-import { Logger, Injectable } from '@nestjs/common'
+import { HttpException, Logger, Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { MediaServer } from '@schemas/index'
 import * as crypto from 'crypto'
@@ -66,7 +66,12 @@ export class MediaServerService {
                       },
                       body: JSON.stringify(body),
                     })
-                      .then((response) => response.json())
+                      .then((response) => {
+                        if (response.ok) {
+                          return response.json()
+                        }
+                        throw new HttpException(response.text(), response.status)
+                      })
                       .then((data) => {
                         resolve(data)
                       })

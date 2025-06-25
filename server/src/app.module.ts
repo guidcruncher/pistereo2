@@ -17,6 +17,7 @@ import { SpotifyModule } from './spotify/spotify.module'
 import { TuneinModule } from './tunein/tunein.module'
 import { UserstreamModule } from './userstream/userstream.module'
 import { AppController } from './app.controller'
+import { NotificationModule } from './notification/notification.module'
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { AppController } from './app.controller'
     AudioModule,
     MetadataModule,
     SearchModule,
+    NotificationModule,
   ],
   controllers: [AppController],
   providers: [

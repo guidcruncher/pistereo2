@@ -74,10 +74,12 @@ export default {
             c.value = item.value
           })
         }
-        this.saveMixerChannel(item, index)
+        this.saveMixer()
       }
     },
-    resetAll() {},
+    resetAll() {
+      this.setAll(60)
+    },
     setAll(level) {
       this.mixer.frequencies.forEach((f) => {
         f.channels.forEach((c) => {
