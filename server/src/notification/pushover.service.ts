@@ -1,7 +1,25 @@
 import { HttpException, Injectable } from '@nestjs/common'
+import { OnEvent } from '@nestjs/event-emitter'
 
 @Injectable()
 export class PushoverService {
+  @OnEvent('notify')
+  async handleNotifyEvent(payload: any) {
+    if (payload.message) {
+      if (payload.user) {
+        return await this.dispatch(payload.user, payload.message)
+      }
+
+      if (payload.users) {
+        return Promise.all(
+          payload.users.map(async (user) => {
+            return this.dispatch(user, payload.message)
+          }),
+        )
+      }
+    }
+  }
+
   async dispatch(user: string, message: any) {
     const pushoverURL = 'https://api.pushover.net/1/messages.json'
     let params: URLSearchParams = new URLSearchParams()
@@ -24,6 +42,6 @@ export class PushoverService {
       return await res.json()
     }
 
-    throw new HttpException((await res.text()), res.status)
+    throw new HttpException(await res.text(), res.status)
   }
 }
