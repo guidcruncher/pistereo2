@@ -44,19 +44,6 @@ export default {
       }
 
       if (changed) {
-        emit('time_changed', {
-          utc: new Date(
-            Date.UTC(
-              date.getUTCFullYear(),
-              date.getUTCMonth(),
-              date.getUTCDate(),
-              date.getUTCHours(),
-              date.getUTCMinutes(),
-              0,
-            ),
-          ),
-          local: new Date(date.setSeconds(0)),
-        })
       }
     },
   },
