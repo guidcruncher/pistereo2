@@ -311,7 +311,8 @@ export class AudioService {
 
   async say(token: string, text: string, lang: string, slow: boolean) {
     let res = await this.deviceService.mediaServerRequest(token, 'PUT', `/player/say`, {
-         text: text, lang: lang
-      })
+      text: text,
+      lang: lang,
+    })
   }
 }
