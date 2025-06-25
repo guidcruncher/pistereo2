@@ -4,7 +4,7 @@ import { HttpException, Injectable } from '@nestjs/common'
 export class PushoverService {
   async dispatch(user: string, message: any) {
     const pushoverURL = 'https://api.pushover.net/1/messages.json'
-    let params: URlSearchParams = new URlSearchParams()
+    let params: URLSearchParams = new URLSearchParams()
     params.append('token', process.env.PISTEREO_PUSHOVER_API_KEY as string)
     params.append('user', user)
 
