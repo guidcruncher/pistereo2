@@ -10,6 +10,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     AlbumListsView: typeof import('./components/AlbumListsView.vue')['default']
     AppFooter: typeof import('./components/AppFooter.vue')['default']
+    Clock: typeof import('./components/Clock.vue')['default']
     EpisodeBrowser: typeof import('./components/EpisodeBrowser.vue')['default']
     EpisodeListsView: typeof import('./components/EpisodeListsView.vue')['default']
     Mixer: typeof import('./components/Mixer.vue')['default']
@@ -22,7 +23,6 @@ declare module 'vue' {
     ScaledImage: typeof import('./components/ScaledImage.vue')['default']
     SearchControl: typeof import('./components/SearchControl.vue')['default']
     ShowListsView: typeof import('./components/ShowListsView.vue')['default']
-    Speech: typeof import('./components/Speech.vue')['default']
     TrackListsView: typeof import('./components/TrackListsView.vue')['default']
     VolumeControl: typeof import('./components/VolumeControl.vue')['default']
   }
