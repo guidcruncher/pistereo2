@@ -1,5 +1,6 @@
 <template>
   <v-tabs v-model="currentTab" align-tabs="title">
+    <v-tab text="Home" value="home"></v-tab>
     <v-tab text="Playing" value="nowplaying"></v-tab>
     <v-tab text="Queue" value="queue"></v-tab>
     <v-tab text="Playlists" value="myplaylists"></v-tab>
@@ -11,6 +12,13 @@
     <v-tab text="Control" value="radio"></v-tab>
   </v-tabs>
   <v-tabs-window v-model="currentTab">
+    <v-tabs-window-item value="home">
+      <div class="center pa-2">
+        <div>
+          <Clock />
+        </div>
+      </div>
+    </v-tabs-window-item>
     <v-tabs-window-item value="nowplaying">
       <div class="center pa-2">
         <div>
@@ -47,7 +55,6 @@
         <div>
           <Mixer />
         </div>
-        <div><Speech /></div>
       </div>
     </v-tabs-window-item>
     <v-tabs-window-item value="search">
