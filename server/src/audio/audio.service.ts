@@ -309,9 +309,4 @@ export class AudioService {
     throw new HttpException(`Unsupported Uri source ${this.currentTrack.uri.source}`, 400)
   }
 
-  async say(token: string, text: string, lang: string, slow: boolean) {
-    let res = await this.deviceService.mediaServerRequest(token, 'PUT', `/player/say`, {
-         text: text, lang: lang
-      })
-  }
 }

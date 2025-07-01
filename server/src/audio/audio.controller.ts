@@ -202,20 +202,5 @@ export class AudioController {
     return await this.mixerService.updateMixer(device, mixer)
   }
 
-  @Post('/tts/:language')
-  @ApiBody({ type: Object })
-  async textToSpeech(
-    @AuthToken() token,
-    @User() user: any,
-    @Body() data: any,
-    @Param('language') language: string,
-  ) {
-    const text = (data.text ?? '').trim()
 
-    if (text == '') {
-      throw new HttpException('No text specified', 400)
-    }
-
-    await this.audioService.say(token, text, language, false)
-  }
 }
