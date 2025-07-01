@@ -76,6 +76,11 @@ export default {
     <v-navigation-drawer v-model="drawer" :permanent="pinned" :temporary="!pinned">
       <v-list-item title="PiStereo2" subtitle="Your music jukebox!"></v-list-item>
       <v-divider></v-divider>
+      <v-list-item link title="Home" @click="showTab('home')"
+        ><template v-slot:prepend>
+          <v-icon icon="mdi-home"></v-icon>
+        </template>
+      </v-list-item>
       <v-list-item link title="Playing" @click="showTab('nowplaying')"
         ><template v-slot:prepend>
           <v-icon icon="mdi-play"></v-icon>
@@ -122,7 +127,7 @@ export default {
         </template>
       </v-list-item>
     </v-navigation-drawer>
-    /
+
     <v-main>
       <v-container>
         <router-view />
